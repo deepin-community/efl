@@ -1,0 +1,8 @@
+usr/lib/*/libeina.so.*
+usr/share/elua/modules/eina/*
+usr/lib/*/libeo.so.*
+usr/lib/*/libeo_dbg.so.*
+usr/share/elua/modules/eo.lua
+#libefl
+usr/lib/*/libefl.so.*
+usr/share/locale/*/LC_MESSAGES/efl.mo

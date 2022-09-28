@@ -1,0 +1,16 @@
+libexactness_play.so.1 libefl-all-dev #MINVER#
+* Build-Depends-Package: libefl-all-dev
+ ecore_evas_init@Base 1.25.1-0~eo
+ ecore_main_loop_begin@Base 1.25.1-0~eo
+ efl_loop_begin@Base 1.25.1-0~eo
+ eina_init@Base 1.25.1-0~eo
+ eina_shutdown@Base 1.25.1-0~eo
+ elm_init@Base 1.25.1-0~eo
+libexactness_record.so.1 libefl-all-dev #MINVER#
+* Build-Depends-Package: libefl-all-dev
+ ecore_evas_init@Base 1.25.1-0~eo
+ ecore_main_loop_begin@Base 1.25.1-0~eo
+ efl_loop_begin@Base 1.25.1-0~eo
+ eina_init@Base 1.25.1-0~eo
+ eina_shutdown@Base 1.25.1-0~eo
+ elm_init@Base 1.25.1-0~eo

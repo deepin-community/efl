@@ -1,0 +1,349 @@
+enum Test.Enum_Ex {
+     [[Docs for enum Test.Enum_Ex. @since 1.66]]
+     first = 0,
+     second,
+     third,
+     fourth
+}
+
+struct Test.Struct_Ex {
+    [[Docs for struct Test.Struct_Ex. @since 1.66]]
+    value_int: int;
+    value_enum: Test.Enum_Ex;
+}
+
+class Test.Object extends Efl.Object {
+   [[Docs for class Test.Object. @since 1.66]]
+   methods {
+       method_integral_in_a_check {
+           [[ tests integral in ]]
+           params { a: int; }
+       }
+       method_integral_out_a_check {
+           [[ tests integral out ]]
+           params { @out a: int; }
+       }
+       method_integral_inout_check {
+           [[ tests integral inout ]]
+           params { @inout a: int; }
+       }
+       method_integral_return_a_check {
+           [[ tests integral result ]]
+           return: int;
+       }
+       method_div_mod_check {
+           [[ tests mixed in, outs and result ]]
+           params {
+               a: int;
+               b: int;
+               @out quotient: int;
+               @out remainder: int;
+           }
+           return: bool;
+       }
+       method_and_check {
+           [[ tests boolean ]]
+           params {
+               a: bool;
+               b: bool;
+           }
+           return: bool;
+       }
+       method_modf_check {
+           [[ tests floating point ]]
+           params {
+               a: double;
+               @out int_part: double;
+           }
+           return: double;
+       }
+       method_uppercase_check {
+           [[ tests string ]]
+           params {
+               @inout str: ptr(char);
+           }
+       }
+       method_in_null_check {
+           [[ tests null input ]]
+           params {
+               a: ptr(char);
+           }
+           return: bool;
+       }
+       method_out_null_check {
+           [[ tests null output ]]
+           params {
+               @out a: ptr(char);
+           }
+           return: bool;
+       }
+       method_inout_null_check {
+           [[ tests null output ]]
+           params {
+               @inout a: ptr(char);
+           }
+           return: bool;
+       }
+       method_return_null_check {
+           [[ tests null return ]]
+           return: ptr(char);
+       }
+       method_null_check {
+           [[ tests null values ]]
+           params {
+               in: ptr(char);
+               @out out: ptr(char);
+               @inout inout: ptr(char);
+           }
+           return: ptr(char);
+       }
+       method_array_at_check {
+           [[ tests array ]]
+           params {
+               array: array<int>;
+               index: int;
+           }
+           return: int;
+       }
+       method_array_with_42_check {
+           [[ tests parameters ]]
+           return: array<int> @move @no_unused;
+       }
+       method_array_in_array_out_check {
+           [[ tests parameters ]]
+           params {
+               @in a_in: array<int>;
+               @out a_out: array<int>;
+           }
+       }
+       method_array_of_objects_check {
+           params {
+               @in a_in: array<Test.Object>;
+           }
+           return: array<Test.Object>;
+       }
+       method_array_of_strings_check {
+           params {
+               @in a_in: array<string>;
+           }
+           return: array<string>;
+       }
+       method_array_of_ints_check {
+           params {
+               @in a_in: array<int>;
+           }
+           return: array<int>;
+       }
+       method_array_of_bools_check {
+           params {
+               @in a_in: array<bool>;
+           }
+           return: array<bool>;
+       }
+       method_array_of_doubles_check {
+           params {
+               @in a_in: array<double>;
+           }
+           return: array<double>;
+       }
+       method_array_of_enums_check {
+           params {
+               @in a_in: array<Test.Enum_Ex>;
+           }
+           return: array<Test.Enum_Ex>;
+       }
+       method_array_of_structs_check {
+           params {
+               @in a_in: array<Test.Struct_Ex>;
+           }
+           return: array<Test.Struct_Ex>;
+       }
+       method_list_with_42_check {
+           [[ tests parameters ]]
+           return: list<int> @move @no_unused;
+       }
+       method_list_in_list_out_check {
+           [[ tests parameters ]]
+           params {
+               @in l_in: list<int>;
+               @out l_out: list<int>;
+           }
+       }
+       method_list_of_objects_check {
+           params {
+               @in l_in: list<Test.Object>;
+           }
+           return: list<Test.Object>;
+       }
+       method_list_of_strings_check {
+           params {
+               @in l_in: list<string>;
+           }
+           return: list<string>;
+       }
+       method_list_of_ints_check {
+           params {
+               @in l_in: list<int>;
+           }
+           return: list<int>;
+       }
+       method_list_of_bools_check {
+           params {
+               @in l_in: list<bool>;
+           }
+           return: list<bool>;
+       }
+       method_list_of_doubles_check {
+           params {
+               @in l_in: list<double>;
+           }
+           return: list<double>;
+       }
+       method_list_of_enums_check {
+           params {
+               @in l_in: list<Test.Enum_Ex>;
+           }
+           return: list<Test.Enum_Ex>;
+       }
+       method_list_of_structs_check {
+           params {
+               @in l_in: list<Test.Struct_Ex>;
+           }
+           return: list<Test.Struct_Ex>;
+       }
+       method_accessor_of_objects_check {
+           params {
+               @in a_in: accessor<Test.Object>;
+           }
+           return: accessor<Test.Object>;
+       }
+       method_accessor_of_strings_check {
+           params {
+               @in a_in: accessor<string>;
+           }
+           return: accessor<string>;
+       }
+       method_accessor_of_ints_check {
+           params {
+               @in a_in: accessor<int>;
+           }
+           return: accessor<int>;
+       }
+       method_accessor_of_bools_check {
+           params {
+               @in a_in: accessor<bool>;
+           }
+           return: accessor<bool>;
+       }
+       method_accessor_of_doubles_check {
+           params {
+               @in a_in: accessor<double>;
+           }
+           return: accessor<double>;
+       }
+       method_accessor_of_enums_check {
+           params {
+               @in a_in: accessor<Test.Enum_Ex>;
+           }
+           return: accessor<Test.Enum_Ex>;
+       }
+       method_accessor_of_structs_check {
+           params {
+               @in a_in: accessor<Test.Struct_Ex>;
+           }
+           return: accessor<Test.Struct_Ex>;
+       }
+       method_iterator_of_objects_check {
+           params {
+               @in i_in: iterator<Test.Object>;
+           }
+           return: iterator<Test.Object>;
+       }
+       method_iterator_of_strings_check {
+           params {
+               @in i_in: iterator<string>;
+           }
+           return: iterator<string>;
+       }
+       method_iterator_of_ints_check {
+           params {
+               @in i_in: iterator<int>;
+           }
+           return: iterator<int>;
+       }
+       method_iterator_of_bools_check {
+           params {
+               @in i_in: iterator<bool>;
+           }
+           return: iterator<bool>;
+       }
+       method_iterator_of_doubles_check {
+           params {
+               @in i_in: iterator<double>;
+           }
+           return: iterator<double>;
+       }
+       method_iterator_of_enums_check {
+           params {
+               @in i_in: iterator<Test.Enum_Ex>;
+           }
+           return: iterator<Test.Enum_Ex>;
+       }
+       method_iterator_of_structs_check {
+           params {
+               @in i_in: iterator<Test.Struct_Ex>;
+           }
+           return: iterator<Test.Struct_Ex>;
+       }
+       method_array_of_arrays_of_ints_check {
+           params {
+               @in a_in: array<array<int> >;
+           }
+           return: array<array<int> >;
+       }
+       method_list_of_lists_of_ints_check {
+           params {
+               @in l_in: list<list<int> >;
+           }
+           return: list<list<int> >;
+       }
+       method_array_of_lists_of_ints_check {
+           params {
+               @in a_in: array<list<int> >;
+           }
+           return: array<list<int> >;
+       }
+       method_list_of_arrays_of_ints_check {
+           params {
+               @in l_in: list<array<int> >;
+           }
+           return: list<array<int> >;
+       }
+       method_list_with_opaque_elements_check {
+           return: const(list<Elm.Calendar.Mark>);
+       }
+       method_in_enum_return_enum_check {
+           params { e: Test.Enum_Ex; }
+           return: Test.Enum_Ex;
+       }
+       method_in_struct_return_struct_check {
+           params { e: ptr(Test.Struct_Ex); }
+           return: ptr(Test.Struct_Ex);
+       }
+       event_emit {
+       }
+       event_repeated_event_name {
+       }
+   }
+   implements {
+      Efl.Object.finalize;
+      Efl.Object.constructor;
+      Efl.Object.destructor;
+   }
+   events {
+      test: void;
+      test,structarg: Test.Struct_Ex;
+      test,stringarg: string;
+      repeated,event,name: void;
+   }
+}

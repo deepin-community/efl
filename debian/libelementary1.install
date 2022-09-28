@@ -1,0 +1,4 @@
+usr/lib/*/libelementary*.so.*
+usr/lib/*/edje/modules/elm/*/module.so
+usr/lib/*/elementary/modules/*/*/*.so
+usr/lib/*/elementary/modules/*/*/*/*.so

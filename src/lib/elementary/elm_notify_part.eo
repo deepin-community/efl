@@ -1,0 +1,12 @@
+class @beta Elm.Notify.Part extends Efl.Ui.Widget_Part implements Efl.Content, Efl.Text,
+                       Efl.Ui.L10n
+{
+   [[Elementary notification internel part class]]
+   data: null;
+   implements {
+      Efl.Text.text { get; set; }
+      Efl.Ui.L10n.l10n_text { get; set; }
+      Efl.Content.content { get; set; }
+      Efl.Content.content_unset;
+   }
+}

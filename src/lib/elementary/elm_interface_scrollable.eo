@@ -1,0 +1,664 @@
+import efl_ui_layout_orientable;
+type @beta Elm_Interface_Scrollable_Cb: __undefined_type; [[Elementary interface scrollable callback type]]
+type @beta Elm_Interface_Scrollable_Resize_Cb: __undefined_type; [[Elementary interface scrollable resize callback type]]
+type @beta Elm_Interface_Scrollable_Min_Limit_Cb: __undefined_type; [[Elementary interface scrollable minimal limit callback type]]
+
+/* FIXME: Rename the namespace of the types. */
+enum @beta Elm.Scroller.Policy
+{
+   [[Type that controls when scrollbars should appear.
+
+     See also @Elm.Interface_Scrollable.policy.set.
+   ]]
+   auto = 0, [[Show scrollbars as needed.]]
+   on, [[Always show scrollbars.]]
+   off, [[Never show scrollbars.]]
+   last [[Internal. Sentinel value to indicate last enum field during iteration.]]
+}
+
+enum @beta Elm.Scroller.Single_Direction
+{
+   [[Type that controls how the content is scrolled.
+
+     See also @Elm.Interface_Scrollable.single_direction.set.
+   ]]
+   none = 0, [[Scroll every direction.]]
+   soft, [[Scroll single direction if the direction is certain.]]
+   hard, [[Scroll only single direction.]]
+   last  [[Internal. Sentinel value to indicate last enum field during iteration.]]
+}
+
+mixin @beta Elm.Interface_Scrollable requires Efl.Ui.Widget extends Efl.Ui.Focus.Manager_Sub, Efl.Ui.Widget_Focus_Manager
+{
+   [[Elm scrollable mixin]]
+   c_prefix: elm_interface_scrollable;
+   data: Elm_Scrollable_Smart_Interface_Data;
+   methods {
+      @property gravity {
+         [[Control scrolling gravity on the scrollable
+
+           The gravity defines how the scroller will adjust its view
+           when the size of the scroller contents increases.
+
+           The scroller will adjust the view to glue itself as follows.
+
+            x=0.0, for staying where it is relative to the left edge of the content
+            x=1.0, for staying where it is relative to the right edge of the content
+            y=0.0, for staying where it is relative to the top edge of the content
+            y=1.0, for staying where it is relative to the bottom edge of the content
+
+           Default values for x and y are 0.0]]
+         set {
+         }
+         get {
+         }
+         values {
+            x: double; [[Horizontal scrolling gravity]]
+            y: double; [[Vertical scrolling gravity]]
+         }
+      }
+      @property bounce_allow {
+         [[Bouncing behavior
+
+           When scrolling, the scroller may "bounce" when reaching an edge of the
+           content object. This is a visual way to indicate the end has been reached.
+           This is enabled by default for both axis. This API will set if it is enabled
+           for the given axis with the boolean parameters for each axis.]]
+         set {
+         }
+         get {
+         }
+         values {
+            horiz: bool; [[Horizontal bounce policy.]]
+            vert: bool; [[Vertical bounce policy.]]
+         }
+      }
+      @property wheel_disabled {
+         [[Control Wheel disable
+           Enable or disable mouse wheel to be used to scroll the scroller content.
+           heel is enabled by default.]]
+         set {
+         }
+         get {
+         }
+         values {
+            disabled: bool; [[$true if wheel is disabled, $false otherwise]]
+         }
+      }
+      @property movement_block {
+         [[Blocking of scrolling (per axis)
+
+           This function will block scrolling movement (by input of a user) in
+           a given direction. One can disable movements in the X axis, the Y
+           axis or both. The default value is $none, where movements are
+           allowed in both directions.
+
+           What makes this function different from
+           freeze_push(), hold_push() and lock_x_set() (or lock_y_set())
+           is that it doesn't propagate its effects to any parent or child
+           widget of $obj. Only the target scrollable widget will be locked
+           with regard to scrolling.
+         ]]
+         values {
+            block: Efl.Ui.Layout_Orientation(Efl.Ui.Layout_Orientation.default); [[Which axis (or axes) to block]]
+         }
+      }
+      @property momentum_animator_disabled {
+          [[Momentum animator]]
+         set {
+         }
+         get {
+         }
+         values {
+            disabled: bool; [[$true if disabled, $false otherwise]]
+         }
+      }
+      @property policy {
+          [[Scrollbar visibility policy]]
+         set {
+         }
+         get {
+         }
+         values {
+            hbar: Elm.Scroller.Policy; [[Horizontal scrollbar policy]]
+            vbar: Elm.Scroller.Policy; [[Vertical scrollbar policy]]
+         }
+      }
+      @property content_region {
+         [[Currently visible content region
+
+           This gets the current region in the content object that is visible through
+           the scroller. The region co-ordinates are returned in the $x, $y,
+           $w, $h values pointed to.
+
+           Note: All coordinates are relative to the content.
+
+           See: @.content_region_show.]]
+
+
+         set {
+         }
+         get {
+         }
+         values {
+            x: int; [[X coordinate of the region]]
+            y: int; [[Y coordinate of the region]]
+            w: int; [[Width of the region]]
+            h: int; [[Height of the region]]
+         }
+      }
+      @property content_events {
+         [[It decides whether the scrollable object propagates the events to content object or not.]]
+         set {
+         }
+         get {
+         }
+         values {
+            repeat_events: bool; [[$true if events are propagated, $false otherwise]]
+         }
+      }
+      @property page_size {
+         [[Scroll page size relative to viewport size.
+
+           The scroller is capable of limiting scrolling by the user to "pages". That
+           is to jump by and only show a "whole page" at a time as if the continuous
+           area of the scroller content is split into page sized pieces. This sets
+           the size of a page relative to the viewport of the scroller. 1.0 is "1
+           viewport" is size (horizontally or vertically). 0.0 turns it off in that
+           axis. This is mutually exclusive with page size
+           (see @.page_size for more information). Likewise 0.5
+           is "half a viewport". Sane usable values are normally between 0.0 and 1.0
+           including 1.0. If you only want 1 axis to be page "limited", use 0.0 for
+           the other axis.]]
+         set {
+         }
+         get {
+         }
+         values {
+            x: int; [[The horizontal page relative size]]
+            y: int; [[The vertical page relative size]]
+         }
+      }
+      @property bounce_animator_disabled {
+          [[Bounce animator]]
+         set {
+         }
+         get {
+         }
+         values {
+            disabled: bool; [[$true if bounce animation is disabled, $false otherwise]]
+         }
+      }
+      @property page_scroll_limit {
+          [[Page scroll limit]]
+         set {
+         }
+         get {
+         }
+         values {
+            page_limit_h: int; [[Page limit horizontal]]
+            page_limit_v: int; [[Page limit vertical]]
+         }
+      }
+      @property page_snap_allow {
+         [[Page snapping behavior
+
+           When scrolling, if a scroller is paged (see
+           elm_scroller_page_size_set() and elm_scroller_page_relative_set()),
+           the scroller may snap to pages when being scrolled, i.e., even if
+           it had momentum to scroll further, it will stop at the next page
+           boundaries. This is disabled, by default, for both axis. This
+           function will set if it that is enabled or not, for each axis.
+
+           Note: If $obj is not set to have pages, nothing will happen after
+           this call.
+         ]]
+         set {
+         }
+         get {
+         }
+         values {
+            horiz: bool; [[Allow snap horizontally]]
+            vert: bool;  [[Allow snap vertically]]
+         }
+      }
+      @property paging {
+          [[Paging property]]
+         set {
+         }
+         get {
+         }
+         values {
+            pagerel_h: double; [[Page relation horizontal]]
+            pagerel_v: double; [[Page relation vertical]]
+            pagesize_h: int; [[Page size horizontal]]
+            pagesize_v: int; [[Page size vertical]]
+         }
+      }
+      @property single_direction {
+         [[Single direction scroll configuration
+
+           This makes it possible to restrict scrolling to a single direction,
+           with a "soft" or "hard" behavior.
+
+           The hard behavior restricts the scrolling to a single direction all
+           of the time while the soft one will restrict depending on factors
+           such as the movement angle. If the user scrolls roughly in one
+           direction only, it will only move according to it while if the move
+           was clearly wanted on both axes, it will happen on both of them.
+         ]]
+         set {
+         }
+         get {
+         }
+         values {
+            single_dir: Elm.Scroller.Single_Direction; [[The single direction scroll policy]]
+         }
+      }
+      @property step_size {
+          [[Step size]]
+         set {
+         }
+         get {
+         }
+         values {
+            x: int; [[X coordinate]]
+            y: int; [[Y coordinate]]
+         }
+      }
+      @property content_loop {
+         [[Controls an infinite loop for a scroller.
+         ]]
+         set {
+         }
+         get {
+         }
+         values {
+            loop_h: bool; [[The scrolling horizontal loop]]
+            loop_v: bool; [[The scrolling vertical loop]]
+         }
+      }
+      @property scroll_up_cb {
+         [[Set the callback to run when the content has been moved up.]]
+         set {
+         }
+         values {
+            scroll_up_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property hbar_drag_cb {
+         [[Set the callback to run when the horizontal scrollbar is dragged.]]
+         set {
+         }
+         values {
+            hbar_drag_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property drag_start_cb {
+         [[Set the callback to run when dragging of the contents has started.]]
+         set {
+         }
+         values {
+            drag_start_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property freeze {
+         [[Freeze property]]
+         set {
+         }
+         values {
+            freeze: bool; [[$true if freeze, $false otherwise]]
+         }
+      }
+      @property content_viewport_resize_cb {
+         [[When the viewport is resized, the callback is called.]]
+         set {
+         }
+         values {
+            viewport_resize_cb: Elm_Interface_Scrollable_Resize_Cb; [[The callback]]
+         }
+      }
+      @property scroll_left_cb {
+         [[Set the callback to run when the content has been moved to the left]]
+         set {
+         }
+         values {
+            scroll_left_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property vbar_press_cb {
+         [[Set the callback to run when the vertical scrollbar is pressed.]]
+         set {
+         }
+         values {
+            vbar_press_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property hbar_press_cb {
+         [[Set the callback to run when the horizontal scrollbar is pressed.]]
+         set {
+         }
+         values {
+            hbar_press_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property hbar_unpress_cb {
+         [[Set the callback to run when the horizontal scrollbar is unpressed.]]
+         set {
+         }
+         values {
+            hbar_unpress_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property drag_stop_cb {
+         [[Set the callback to run when dragging of the contents has stopped.]]
+         set {
+         }
+         values {
+            drag_stop_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property extern_pan {
+          [[Extern pan]]
+         set {
+         }
+         values {
+            pan: Efl.Canvas.Object; [[Pan object]]
+         }
+      }
+      @property page_change_cb {
+         [[Set the callback to run when the visible page changes.]]
+         set {
+         }
+         values {
+            page_change_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property hold {
+          [[Hold property]]
+         set {
+         }
+         values {
+            hold: bool; [[$true if hold, $false otherwise]]
+         }
+      }
+      @property animate_start_cb {
+         [[Set the callback to run when the scrolling animation has started.]]
+         set {
+         }
+         values {
+            animate_start_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property scroll_down_cb {
+         [[Set the callback to run when the content has been moved down.]]
+         set {
+         }
+         values {
+            scroll_down_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property page_relative {
+         [[Set scroll page size relative to viewport size.]]
+         set {
+         }
+         values {
+            h_pagerel: double; [[Page relation horizontal]]
+            v_pagerel: double; [[Page relation vertical]]
+         }
+      }
+      @property scroll_cb {
+         [[Set the callback to run when the content has been moved.]]
+         set {
+         }
+         values {
+            scroll_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property animate_stop_cb {
+         [[Set the callback to run when the scrolling animation has stopped.]]
+         set {
+         }
+         values {
+            animate_stop_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property content_min_limit_cb {
+         [[set the callback to run on minimal limit content]]
+         set {
+         }
+         values {
+            min_limit_cb: Elm_Interface_Scrollable_Min_Limit_Cb; [[The callback]]
+         }
+      }
+      @property scroll_right_cb {
+         [[Set the callback to run when the content has been moved to the right.]]
+         set {
+         }
+         values {
+            scroll_right_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property scrollable_content {
+         [[Content property]]
+         set {
+         }
+         values {
+            content: Efl.Canvas.Object; [[Content object]]
+         }
+      }
+      @property edge_left_cb {
+         [[Set the callback to run when the left edge of the content has been reached.]]
+         set {
+         }
+         values {
+            edge_left_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property vbar_drag_cb {
+         [[Set the callback to run when the horizontal scrollbar is dragged.]]
+         set {
+         }
+         values {
+            vbar_drag_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property vbar_unpress_cb {
+         [[Set the callback to run when the horizontal scrollbar is unpressed.]]
+         set {
+         }
+         values {
+            vbar_unpress_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property edge_bottom_cb {
+         [[Set the callback to run when the bottom edge of the content has been reached.]]
+         set {
+         }
+         values {
+            edge_bottom_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property edge_right_cb {
+         [[Set the callback to run when the right edge of the content has been reached.]]
+         set {
+         }
+         values {
+            edge_right_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property edge_top_cb {
+         [[Set the callback to run when the top edge of the content has been reached.]]
+         set {
+         }
+         values {
+            edge_top_cb: Elm_Interface_Scrollable_Cb; [[The callback]]
+         }
+      }
+      @property objects {
+         [[Object property]]
+         set {
+         }
+         values {
+            edje_object: Efl.Canvas.Object; [[Edje object]]
+            hit_rectangle: Efl.Canvas.Object; [[Evas object]]
+         }
+      }
+      @property last_page {
+         [[Scroll last page number.
+
+           The page number starts from 0. 0 is the first page.
+           This returns the last page number among the pages.
+
+           See: @.current_page, @.page_show and @.page_bring_in.]]
+         get {
+         }
+         values {
+            pagenumber_h: int; [[The horizontal page number]]
+            pagenumber_v: int; [[The vertical page number]]
+         }
+      }
+      @property current_page {
+         [[Scroll current page number.
+
+           The page number starts from 0. 0 is the first page.
+           Current page means the page which meets the top-left of the viewport.
+           If there are two or more pages in the viewport, it returns the number of the page
+           which meets the top-left of the viewport.
+
+           See: @.last_page, @.page_show and @.page_bring_in.]]
+         get {
+         }
+         values {
+            pagenumber_h: int; [[The horizontal page number]]
+            pagenumber_v: int; [[The vertical page number]]
+         }
+      }
+      @property content_viewport_geometry {
+          [[Content viewport geometry]]
+         get {
+         }
+         values {
+            x: int; [[X coordinate]]
+            y: int; [[Y coordinate]]
+            w: int; [[Width]]
+            h: int; [[Height]]
+         }
+      }
+      @property content_size {
+         [[Get the size of the content object
+
+           This gets the size of the content object of the scroller.]]
+         get {
+         }
+         values {
+            w: int; [[Width of the content object.]]
+            h: int; [[Height of the content object.]]
+
+         }
+      }
+      content_pos_set {
+          [[Set the content position]]
+         params {
+            @in x: int; [[X coordinate]]
+            @in y: int; [[Y coordinate]]
+            @in sig: bool; [[Send signals to the theme corresponding to the
+                             scroll direction, or if an edge was reached.]]
+         }
+      }
+      content_pos_get @const {
+          [[Get content position]]
+         params {
+            @out x: int; [[X coordinate]]
+            @out y: int; [[Y coordinate]]
+         }
+      }
+      page_show {
+         [[Show a specific virtual region within the scroller content object by page number.
+
+           0, 0 of the indicated page is located at the top-left of the viewport.
+           This will jump to the page directly without animation.
+
+           See @.page_bring_in.]]
+         params {
+            @in pagenumber_h: int; [[The horizontal page number]]
+            @in pagenumber_v: int; [[The vertical page number]]
+         }
+      }
+      region_bring_in {
+         [[Show a specific virtual region within the scroller content object.
+
+           This will ensure all (or part if it does not fit) of the designated
+           region in the virtual content object (0, 0 starting at the top-left of the
+           virtual content object) is shown within the scroller. Unlike
+           elm_scroller_region_show(), this allows the scroller to "smoothly slide"
+           to this location (if configuration in general calls for transitions). It
+           may not jump immediately to the new location and make take a while and
+           show other content along the way.
+
+           See @.content_region_show]]
+         params {
+            @in x: int; [[X coordinate of the region]]
+            @in y: int; [[Y coordinate of the region]]
+            @in w: int; [[Width of the region]]
+            @in h: int; [[Height of the region]]
+         }
+      }
+      page_bring_in {
+         [[Show a specific virtual region within the scroller content object by page number.
+
+           0, 0 of the indicated page is located at the top-left of the viewport.
+           This will slide to the page with animation.
+
+           @.page_show]]
+         params {
+            @in pagenumber_h: int; [[The horizontal page number]]
+            @in pagenumber_v: int; [[The vertical page number]]
+         }
+      }
+      content_region_show {
+         [[Show a specific virtual region within the scroller content object
+
+           This will ensure all (or part if it does not fit) of the designated
+           region in the virtual content object (0, 0 starting at the top-left of the
+           virtual content object) is shown within the scroller.]]
+         params {
+            @in x: int; [[X coordinate of the region]]
+            @in y: int; [[Y coordinate of the region]]
+            @in w: int; [[Width of the region]]
+            @in h: int; [[Height of the region]]
+         }
+      }
+      content_min_limit {
+         [[Prevent the scrollable from being smaller than the minimum size of the content.
+
+           By default the scroller will be as small as its design allows,
+           irrespective of its content. This will make the scroller minimum size the
+           right size horizontally and/or vertically to perfectly fit its content in
+           that direction.]]
+         params {
+            @in w: bool; [[Whether to limit the minimum horizontal size]]
+            @in h: bool; [[Whether to limit the minimum vertical size]]
+         }
+      }
+      @property item_loop_enabled {
+         [[Whether scrolling should loop around.]]
+         values {
+            enable: bool; [[True to enable looping.]]
+         }
+      }
+      reset_signals {
+        [[Call this if you have changed the group of the object passed to @.objects]]
+      }
+   }
+   implements {
+      class.constructor;
+      Efl.Object.constructor;
+      Efl.Ui.Focus.Manager.border_elements { get; }
+      Efl.Ui.Widget_Focus_Manager.focus_manager_create;
+      Efl.Ui.I18n.mirrored { set; }
+   }
+   events {
+      changed: void; [[Called when content changed]]
+   }
+}

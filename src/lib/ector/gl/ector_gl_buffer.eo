@@ -1,0 +1,5 @@
+class @beta Ector.GL.Buffer extends Efl.Object implements Ector.Buffer
+{
+   [[Ector GL buffer class]]
+   data: null;
+}

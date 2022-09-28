@@ -1,0 +1,7 @@
+class B extends A {
+   [[Docs for class B. @since 1.66]]
+   data: B_Data;
+   implements {
+      Efl.Object.constructor;
+   }
+}

@@ -1,0 +1,2 @@
+usr/lib/*/libeolian.so.*
+usr/share/elua/modules/eolian.lua

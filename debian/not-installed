@@ -1,0 +1,15 @@
+# c++ bindings aren't built, but the cmake files are still generated
+usr/lib/*/cmake/*Cxx
+
+# would require a separate binary package to avoid circular
+# dependencies, and isn't needed by anything in the archive.  Can be
+# likely be shipped after library bundling.
+usr/bin/ecore_evas_convert
+
+# installing some checkmes would require additional binary packages.
+# These can be shipped in a common data package after the lib bundling
+# is complete.
+usr/share/*/checkme
+
+# this appears to have been committed upstream by mistake
+usr/share/elua/apps/empty.txt

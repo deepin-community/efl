@@ -1,0 +1,11 @@
+abstract @beta Ector.Renderer.Software extends Ector.Renderer
+{
+   [[Ector software renderer class]]
+   data: null;
+   methods {
+      op_fill @pure_virtual {
+          [[Renderer fill operation]]
+         return: bool; [[$true on success, $false otherwise]]
+      }
+   }
+}

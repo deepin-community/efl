@@ -1,0 +1,4 @@
+usr/bin/efl_debug
+usr/bin/efl_debugd
+usr/bin/eina_btlog
+usr/bin/eina_modinfo

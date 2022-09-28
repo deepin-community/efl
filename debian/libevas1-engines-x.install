@@ -1,0 +1,3 @@
+usr/lib/*/evas/modules/engines/gl_generic/*/module.so
+usr/lib/*/evas/modules/engines/gl_x11/*/module.so
+usr/lib/*/evas/modules/engines/software_x11/*/module.so

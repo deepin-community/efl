@@ -1,0 +1,54 @@
+
+================================================================================
+Class:        ${cls.name}$ (${cls.short_name}$)
+================================================================================
+Class type:   ${cls.type}$
+Parent:       ${cls.parent.name if cls.parent else None}$
+Hierarchy:    ${' => '.join([i.name for i in cls.hierarchy])}$
+InheritsFull: ${', '.join([i.name for i in cls.inherits_full])}$
+Namespace:    ${cls.namespace}$
+Namespaces:   ${list(cls.namespaces)}$
+File:         ${cls.file}$
+Ctor enable:  ${cls.ctor_enable}$
+Dtor enable:  ${cls.dtor_enable}$
+
+Constructors:
+=============
+<!--(for ctor in cls.constructors)-->
+ * ${ctor}$
+<!--(else)-->
+ no constructors available
+<!--(end)-->
+
+Methods:
+========
+<!--(for func in cls.methods)-->
+ * ${func.name}$(...) ${func.method_scope}$
+<!--(else)-->
+ no methods available
+<!--(end)-->
+
+Properties:
+===========
+<!--(for func in cls.properties)-->
+ * ${func.name}$ (<!--(for v in func.getter_values)-->${v.type.c_type_default}$ ${v.name}$, <!--(end)-->)
+<!--(else)-->
+ no properties available
+<!--(end)-->
+
+Implements:
+===========
+<!--(for i in cls.implements)-->
+ * ${i.name}$
+<!--(else)-->
+ no implements available
+<!--(end)-->
+
+Events:
+=======
+<!--(for event in cls.events)-->
+ * ${event.name}$ -> ${event.c_name}$
+<!--(else)-->
+ no events available
+<!--(end)-->
+

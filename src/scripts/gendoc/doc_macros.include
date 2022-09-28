@@ -1,0 +1,345 @@
+#!##############################################################################
+#!####  BEST_SUMMARY(obj)  #####################################################
+#!##############################################################################
+<!--(macro BEST_SUMMARY)-->
+   <!--(if isinstance(obj, Documentation))-->
+${UNTOKENIZE(tokens=obj.summary_tokens)}$#!
+   <!--(elif isinstance(obj, Implement))-->
+      <!--(if obj.documentation_get(obj.function.type))-->
+${UNTOKENIZE(tokens=obj.documentation_get(obj.function.type).summary_tokens)}$#!
+      <!--(elif obj.documentation_fallback)-->
+${UNTOKENIZE(tokens=obj.documentation_fallback.summary_tokens)}$#!
+      <!--(end)-->
+   <!--(elif obj and obj.documentation)-->
+${UNTOKENIZE(tokens=obj.documentation.summary_tokens)}$#!
+   <!--(else)-->
+**MISSING DOCS !!!!!**#!
+   <!--(end)-->
+<!--(end)-->
+#!##############################################################################
+#!####  BEST_DESCRIPTION(obj)  #################################################
+#!##############################################################################
+<!--(macro BEST_DESCRIPTION)-->
+   <!--(if isinstance(obj, Documentation))-->
+${UNTOKENIZE(tokens=obj.description_tokens)}$#!
+   <!--(elif isinstance(obj, Implement))-->
+      <!--(if obj.documentation_get(obj.function.type))-->
+${UNTOKENIZE(tokens=obj.documentation_get(obj.function.type).description_tokens)}$#!
+      <!--(elif obj.documentation_fallback)-->
+${UNTOKENIZE(tokens=obj.documentation_fallback.description_tokens)}$#!
+      <!--(end)-->
+   <!--(elif obj and obj.documentation)-->
+${UNTOKENIZE(tokens=obj.documentation.description_tokens)}$#!
+   <!--(else)-->
+**MISSING DOCS !!!!!**#!
+   <!--(end)-->
+<!--(end)-->
+#!##############################################################################
+#!####  BEST_SINCE(obj)  #######################################################
+#!##############################################################################
+<!--(macro BEST_SINCE)-->
+   <!--(if isinstance(obj, Documentation) and obj.since)-->
+//Since ${obj.since}$//
+   <!--(elif isinstance(obj, Implement))-->
+      <!--(if obj.documentation_get(obj.function.type))-->
+//Since ${obj.documentation_get(obj.function.type).since}$//
+      <!--(elif obj.documentation_fallback)-->
+//Since ${obj.documentation_fallback.since}$//
+      <!--(end)-->
+   <!--(elif obj and obj.documentation and obj.documentation.since)-->
+//Since ${obj.documentation.since}$//
+   <!--(end)-->
+<!--(end)-->
+#!##############################################################################
+#!####  UNTOKENIZE(tokens)  ####################################################
+#!##############################################################################
+<!--(macro UNTOKENIZE)-->
+   <!--(for i, paragraph in enumerate(tokens))-->
+${'\n\n' if i else ''}$#!
+      <!--(for token in paragraph)-->
+         <!--(if token.type == Eolian_Doc_Token_Type.TEXT)-->
+%%${token.text}$%%#!
+         <!--(elif token.type == Eolian_Doc_Token_Type.REF)-->
+            <!--(if token.ref_type == Eolian_Object_Type.FUNCTION)-->
+${CLS_LINK(cls=token.ref_obj)}$.${FUNC_LINK(func=token.ref_attr)}$#!
+            <!--(elif token.ref_type == Eolian_Object_Type.TYPEDECL)-->
+${TYPEDECL_LINK(typedecl=token.ref_obj)}$#!
+            <!--(elif token.ref_type == Eolian_Object_Type.CLASS)-->
+${CLS_LINK(cls=token.ref_obj)}$#!
+            <!--(elif token.ref_type == Eolian_Object_Type.EVENT)-->
+${EVENT_LINK(cls=token.ref_obj, ev=token.ref_attr)}$#!
+            <!--(else)-->
+**TODO REF ${token.ref_type}$** #!
+            <!--(end)-->
+         <!--(elif token.type == Eolian_Doc_Token_Type.MARKUP_MONOSPACE)-->
+''${token.text}$''#!
+         <!--(elif token.type == Eolian_Doc_Token_Type.MARK_NOTE)-->
+<note>
+${token.text}$
+</note>
+         <!--(elif token.type == Eolian_Doc_Token_Type.MARK_WARNING)-->
+<note warning>
+${token.text}$
+</note>
+         <!--(elif token.type == Eolian_Doc_Token_Type.MARK_REMARK)-->
+<note tip>
+${token.text}$
+</note>
+         <!--(elif token.type == Eolian_Doc_Token_Type.MARK_TODO)-->
+<note>
+**TODO:** ${token.text}$
+</note>
+         <!--(else)-->
+**USUPPORTED TOKEN TYPE ${token}$**
+         <!--(end)-->
+      <!--(end)-->
+   <!--(end)-->
+<!--(end)-->
+#!##############################################################################
+#!####  CLS_TYPE(cls)  #########################################################
+#!##############################################################################
+<!--(macro CLS_TYPE)-->
+   <!--(if cls.type == Eolian_Class_Type.REGULAR)-->
+class#!
+   <!--(elif cls.type == Eolian_Class_Type.ABSTRACT)-->
+class#!
+   <!--(elif cls.type == Eolian_Class_Type.MIXIN)-->
+mixin#!
+   <!--(elif cls.type == Eolian_Class_Type.INTERFACE)-->
+interface#!
+   <!--(end)-->
+<!--(end)-->
+#!##############################################################################
+#!####  CLS_LINK(cls)  #########################################################
+#!##############################################################################
+<!--(macro CLS_LINK)-->
+[[:develop:api#!
+   <!--(for n in cls.namespaces)-->
+:${n.lower()}$#!
+   <!--(end)-->
+:${cls.short_name.lower()}$|${cls.name}$]]
+<!--(end)-->
+#!##############################################################################
+#!####  EVENT_LINK(cls, ev)  ###################################################
+#!##############################################################################
+<!--(macro EVENT_LINK)-->
+''[[:develop:api#!
+   <!--(for n in cls.namespaces)-->
+:${n.lower()}$#!
+   <!--(end)-->
+:${cls.short_name.lower()}$#!
+#event_${ev.short_name.lower().replace(',','_')}$|${ev.name}$]]''
+<!--(end)-->
+#!##############################################################################
+#!####  TYPEDECL_LINK(typedecl)  ###############################################
+#!##############################################################################
+<!--(macro TYPEDECL_LINK)-->
+[[:develop:api#!
+   <!--(for n in typedecl.namespaces)-->
+:${n.lower()}$#!
+   <!--(end)-->
+:${typedecl.short_name.lower()}$|${typedecl.name}$]]
+<!--(end)-->
+#!##############################################################################
+#!####  TYPE_LINK(type)  #######################################################
+#!##############################################################################
+<!--(macro TYPE_LINK)-->
+[[:develop:api#!
+   <!--(for n in type.namespaces)-->
+:${n.lower()}$#!
+   <!--(end)-->
+:${type.short_name}$|${type.name}$]]
+<!--(end)-->
+#!##############################################################################
+#!####  FUNC_LINK(func)  #######################################################
+#!##############################################################################
+<!--(macro FUNC_LINK)-->
+[[:develop:api#!
+   <!--(for n in func.class_.namespaces)-->
+:${n.lower()}$#!
+   <!--(end)-->
+:${func.class_.short_name}$#!
+#${func.short_name}$#!
+|${func.short_name}$]]
+<!--(end)-->
+#!##############################################################################
+#!####  FUNC_SCOPE(func)  ######################################################
+#!##############################################################################
+<!--(macro FUNC_SCOPE)-->
+   <!--(if func.is_static)-->
+ ''static method'' #!
+   <!--(end)-->
+   <!--(if func.type == Eolian_Function_Type.PROPERTY)-->
+      <!--(if func.getter_scope == Eolian_Object_Scope.PROTECTED)-->
+ ''protected get'' #!
+      <!--(elif func.getter_scope == Eolian_Object_Scope.PRIVATE)-->
+ ''private get'' #!
+      <!--(end)-->
+      <!--(if func.setter_scope == Eolian_Object_Scope.PROTECTED)-->
+ ''protected set'' #!
+      <!--(elif func.setter_scope == Eolian_Object_Scope.PRIVATE)-->
+ ''private set'' #!
+      <!--(end)-->
+   <!--(elif func.type == Eolian_Function_Type.METHOD)-->
+      <!--(if func.method_scope == Eolian_Object_Scope.PROTECTED)-->
+ ''protected'' #!
+      <!--(elif func.method_scope == Eolian_Object_Scope.PRIVATE)-->
+ ''private'' #!
+      <!--(end)-->
+   <!--(end)-->
+<!--(end)-->
+#!##############################################################################
+#!####  OBJECT_SCOPE(obj)  #####################################################
+#!##############################################################################
+<!--(macro OBJECT_SCOPE)-->
+   <!--(if obj.scope == Eolian_Object_Scope.PROTECTED)-->
+ ''private'' #!
+   <!--(elif obj.scope == Eolian_Object_Scope.PRIVATE)-->
+ ''protected'' #!
+   <!--(end)-->
+<!--(end)-->
+#!##############################################################################
+#!####  EVENT_TAGS(ev)  ########################################################
+#!##############################################################################
+<!--(macro EVENT_TAGS)-->
+   <!--(if ev.is_hot)-->
+ ''hot'' #!
+   <!--(elif ev.is_restart)-->
+ ''restart'' #!
+   <!--(end)-->
+${OBJ_TAGS(obj=ev)}$
+<!--(end)-->
+#!##############################################################################
+#!####  IMPLEMENT_TAGS(impl)  ##################################################
+#!##############################################################################
+<!--(macro IMPLEMENT_TAGS)-->
+   <!--(if impl.is_prop_get and impl.is_prop_set)-->
+ ''rw'' #!
+   <!--(elif impl.is_prop_get)-->
+ ''read only'' #!
+   <!--(elif impl.is_prop_set)-->
+ ''write only'' #!
+   <!--(end)-->
+${OBJ_TAGS(obj=impl)}$
+<!--(end)-->
+#!##############################################################################
+#!####  OBJ_TAGS(obj)  #########################################################
+#!##############################################################################
+<!--(macro OBJ_TAGS)-->
+   <!--(if obj.is_beta)-->
+  ''beta'' #!
+   <!--(end)-->
+<!--(end)-->
+#!##############################################################################
+#!####  PARAM_DIRECTION_TAG(param)  ############################################
+#!##############################################################################
+<!--(macro PARAM_DIRECTION_TAG)-->
+      <!--(if param.direction == Eolian_Parameter_Direction.IN)-->
+ ''in'' #!
+      <!--(elif param.direction == Eolian_Parameter_Direction.OUT)-->
+ ''out'' #!
+      <!--(elif param.direction == Eolian_Parameter_Direction.INOUT)-->
+ ''inout'' #!
+      <!--(end)-->
+<!--(end)-->
+#!##############################################################################
+#!####  METHOD_PARAMS(func)  ###################################################
+#!##############################################################################
+<!--(macro METHOD_PARAMS)-->
+
+   <!--(for i, par in enumerate(func.parameters))-->
+      <!--(if i == 0)-->
+^ parameters ^ type ^ description ^
+      <!--(end)-->
+|${PARAM_DIRECTION_TAG(param=par)}$ **${par.name}$**|${TYPE_LINK(type=par.type)}$ #!
+|${BEST_SUMMARY(obj=par)}$ ${BEST_DESCRIPTION(obj=par)}$|
+   <!--(else)-->
+**This function does not accept any parameter.**
+   <!--(end)-->
+
+   <!--(if func.method_return_type)-->
+${setvar("obj", "func.return_documentation(Eolian_Function_Type.METHOD)")}$#!
+^ return ^ description ^
+|**${TYPE_LINK(type=func.method_return_type)}$**|${BEST_SUMMARY(obj=obj)}$ ${BEST_DESCRIPTION(obj=obj)}$|
+   <!--(else)-->
+**This function does not return anything.**
+   <!--(end)-->
+
+<!--(end)-->
+#!##############################################################################
+#!####  PROPERTY_PARAMS(func)  #################################################
+#!##############################################################################
+<!--(macro PROPERTY_PARAMS)-->
+
+   <!--(for i, val in enumerate(func.getter_values or func.setter_values))-->
+      <!--(if i == 0)-->
+^ values ^ type ^ description ^
+      <!--(end)-->
+|**${val.name}$**|${TYPE_LINK(type=val.type)}$|${BEST_SUMMARY(obj=val)}$|
+   <!--(end)-->
+
+   <!--(for i, key in enumerate(func.getter_keys or func.setter_keys))-->
+      <!--(if i == 0)-->
+^ keys ^ type ^ description ^
+      <!--(end)-->
+|**${key.name}$**|${TYPE_LINK(type=key.type)}$|${BEST_SUMMARY(obj=key)}$|
+   <!--(end)-->
+
+<!--(end)-->
+#!##############################################################################
+#!####  IMPLEMENT_FULL(impl, cls)  #############################################
+#!##############################################################################
+<!--(macro IMPLEMENT_FULL)-->
+**${FUNC_LINK(func=impl.function)}$** #!
+(#!
+   <!--(if impl.is_property)-->
+      <!--(for i, val in enumerate(impl.function.getter_values or impl.function.setter_values))-->
+${', ' if i else ''}$${val.type.short_name}$#!
+      <!--(end)-->
+   <!--(elif impl.is_method)-->
+      <!--(for i, param in enumerate(impl.function.parameters))-->
+${', ' if i else ''}$#!
+//${param.type.short_name}$// ''${param.direction.name.lower()}$'' **${param.short_name}$**#!
+      <!--(end)-->
+   <!--(end)-->
+) #!
+${IMPLEMENT_TAGS(impl=impl)}$ #!
+   <!--(if impl.is_method)-->
+      <!--(if impl.function.method_return_type)-->
+ => //${impl.function.method_return_type.short_name}$// #!
+      <!--(else)-->
+ => //None// #!
+      <!--(end)-->
+   <!--(end)-->
+${FUNC_SCOPE(func=impl.function)}$#!
+   <!--(if impl.class_ != cls)-->
+//[Overridden from ${CLS_LINK(cls=impl.class_)}$]// #!
+   <!--(end)-->
+\\
+
+> ${BEST_SUMMARY(obj=impl)}$ ${BEST_SINCE(obj=impl)}$
+
+++++ more... |
+
+${BEST_DESCRIPTION(obj=impl)}$
+
+   <!--(if impl.is_method)-->
+${METHOD_PARAMS(func=impl.function)}$
+   <!--(else)-->
+${PROPERTY_PARAMS(func=impl.function)}$
+   <!--(end)-->
+++++
+
+<!--(end)-->
+#!##############################################################################
+#!####  OBJECT_STATIC_CONTENT(obj, section)  ###################################
+#!##############################################################################
+<!--(macro OBJECT_STATIC_CONTENT)-->
+{{page>:develop:api-include#!
+   <!--(for ns in obj.namespaces)-->
+:${ns.lower()}$#!
+   <!--(end)-->
+:${obj.name.lower()}$#!
+:{section}#!
+&nouser&nolink&nodate}}
+<!--(end)-->

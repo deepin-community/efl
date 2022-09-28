@@ -1,0 +1,17 @@
+struct Callback_Event {
+  [[Docs for struct Callback_Event. @since 1.66]]
+  field1: int;
+  field2: list<string>;
+}
+
+class Callback extends Efl.Object {
+   [[Docs for class Callback. @since 1.66]]
+   data: Callback_Data;
+   events {
+     prefix,event1: void;
+     prefix,event2: Callback;
+     prefix,event3: int;
+     prefix,event4: const(array<string>);
+     prefix,event5: Callback_Event;
+   }
+}

@@ -1,0 +1,128 @@
+class @beta Name1.Name2.Type_Generation extends Efl.Object
+{
+   data: Type_Generation_Data;
+   methods {
+     // in void ptr
+     invoidptr {
+       params {
+         @in v: void_ptr;
+       }
+     }
+     inint {
+       params {
+         @in v: int;
+       }
+     }
+     instring {
+       params {
+         @in v: string;
+       }
+     }
+     instringown {
+       params {
+         @in v: mstring @move;
+       }
+     }
+     instringshare {
+       params {
+         @in v: stringshare;
+       }
+     }
+     instringshareown {
+       params {
+         @in v: stringshare @move;
+       }
+     }
+     // return
+     returnvoidptr {
+        return: void_ptr;
+     }
+     returnint {
+       return: int;
+     }
+     returnstring {
+       return: string;
+     }
+     returnstringown {
+       return: mstring @move;
+     }
+     returnstringshare {
+        return: stringshare;
+     }
+     returnstringshareown {
+        return: stringshare @move;
+     }
+     // out
+     outvoidptr {
+       params {
+         @out v: void_ptr;
+       }
+     }
+     outint {
+       params {
+         @out v: int;
+       }
+     }
+     outstringshare {
+       params {
+         @out v: stringshare;
+       }
+     }
+     outstringshareown {
+       params {
+         @out v: stringshare @move;
+       }
+     }
+     // classname
+     inclassname {
+       params {
+         @in v: Name1.Name2.Type_Generation;
+       }
+     }
+     outclassname {
+       params {
+         @out v: Name1.Name2.Type_Generation;
+       }
+     }
+     inoutclassname {
+       params {
+         @inout v: Name1.Name2.Type_Generation;
+       }
+     }
+     optionalinvoidptr {
+       params {
+         @in v: void_ptr @optional;
+       }
+     }
+     optionalinint {
+       params {
+         @in v: int @optional;
+       }
+     }
+     optionaloutvoidptr {
+       params {
+         @out v: void_ptr @optional;
+       }
+     }
+     optionaloutint {
+       params {
+         @out v: int @optional;
+       }
+     }
+     optionalinclassname {
+       params {
+         @in v: Name1.Name2.Type_Generation @optional;
+       }
+     }
+     optionaloutclassname {
+       params {
+         @out v: Name1.Name2.Type_Generation @optional;
+       }
+     }
+     optionalinoutclassname {
+       params {
+         @inout v: Name1.Name2.Type_Generation @optional;
+       }
+     }
+  }
+}

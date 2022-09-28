@@ -1,0 +1,10 @@
+usr/bin/elementary_config
+usr/bin/elementary_quicklaunch
+usr/bin/elementary_run
+usr/bin/elm_prefs_cc
+usr/bin/elementary_codegen
+usr/share/applications/elementary_config.desktop
+usr/bin/elementary_perf
+usr/bin/elementary_test
+usr/share/applications/elementary_test.desktop
+usr/share/applications/elementary_perf.desktop

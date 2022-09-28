@@ -1,0 +1,36 @@
+class @beta Efl.Ui.Focus.Composition_Adapter extends Efl.Object implements Efl.Ui.Focus.Object
+{
+   [[This class allows an @Efl.Canvas.Object to receive focus as if they were @Efl.Ui.Widget.
+   
+     Instantiate this class and manually set its properties to the appropriate objects.
+   ]]
+   methods {
+      @property canvas_object {
+         [[The canvas object that needs to receive focus.]]
+         values {
+            v : Efl.Canvas.Object; [[The canvas object.]]
+         }
+      }
+      @property focus_manager_object {
+        [[The focus manager handling the focus for the @.canvas_object.]]
+        set {}
+        values {
+          v : Efl.Ui.Focus.Manager; [[The focus manager.]]
+        }
+      }
+      @property focus_manager_parent {
+        [[The focus parent for the @.canvas_object.]]
+        set {}
+        values {
+          parent : Efl.Ui.Focus.Object; [[The focus parent.]]
+        }
+      }
+   }
+   implements {
+     Efl.Ui.Focus.Object.focus_geometry {get;}
+     Efl.Ui.Focus.Object.focus_parent {get;}
+     Efl.Ui.Focus.Object.focus_manager {get;}
+     Efl.Ui.Focus.Object.focus {set;}
+     Efl.Object.destructor;
+   }
+}

@@ -1,0 +1,4 @@
+usr/lib/*/libecore.so.*
+usr/lib/*/ecore/system/*/*/module.so
+
+usr/lib/*/libeldbus.so.*

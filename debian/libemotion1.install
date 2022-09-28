@@ -1,0 +1,3 @@
+usr/lib/*/libemotion.so.*
+usr/lib/*/emotion/modules/gstreamer1/*/module.so
+usr/lib/*/*/modules/emotion/*/module.so

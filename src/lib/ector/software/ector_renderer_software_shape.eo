@@ -1,0 +1,15 @@
+class @beta Ector.Renderer.Software.Shape extends Ector.Renderer.Software implements Ector.Renderer.Shape
+{
+   [[Ector software renderer shape class]]
+   c_prefix: ector_renderer_software_shape;
+   implements {
+      Ector.Renderer.prepare;
+      Ector.Renderer.draw;
+      Ector.Renderer.Software.op_fill;
+      Ector.Renderer.comp_method { set; }
+      Ector.Renderer.crc { get; }
+      Efl.Gfx.Path.commit;
+      Efl.Object.constructor;
+      Efl.Object.destructor;
+   }
+}

@@ -1,0 +1,17 @@
+#ifndef EFL_CONFIG_H
+#define EFL_CONFIG_H
+
+/* Add -DEFL_API_OVERRIDE to your CFLAGS to override the default
+ * installed api set and after that -DEFL_NOLEGACY_API_SUPPORT
+ * as desired
+ */
+#ifndef EFL_API_OVERRIDE 
+@EFL_API_LEGACY_DEF@
+#endif
+
+#define EFL_VERSION_MAJOR @EFL_VERSION_MAJOR@
+#define EFL_VERSION_MINOR @EFL_VERSION_MINOR@
+#define EFL_VERSION_MICRO @EFL_VERSION_MICRO@
+#define EFL_BUILD_ID "@EFL_BUILD_ID@"
+
+#endif

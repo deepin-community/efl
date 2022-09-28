@@ -1,0 +1,2 @@
+usr/lib/*/libecore_wl2.so.*
+usr/lib/*/ecore_wl2/engines/*/*/module.so

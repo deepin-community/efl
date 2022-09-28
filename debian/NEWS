@@ -1,0 +1,11 @@
+efl (1.23.2-1) experimental; urgency=medium
+
+  This release includes significant changes:
+
+  * autotools has been replaced by meson.  This results in numerous
+    changes to how modules are built.
+  * egl/gles is now the default on all architectures instead of just arm.
+    Full OpenGL is no longer supported on Linux.
+  * Wayland support is much improved.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sun, 20 Oct 2019 19:54:43 -0700

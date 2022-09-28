@@ -1,0 +1,4 @@
+usr/lib/*/libefreet.so.*
+usr/lib/*/libefreet_mime.so.*
+usr/lib/*/libefreet_trash.so.*
+usr/lib/*/efreet

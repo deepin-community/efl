@@ -1,0 +1,2 @@
+usr/lib/*/libecore_evas.so.*
+usr/lib/*/ecore_evas/engines/*/*/module.so

@@ -1,0 +1,2 @@
+usr/lib/*/evas/modules/engines/drm/*/module.so
+usr/lib/*/evas/modules/engines/gl_drm/*/module.so

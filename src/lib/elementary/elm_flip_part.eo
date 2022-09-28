@@ -1,0 +1,10 @@
+class @beta Elm.Flip.Part extends Efl.Object implements Efl.Content
+{
+   [[Elementary flip internal part class]]
+   data: null;
+   implements {
+      Efl.Object.destructor;
+      Efl.Content.content { get; set; }
+      Efl.Content.content_unset;
+   }
+}

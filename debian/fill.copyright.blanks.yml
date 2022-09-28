@@ -1,0 +1,131 @@
+---
+# these set the default info for the repo.  using * triggers lots of
+# errors from cme, so list top levels separately.
+
+.*:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+.ci:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+cmakeconfig:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+confs:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+data:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+dbus-services:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+doc:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+header_checks:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+meson:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+old/*:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+po:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+scripts:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+spec:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+src:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+systemd-services:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: BSD-2-clause
+
+
+# individual overrides follow
+src/tests/evas/dicts/*:
+  'override-license': BSD-2-clause
+  'override-copyright': |
+    2007, TeX Users Group.
+    2002-2019, Enlightenment Developers (see AUTHORS)
+
+src/tests/evas/dicts/README_hyph_en_US.txt:
+  'override-license': BSD-2-clause
+
+src/tests/evas/dicts/hyph_de_DE.dic:
+  'override-license': LGPL-2.1+
+  'override-copyright': |
+    Marco Huggenberger <marco@by-night.ch>
+    Daniel Naber
+
+# eina is effectively LGPL-2.1+, but Expat headers are included too
+src/lib/eina/eina_(binshare|share_common|stringshare|tmpstr|ustringshare).h:
+  'override-license': LGPL-2.1+
+
+src/lib/eina/eina_list.c:
+  'override-license': LGPL-2.1+
+
+src/lib/eina/eina_share_common.c:
+  'override-license': LGPL-2.1+
+
+src/lib/eina/eina_convert.c:
+  'override-license': LGPL-2.1+
+
+src/lib/ector/ector_gl_internal.h:
+  'override-license': Khronos
+
+src/modules/evas/engines/gl_common/evas_gl_define.h:
+  'override-license': Khronos
+
+src/static_libs/rg_etc/(etc2_encoder|rg_etc2).c:
+  'override-license': BSD-2-clause
+
+src/lib/evas/Evas_Loader.h:
+  'override-license': BSD-2-clause
+
+old/ChangeLog.evil.0:
+  'override-license': BSD-2-clause
+
+doc/foot.html:
+  'override-copyright': 2002-2020, Enlightenment Developers (see AUTHORS)
+  'override-license': BSD-2-clause
+
+po/hu.po:
+  'override-license': public-domain
+
+po/(ar|az_IR|fa|he|ps|ur|yi).po:
+  'override-copyright': 2002-2020, Enlightenment Developers (see AUTHORS)
+  'override-license': BSD-2-clause
+
+src/bin/exactness/exactness_(play|record).in:
+  'override-copyright': 2017-2020, Enlightenment
+  license: BSD-2-clause
+
+src/bindings/(cxx|mono)/*:
+  copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+  license: Apache-2.0
+
+src/examples/ecore/*:
+  'override-copyright': 2002-2020, Enlightenment Developers (see AUTHORS)
+  'override-license': BSD-2-clause

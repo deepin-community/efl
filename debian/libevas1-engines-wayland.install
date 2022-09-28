@@ -1,0 +1,3 @@
+usr/lib/*/evas/modules/engines/wayland_shm/*/module.so
+usr/lib/*/evas/modules/engines/wayland_egl/*/module.so
+usr/lib/*/libefl_canvas_wl.so.*

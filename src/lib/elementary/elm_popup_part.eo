@@ -1,0 +1,10 @@
+class @beta Elm.Popup.Part extends Efl.Ui.Layout_Part_Legacy
+{
+   [[Elementary popup internal part class]]
+   data: null;
+   implements {
+      Efl.Content.content { get; set; }
+      Efl.Content.content_unset;
+      Efl.Text.text { set; get; }
+   }
+}

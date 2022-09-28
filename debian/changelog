@@ -1,0 +1,1047 @@
+efl (1.25.1-1) unstable; urgency=medium
+
+  * New upstream version.
+  * Set -Dbindings along with lua options so it doesn't disagree with
+    other settings.  Fix FTBFS on arches without luajit.
+  * d/patches:
+    + 49_fix_software_x11_deps.diff: drop, applied upstream
+    + 50_fix_ecore_imf_deps.diff: drop, applied upstream
+  * Bump eo symbol versions for 1.25.1 release.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Mon, 19 Oct 2020 18:57:37 -0700
+
+efl (1.25.0-1) unstable; urgency=medium
+
+  [ Ross Vandegrift ]
+  * Bump eo symbol versions for 1.25.0 release.
+  * Add new symbols included in 1.25.0 release.
+  * Remove symbols dropped from 1.25.0 release.
+  * d/patches:
+    + 49_fix_software_x11_deps.diff: fix ftbfs with strict linking
+    + 50_fix_ecore_imf_deps.diff: fix ftbfs with strict linking
+    + 99-fix-shader-regen.diff: update description
+    + 99-always-regen-shaders.diff: rename
+    + set Forwared: not-needed on local modifications that don't
+      make sense for upstream.
+  * Changes to lintian overrides:
+    + fix version in libevas1.lintian-overrides
+    + add lintian overrides for tags tricked by file extensions
+    + Add lintian override for cycle between libefreet-bin & libeio1.
+    + Add lintian overrides for now empty libefreet_mime and libefreet_trash.
+  * d/rules:
+    + disable new avif loader, it's still experimental
+    + chmod -x a file missed by dh_fixperms
+  * Fix nodoc support, I broke it during meson conversion.  Thanks to Axel
+    Beckert and others in a recent debian-devel thread for this pattern.
+  * Update for changes to lua support
+    + luajit bindings were renamed to lua
+    + expliclty enable elua, upstream defaults to disabling it.  It is
+      expected to be removed or significantly changed in a future release.
+    + lualian files are no longer shipped
+    + d/not-installed: avoid installing empty file
+  * d/copyright: update, apply cme config suggestions
+
+  [ Helmut Grohne ]
+  * Fix cross tool version check to cope with binNMUs. (Closes: #972362)
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sun, 18 Oct 2020 10:45:15 -0700
+
+efl (1.24.3-5) unstable; urgency=medium
+
+  * Upload to unstable, no further changes.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Mon, 10 Aug 2020 21:56:02 -0700
+
+efl (1.24.3-4) experimental; urgency=medium
+
+  * Fix incorrect changelog entry.
+    Thanks to Adrian Bunk
+  * d/control: remove hurd-*, kfreebsed-* from elua packages arch list.
+    This was missed in the last change disabling non-linux builds.
+  * libefl-all-dev: add missing symbols file for exactness debug tool
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Thu, 30 Jul 2020 19:47:44 -0700
+
+efl (1.24.3-3) experimental; urgency=medium
+
+  * Upload to experimental (Closes: #957169)
+  * Add libevas1-engines-wayland Breaks enlightenment << 0.24 to ensure
+    smooth upgrades when 1.24 enters unstable.
+  * d/rules: BINPKGS needs to be space delimited for filter
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sat, 25 Jul 2020 15:37:21 -0700
+
+efl (1.24.3-2) experimental; urgency=medium
+
+  * d/rules:
+    + avoid trying to install elua files when not building elua.  Fixes FTBFS
+    on arm64, s390x.
+    + d/rules: adapt efl-doc make condition to use new BINPKG list.
+  * Only build on linux.  EFL has required systemd for every release since
+    the 1.8 days.  By making this official, libecore_fb no longer requires
+    special handling.  Fixes FTBFS on arch all.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Mon, 20 Jul 2020 22:51:45 -0700
+
+efl (1.24.3-1) experimental; urgency=medium
+
+  * New upstream release
+  * d/patches
+    + 0008-build-ensure-we-set-ENABLE_LUA_OLD-*.patch: drop, applied upstream
+    + 20_disable_doxygen_timestamps.diff: defuzz
+  * d/control: Build-Conflicts on systemctl to workaround #959828
+  * add script to validate that eo symbol versions match upstream versions
+  * Bump eo symbol versions for 1.24.3 release
+  * d/control: bump to compat 13
+  * add debian/not-installed so dh_missing can run in fail mode
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Fri, 17 Jul 2020 22:22:35 -0700
+
+efl (1.24.1-1) experimental; urgency=medium
+
+  * New upstream release.
+  * Drop symbols removed from 1.24.1 release
+  * Bump eo symbol versions for 1.24.1 release
+  * libefl-all-dev: update lintian override for changing version
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Wed, 13 May 2020 22:47:29 -0700
+
+efl (1.24.0-2) experimental; urgency=medium
+
+  * Fix FTBFS on non-luajit arches
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Mon, 11 May 2020 20:20:43 -0700
+
+efl (1.24.0-1) experimental; urgency=medium
+
+  * d/patches:
+    + 15_try_curl-gnutls.diff: defuzz
+    + 20_disable_doxygen_timestamps.diff: defuzz
+    + 25_edje_check_luaold.diff: drop, applied upstream
+    + 45_disable_doc_pack.diff: adapt to new release
+    + 99-fix-shader-regen.diff: adapt to new release
+    + 000*.patch: drop, applied upstream
+  * d/control: Build-Depend on libopenjp2-7-dev
+  * Drop ibus support. Upstream has changed the default to xim+scim due to ibus
+    not working
+  * d/rules: drop 3d shader rebuild, upstream has removed evas3d
+  * libelocation1: drop, library was removed upstream
+  * libephysics1: drop, upstream is disabling this default moving forward
+  * libecore-avahi1: drop, upstream is disabling by default
+  * libemotion-players: drop, upstream has removed support for xine/vlc.
+    All emotion playback now must use the gstreamer1 interface.
+  * efl-wl has been renamed efl-canvas-wl
+  * Cleanup symbols dropped from 1.24.0 release
+  * Add new symbols from 1.24.0 release
+  * Bump eo symbol versions for 1.24.0 release
+  * libefl-all-dev: distribute exactness, a new testing tool for EFL apps
+  * libelementary-bin: add missing elementary_perf.desktop file
+  * libefl-all-dev: install eo files.
+    Upstream now considers this format stable enough to distribute the eo
+    definitions.
+  * adjust libevas1.lintian-overrides for 1.24
+  * Add Breaks for deprecated libevas-bin
+  * d/gbp.conf: enable ignore-branch to make future switching between sid and
+    experimental easier.
+  * Update cme config and copyright information
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sat, 09 May 2020 00:29:53 -0700
+
+efl (1.23.3-8) unstable; urgency=medium
+
+  [ Helmut Grohne ]
+  * Fix FTCBFS: (Closes: #951413)
+    + Missing include pkg-info.mk.
+    + Add required cross build depends on lib*-bin from efl.
+    + Mark relevant lib*-bin packages Multi-Arch: foreign.
+
+  [ Ross Vandegrift ]
+  * Move elementary_test and elementary_perf into libelementary-bin.
+    Upstream requests these be available for helping users troubleshoot.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sun, 23 Feb 2020 22:14:57 -0800
+
+efl (1.23.3-7) unstable; urgency=medium
+
+  [ Helmut Grohne ]
+  * Add new binary package libeolian-bin.
+    Improve cross building: Move eolian_gen to libeolian-bin which can be
+    Multi-Arch: foreign and used in Build-Depends. (Closes: #950420)
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Tue, 04 Feb 2020 21:02:37 -0800
+
+efl (1.23.3-6) unstable; urgency=medium
+
+  * Upload to unstable (Closes: #949351)
+  * d/gbp.conf: update config to point to debian/sid branch.
+  * d/control: update to Standards-Version 4.5.0, no changes needed.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Wed, 29 Jan 2020 22:19:24 -0800
+
+efl (1.23.3-5) experimental; urgency=low
+
+  * libefl-all-dev:
+    + add some missing Depends that appear in EFL .pc files
+    + adjust Depends to line up with Build-Depends.  Restrict
+    libblkid-dev, libmount-dev, libudev-dev to linux-any.  Swap libdrm-dev
+    for mesa-common-dev.
+  * Use -X to avoid installing Vera.ttf, rm breaks re-builds
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Wed, 25 Dec 2019 22:52:59 -0800
+
+efl (1.23.3-4) experimental; urgency=low
+
+  * d/p/25_edje_check_luaold.diff: ensure that edje.pc gets a correct
+    Requires entry on arm64 & s390x.  (Closes: #946130)
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Tue, 24 Dec 2019 20:00:18 -0800
+
+efl (1.23.3-3) experimental; urgency=low
+
+  * d/control:
+    + Build-Depend on libx11-xcb-dev. This fixes FTBFS with mesa >= 19.3.
+    + wrap-and-sort -tvs
+  * d/copyright:
+    + minor lintian cleanups
+    + fix test data copyright attribution
+  * d/p/99-fix-shader-regen.diff: re-add missing dep3 header
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Mon, 23 Dec 2019 18:00:39 -0800
+
+efl (1.23.3-2) experimental; urgency=low
+
+  * Disable EFL test suite again.  There are still too many issues to be
+    able to rely on it, especially on architectures others than non-amd64.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Fri, 29 Nov 2019 17:15:06 -0800
+
+efl (1.23.3-1) experimental; urgency=medium
+
+  * New upstream release.
+
+  * Bump all eo symbol versions for 1.23.3 release
+  * Disable eina value tests on 32-bit arches.  According to upstream,
+    they are known to fail.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Wed, 27 Nov 2019 21:14:48 -0800
+
+efl (1.23.2-2) experimental; urgency=medium
+
+  * Disable native arch optimization on armel to fix FTBFS without NEON
+  * d/rules: separate lua & fb flags from arch flags
+  * d/control: add missing libxkbcommon-x11-dev dep to libefl-all-dev and drop
+    unnecessary dep/build-dep on libxkbcommon-dev
+  * Increase test timeout to 60s to help FTFBS on armhf, mipsel, and
+    mipsel64
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sun, 24 Nov 2019 19:36:21 -0800
+
+efl (1.23.2-1) experimental; urgency=medium
+
+  * New upstream release.
+
+  [ Andreas Metzler ]
+  * Fix typo in changelog entry.
+
+  [ Ross Vandegrift ]
+  * Re-enable running the EFL test suite.
+  * update salsa-ci pipeline to current style of job skipping
+  * Disable salsa-ci pipeline for EFL
+  * d/patches:
+    + 20_disable_doxygen_timestamps.diff: defuzz
+    + d/p/30_drop_crashing_widget_previews.diff: skip crashing widget previews
+  * Run tests in a dbus session
+  * Convert build system from autotools to meson
+    + drop d/p/95-parallel-previews.diff, unnecessary
+    + drop static libraries, upstream no longer builds them
+    + cxx bindings are disabled, drop them from installation
+    + update shader regen to ensure they are built from their source
+    + d/control: drop Build-Depends for full gl.
+    + d/p/000[4-6]*.patch, cherry-pick fixes for evas loaders/savers.  These
+      patches fix a bug in the release which causes all evas modules to be
+      built static.
+    + fix documentation installation
+    + d/p/45_disable_doc_pack.diff, port to meson
+    + fix installation paths that changed since autotools
+    + Update gdb python helper installation path
+  * Bump all eo symbol versions for 1.23.2 release
+  * Add new symbols for 1.23.2 release
+  * update engines install files for new 1.23 modules
+  * exclude .gitignore files from example installations
+  * Add lintian overrides for a not-linked-against-libc false positive 
+  * Build with -O3 to match upstream default. Previous packages used -O2.
+    But -O2 is now causing leakage of libbullet c++ symbols in libephysics1.
+  * d/copyright: adopt cme for management, update for new release
+  * libefl-all-dev:
+    + install some debugging binaries in libefl-all-dev
+    + Install both ethumb_client pkgconfig files in libefl-all-dev
+    + Depends on libunwind-dev when available
+  * libeina1a: add missing Breaks on libevas1-engines-wayland
+  * libevas1: distribute buffer engine.  Even though this seems like a dev
+    tool, enlightenment segfaults if this is missing at runtime.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sat, 16 Nov 2019 14:38:37 -0800
+
+efl (1.22.3-1) experimental; urgency=medium
+
+  * New upstream release.
+  * Actually enable compat 12, instead of just debhelper 12
+  * efl-doc:
+    + drop extra copy of Bitstream Vera, use ttf-bitstream-vera instead
+    + avoid shipping build Makefiles with examples.  These are for
+      compiling the examples during build.  See the *.mk files for end-user
+      example Makefiles.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sat, 24 Aug 2019 17:11:22 -0700
+
+efl (1.22.2-2) experimental; urgency=low
+
+  * Fix arches in libefl-all-dev->libelua1 dependency.
+    Thanks to Aurelien Jarno for the patch (Closes: #933747)
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sun, 04 Aug 2019 09:57:25 -0700
+
+efl (1.22.2-1) experimental; urgency=medium
+
+  * New upstream release.
+
+  [ Efraim Flashner ]
+  * use liblua over libluajit on powerpc
+
+  [ Ross Vandegrift ]
+  * Enable salsa-ci pipeline for unstable
+    + Disable piuparts though, takes too long
+  * d/gbp.conf: drop cleaner to fix pipeline runs
+  * d/rules:
+    + support terse build
+    + remove ddeb-migration after buster release
+  * Remove artifacts for cserve2, upstream has removed it
+  * Stop distributing eolian files.  Upstream no longer installs these by
+    default to prevent developers from depending on unstable interfaces.
+  * Update symbols for changes in 1.22.2 release
+  * Bump all eo symbol versions for 1.22.2 release
+  * d/patches:
+    + 05_eina_strbuf_explicit_format_strings.diff: drop, fixed upstream
+    + 25_fix_glinptr_redef.diff: drop backported upstream fix
+    + 99-fix-shader-regen.diff: defuzz
+  * Build with --enable-old-lua on all arches without luajit support.
+    This should enable builds on alpha, ia64, hppa, m68k, riscv64, sh4,
+    sparc64 and x32. (Closes: #933747)
+  * Adjust libevas1 engine dependency to prefer libevas1-engines-x.
+    Hopefully this will fix installation issues with EFL apps.
+  * d/control:
+    + bump Standards-Version, no changes required
+    + Remove transitional packages after buster release.
+    + Switch to my debian email
+  * Distribute eina_modinfo in libeina-bin
+  * Upgrade to debhelper compat 12
+  * d/copyright: update
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sat, 03 Aug 2019 15:17:29 -0700
+
+efl (1.21.1-5) unstable; urgency=medium
+
+  * d/patches/25_fix_glinptr_redef.diff: Fix FTBFS on 32-bit arches with
+    mesa >= 18.3.
+
+ -- Ross Vandegrift <ross@kallisti.us>  Tue, 12 Feb 2019 14:43:45 -0800
+
+efl (1.21.1-4) unstable; urgency=medium
+
+  * d/control:
+    + efl-doc should be Multi-Arch: foreign
+    + libelementary1 should be Multi-Arch: same
+    + libelementary-data should be Multi-Arch: foreign
+    + Bump Standards-Verison to 4.3.0, no changes required
+    + Refresh package descriptions from upstream info
+  * d/libelementary1.symbols: add missing Build-Depends-Package field
+  * libelementary-data: move icon readme to docs dir
+
+ -- Ross Vandegrift <ross@kallisti.us>  Mon, 11 Feb 2019 19:56:43 -0800
+
+efl (1.21.1-3) unstable; urgency=medium
+
+  * Limit libunwind-dev b-d to the architectures where the package is
+    available.
+
+ -- Andreas Metzler <ametzler@debian.org>  Mon, 22 Oct 2018 18:57:23 +0200
+
+efl (1.21.1-2) unstable; urgency=medium
+
+  * Fix FTBFS: re-tag evas_common_scale_rgba_in_to_out_clip_smooth_mmx
+    symbol as arch specific for any-amd64 and any-i386.  Tag was
+    accidentally dropped in d7a3e88e5e.
+
+ -- Ross Vandegrift <ross@kallisti.us>  Thu, 18 Oct 2018 21:01:49 -0700
+
+efl (1.21.1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * d/patches:
+    + 05-fix-signedness-mismatch.diff: drop, applied upstream
+    + 50-fix-edje_recc-bashism.diff: drop, applied upstream
+    + 20_disable_doxygen_timestamps.diff: defuzz
+    + 99-fix-shader-regen.diff: add missing depend on ector .x file
+    + 05_eina_strbuf_explicit_format_strings.diff: fix format string to build
+      with -Werror=format-security.
+    + 10_remove_google_analytics.diff: remove remote js loading from docs
+  * Add new Build-Depends:
+    + libxkbcommon-x11-dev is now required
+    + libunwind-dev for improved backtraces
+  * Bump eo symbol versions for 1.21.1 release, sort libeina1a.symbols to
+    match order of dpkg-gensymbols output.
+  * d/copyright: cleanup unused paragraphs
+  * Ship ecore_el2_dmabuf module.
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sat, 13 Oct 2018 12:47:34 -0700
+
+efl (1.20.7-7) unstable; urgency=medium
+
+  * Correct Breaks/Replaces of libefl-all-dev on transition packages. Use
+    "<< 1.20.5-1" instead of "<< ${binary:Version})". Closes: #907741
+    (Thanks, Adrian Bunk)
+  * Also drop related (now unused) lintian overrides.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sat, 01 Sep 2018 12:07:40 +0200
+
+efl (1.20.7-6) unstable; urgency=low
+
+  [ Andreas Metzler ]
+  * Remove Nicolas Braud-Santoni from uploaders list. (Thank you!)
+    Closes: #901037
+
+  [ Ross Vandegrift ]
+  * d/patches/20_disable_doxygen_timestamps.diff: disable timestamps to
+    improve reproducibility of efl-doc.
+  * d/control: add libevas1-engines-drm to libeina1a Breaks to ensure it
+    is upgraded in lock-step with other EFL components.
+  * Try to avoid circular dependency by demoting libevas1 Depends on
+    libevas1-engines-x to Recommends. (Closes: #901624)
+  * Add the other engines to libevas1 Recommends to improve upon the
+    solution for #900594.
+
+ -- Ross Vandegrift <ross@kallisti.us>  Thu, 21 Jun 2018 19:41:48 -0700
+
+efl (1.20.7-5) unstable; urgency=low
+
+  * Change libevas1' dependency on libevas1-engine (a virtual package) to
+    libevas1-engines-x | libevas1-engine, preventing apt from choosing
+    wayland packages by default. Closes: #900594
+  * Move license texts to the end of debian/copyright.
+    global-files-wildcard-not-first-paragraph-in-dep5-copyright
+  * Do not ship jquery.js, it is not used.
+
+ -- Andreas Metzler <ametzler@debian.org>  Wed, 06 Jun 2018 19:08:34 +0200
+
+efl (1.20.7-4) unstable; urgency=medium
+
+  * Undo workaround in previous upload, libinput-dev did the same thing, which
+    is the right place to do it.
+  * As on arm64 (try to) build with lua-old on s390x.
+
+ -- Andreas Metzler <ametzler@debian.org>  Tue, 27 Mar 2018 18:49:59 +0200
+
+efl (1.20.7-3) unstable; urgency=medium
+
+  * As a temporary work around for #892956 add build-depends (and
+    libefl-all-dev depends) on libwacom-dev, libmtdev-dev, libevdev-dev.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sun, 18 Mar 2018 13:57:44 +0100
+
+efl (1.20.7-2) unstable; urgency=medium
+
+  * Upload to unstable
+  * d/gbp.conf: update config to point to debian/sid branch.
+
+ -- Ross Vandegrift <ross@kallisti.us>  Tue, 13 Mar 2018 14:23:45 -0700
+
+efl (1.20.7-1) experimental; urgency=medium
+
+  * New upstream version
+  * Update Vcs URLs for alioth -> salsa transition
+  * d/changelog: integrate details from 1.8.6-2.[2-5] NMUs
+  * Update symbols for changes in 1.20.7 release
+  * Bump all eo symbol versions for 1.20.7 release
+  * d/control: Bump Standards-Version to 4.1.3, no changes required
+  * d/rules: add --disable-neon on armhf.  When enabled, EFL turns on gcc
+    NEON optimizations.  This triggers illegal instruction errors on
+    cpus without NEON support.
+    - Details at: https://phab.enlightenment.org/T6711
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sat, 03 Mar 2018 15:32:31 -0800
+
+efl (1.20.6-3) experimental; urgency=medium
+
+  * Even without elua some kind of lua is required for building efl. Run
+    ./configure with --enable-lua-old on arm64 and (build)-depend on
+    liblua5.2-dev.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sat, 16 Dec 2017 11:16:19 +0100
+
+efl (1.20.6-2) experimental; urgency=medium
+
+  * Disable ELUA support on arm64 to work around build-error. ("bad light
+    userdata pointer").
+
+ -- Andreas Metzler <ametzler@debian.org>  Thu, 07 Dec 2017 19:09:13 +0100
+
+efl (1.20.6-1) experimental; urgency=medium
+
+  * Team upload.
+  * New upstream version
+
+  [ Ross Vandegrift ]
+  * d/rules:
+    + switch to dh_missing
+    + disable docs if nodoc is set in DEB_BUILD_OPTIONS
+  * d/patches:
+    + 05-fix-signedness-mismatch.diff: fix a conflicting sign in evas
+      (Closes: #748026).
+    + 55_evas-gl-generic-common-add-more-linking-for-gles-mod.patch: drop,
+      applied upstream
+  * d/copyright: use https Format link
+  * d/control:
+    + Bump Standards-Version to 4.1.1
+    + Set Rules-Requires-Root to disable building as root
+  * d/rules: remove use of DEB_BUILD_OPTIONS.  nocheck isn't explicitly needed
+    anyhow, since configure is used to disable tests.
+  * Ship efl-wl artifacts that should've been added with wayland support
+  * Provide eo debugging tools.  libeo_dbg is a special build of libeo
+    that includes additional debugging functionality.  It is designed to
+    be LD_PRELOADed ahead of libeo.  eo_debug is a helper script to do
+    that.  libeo_dbg can have significant performance overhead, so should
+    not be used by default.
+  * Eliminate use of debian/tmp from d/install, d/examples files
+  * d/efl-doc.examples: fix source dir for example installation
+  * Bump all eo symbol versions for 1.20.6 release
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sat, 02 Dec 2017 15:32:22 -0800
+
+efl (1.20.5-2) experimental; urgency=low
+
+  * 55_evas-gl-generic-common-add-more-linking-for-gles-mod.patch from
+    upstream GIT master, fixing build erro with --with-opengl=es (armel and
+    armhf packages).
+  * Tag evas_common_scale_rgba_in_to_out_clip_smooth_mmx symbol as arch
+    specific for any-amd64 and any-i386, fixing a build error on other archs.
+  * Add myself to uploaders.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sat, 04 Nov 2017 14:11:31 +0100
+
+efl (1.20.5-1) experimental; urgency=medium
+
+  * Team upload.
+  * New upstream version
+
+  [ Ross Vandegrift ]
+  * libefl-all-dev needs to depend on libelementary-dev, libelput-dev.
+  * d/libelocation1.symbols: correct versions to reflect eo release.
+  * d/control: remove uses of deprecated Priority: extra.
+  * Merge libe*-dev into libefl-all-dev, add transitional packages.  With
+    split -dev packages, adding dependencies to match pkg-config
+    requirements results in circular dependencies.  Also, upstream does
+    not support or test building against part of EFL.  Combining these
+    into a single dev package avoids both problems. (Closes: #878584)
+    Since libector-dev is one of the dropped packages this Closes: #877180.
+  * d/p/95-parallel-previews.diff: defuzz.
+  * Bump all eo symbol versions for 1.20.5 release
+
+  [ Andreas Metzler ]
+  * Fix dependency info for eolian symbols by using upstreamversion-0~eo
+    instead of upstreamversion+eo+1. The latter was automatically replaced
+    with upstreamversion-1 since it sorted as greater than the uploaded
+    version. Also update lintian-overrides accordingly
+    (symbols-file-contains-current-version-with-debian-revision ->
+    symbols-file-contains-debian-revision).
+  * Refer to libefl-all-dev in the symbol files' Build-Depends-Package field.
+  * List new symbol in libedje1.symbols and libector1.symbols.
+  * Drop Priority field in efl-doc binary backage stanza
+    (binary-control-field-duplicates-source).
+  * Point watchfile to https URL.
+  * In debian/rules use DEB_*_MAINT_APPEND to modify (L|C)FLAGS.
+
+ -- Andreas Metzler <ametzler@debian.org>  Mon, 30 Oct 2017 12:16:36 +0100
+
+efl (1.20.4-1) experimental; urgency=medium
+
+  * Team upload.
+  * New upstream version
+    - Fix FTBFS due to lua updates (Closes: #875387)
+
+  [ Ross Vandegrift ]
+  * Update gbp.conf for experimental branch
+  * Include dpkg arch makefile to fix calling debian/rules directly
+    (Closes: #858563)
+  * Build with Wayland support
+  * Build with SCIM support
+  * Build-depend on libibus-1.0-dev to fix ibus support
+  * Setup writable $XDG_RUNTIME_DIR/$HOME for build
+  * Build with fake_home.sh to setup writable $XDG_RUNTIME_DIR/$HOME
+    Needed because edje_cc now fails if it can't mkdir .run in one of these
+    locations.  See src/lib/efl/interfaces/efl_vpath_core.c.
+  * debian/libecore-bin.install: distribute libproxy isolation binary.
+    Ecore now isolates its libproxy usage in a separate process.  This
+    helps avoid crashes in scenarios where libproxy fails to handle
+    exceptions.  See commit bd2f189d for details.
+    - As a result, libecore1 now depends on libecore-bin.
+  * debian/libelementary1.install: update wildcards to catch any new modules
+  * debian/libecore-x1.install: drop removed ecore_x_* helpers
+  * d/copyright: eliminate removed files
+  * Update README.source for tarball-based workflow
+  * Remove empty shlibs:Depends from packages that don't need it
+  * Switch to debhelper 10
+  * Disable EFL test suite during package build, see note in README.source.
+    As a result the following patches have been dropped:
+    - d/p/02_no_ecore_imf_test.diff
+    - d/p/20-skip_dbus_tests.diff
+    - d/p/21-skip_net_tests.diff
+    - d/p/24-skip_gnutls_broken.diff
+    - d/p/26-skip_filter_tests.diff
+    - d/p/75-disable-evas_test_image.diff
+    - d/p/80-disable-ecore_cxx_safe_call_sync.diff
+    - d/p/85-disable-elm_tests.diff
+    - d/p/90-disable-ecore_con_tests.diff
+  * Improve shader code generation scripts, and use that feature during build
+    - d/p/99-fix-shader-regen.diff: add improved script
+    - d/p/100-drop-pregen-shaders.diff: drop, now cleaned in debian/rules
+  * d/p/15_try_curl-gnutls.diff: defuzz
+  * Add -lm, -ldl to LDFLAGS to fix linking problems
+  * debian/copyright: update, try to simplify as much as possible
+  * debian/control: drop conflicts on very old libevas-0.9.9.050a-engines
+  * Update symbols for changes in 1.20.4 release
+  * Bump all eo symbol versions for 1.20.4 release
+
+ -- Ross Vandegrift <ross@kallisti.us>  Fri, 22 Sep 2017 16:52:21 -0700
+
+efl (1.18.4-1) experimental; urgency=medium
+
+  * Team upload.
+  * New upstream version
+
+  [ Nicolas Braud-Santoni ]
+  * Test fixup (XDG_RUNTIME_DIR & HOME)
+  * Use TLS-enabled, canonical links
+  * debian/control: Add missing dependency for the doc build
+  * debian/control: Add Uploaders
+
+  [ Ross Vandegrift ]
+  * debian/patches/45_disable_doc_pack.diff: defuzz
+  * debian/patches/50-fix-edje_recc-bashism.diff: defuzz
+  * debian/patches/70-gnutls3.4.diff: drop, fixed upstream
+  * debian/patches/95-parallel-previews.diff: make widget previews in parallel
+  * Fix EGL build options for arm
+  * Add binary packages to eina breaks to prevent mixed-version EFL installs
+  * Run tests and make doc with temporary HOME and XDG_RUNTIME_DIR
+  * debian/gbp.conf: import & build upstream tarballs
+  * debian/patches/100-drop-pregen-shaders.diff: always regen shader code
+  * debian/control: ensure libeina1 is removed before libeina1a is unpacked
+  * Bump all eo symbol versions for 1.18.4 release
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sun, 11 Dec 2016 13:14:42 -0500
+
+efl (1.18.2-2) experimental; urgency=medium
+
+  * Team upload.
+  * debian/patches/70-gnutls3.4.diff: adopt the upstream fix
+  * Drop transitional libeina1 package
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sun, 30 Oct 2016 12:56:45 -0400
+
+efl (1.18.2-1) experimental; urgency=medium
+
+  * Team upload.
+  * New upstream version
+  * Bump all eo symbol versions for 1.18.2 release
+  * Fix missing eina, eo, eolian, emile, elocation static libraries
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sun, 23 Oct 2016 10:45:50 -0400
+
+efl (1.18.1-3) experimental; urgency=medium
+
+  * Team upload.
+  * Disable two ecore_econ tests that fail under buildd/sbuild
+  * Update libelementary1's versioned Breaks to work for releases after 1.15
+  * Rename libeina1 -> libeina1a due to ABI break
+  * Lintian overrides for libeina1a, libefreet1a package/soname
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sun, 09 Oct 2016 14:00:08 -0400
+
+efl (1.18.1-2) experimental; urgency=medium
+
+  * Non-maintainer upload.
+  * Enable build hardening options
+  * Switch to automatic dbgsym packages
+  * Bump Standards-Version to 3.9.8
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sun, 02 Oct 2016 14:05:57 -0400
+
+efl (1.18.1-1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * New upstream version
+  * Bump all eo symbol versions for 1.18.1 release
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sat, 17 Sep 2016 09:27:16 -0400
+
+efl (1.18.0-1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * New upstream version
+  * Distribute elocation; Elementary uses it.
+  * debian/patches:
+    - 02_no_ecore_imf_test.diff: defuzz
+    - 15_try_curl-gnutls.diff: defuzz
+    - 20-skip_dbus_tests.diff: defuzz
+      + fix skips for new test layout
+      + fix randomly failing test
+    - 21-skip_net_tests.diff: defuzz, fix eeze skips for new test layout
+    - 22-skip-fb-tests.diff: dropped, tests disabled upstream
+    - 24-skip_gnutls_broken.diff: defuzz
+    - 26-skip_filter_tests.diff: defuzz
+    - 40_fix_elocation_pc.diff: dropped, fixed upstream
+    - 45_disable_doc_pack.diff: defuzz, also suppress doc pack output
+    - 75-disable-evas_test_image.diff: defuzz
+    - 80-disable-ecore_cxx_safe_call_sync.diff: defuzz
+  * Add elementary, evas-loaders, emotion-players to efl packaging
+  * Add new package libefl-data for common data files
+  * Drop old configure options
+  * Build-Depends-Indep on imagemagick, convert used in make doc
+  * Fix missing static files from dev packages
+  * Add/remove eo symbols from 1.18
+  * Bump all eo symbol version for 1.18 release of eolian generator
+  * Ship new icon set for Elementary
+  * debian/patches/21-skip_net_tests.diff: drop randomly failing test
+  * Drop unused copyright stanza
+  * Use secure Vcs- URLs in debian/control
+
+ -- Ross Vandegrift <ross@kallisti.us>  Fri, 19 Aug 2016 15:04:12 -0400
+
+efl (1.17.2-1) UNRELEASED; urgency=medium
+
+  * debian/patches: drop fixes applied upstream
+  * debian/patches: defuzz
+  * Re-enable eina magic debug to fix 1.17+ eina strbuf tests
+  * debian/patches: disable network operation tests in a separate patch
+  * debian/patches/20-skip_dbus_tests.diff: disable eldbus tests too
+  * ship cmake files for c++ bindings to libeo and libeina
+  * ship new eolian eo files with libecore-dev
+  * Remove libector-dev headers, they were dropped in 1.17
+  * Add symbol changes for 1.17 release
+  * Bump symbol versions for new release of eolian generator
+  * d/p/75-disable-evas_test_image.diff: test fails outside of X
+  * d/p/80-disable-ecore_cxx_safe_call_sync.diff: test fails outside of X
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sat, 06 Aug 2016 16:52:33 -0400
+
+efl (1.16.1-1) UNRELEASED; urgency=medium
+
+  * Remove explicit version from module paths in install files
+  * patches/03_no_ecore_audio_test.diff: drop, test is working again
+  * patches/15_try_curl-gnutls.diff: update target file, defuzz
+  * patches/29_fix_eio_deps.diff: drop, applied upstream
+  * pathces/35_adjust_lz4_deps.diff: drop, fixed upstream
+  * patches/22_consolidate-systemd-deps.diff: drop, applied upstream
+  * patches/55-emile_remove_sslv3.diff: remove last occurrence of EMILE_SSLv3
+  * patches/21_skip_failing_tests.diff: drop to replace with smaller patches
+  * patches/20-skip_dbus_tests.diff: skip tests that require dbus connection
+  * patches/22-skip-fb-tests.diff: skip tests that require writable /dev/tty0
+  * patches/24-skip_gnutls_broken.diff: skip tests that don't work with gnutls
+  * patches/26-skip_filter_tests.diff: skip failing filter test
+  * patches/60-fix-evas_double_free.diff: fix double free in evas tests
+  * update emotion install file to ship new edje module
+  * Add new 1.16 symbols
+  * Remove eo/eolian symbols dropped in 1.16
+  * Bump symbol versions for new release of eolian generator
+  * Add cmake files to dev packages
+  * patches/65-adjust_eldbus_deps.diff: add missing libefl dep to eldbus build
+  * patches/70-gnutls3.4.diff: fix build with gnutls 3.4
+  * Add debian/gbp.conf with pointers to appropriate branches/tags
+  * Add notes on gbp & new releases to README.source
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sun, 27 Mar 2016 11:13:17 -0400
+
+efl (1.15.3-1) unstable; urgency=medium
+
+  [ Ross Vandegrift ]
+  * Non-maintainer upload.
+  * New upstream version
+  * Update symbols to include eolian version information
+
+  [ Andreas Metzler ]
+  * Drop duplicate entries in efl build-deps.
+
+ -- Ross Vandegrift <ross@kallisti.us>  Fri, 01 Jan 2016 14:50:53 -0500
+
+efl (1.15.1-1) UNRELEASED; urgency=medium
+
+  [ Andreas Metzler ]
+  * Use ${source:Upstream-Version} for Breaks.
+  * Support DEB_BUILD_OPTIONS=nocheck.
+  * Add Build-Depends-Package entries to symbol files.
+
+  [ Ross Vandegrift ]
+  * Drop Xprint from build deps
+  * Drop cares from build deps, it's only used on Windows
+  * Re-enable cserve2, without isn't well-tested
+  * Re-enable physics, without isn't well-tested
+  * Remove compiled lua files on clean
+  * Remove libefreet1 transitional package, it was in jessie
+  * Enable pulseaudio support
+  * Build with system liblz4
+  * Build with XInput v2.2+ support
+  * Enable webp image loader
+  * Build with harfbuzz support
+  * Build with systemd support
+  * Add avahi-client-dev build dep
+  * patches/01_restore-eina_abi.diff: don't try to save ancient abi
+  * patches/02_no_ecore_imf_test.diff: defuzz
+  * patches/03_no_ecore_audio_test.diff: defuzz
+  * patches/15_try_curl-gnutls.diff: refresh
+  * patches/20_shorter_buildlog.diff: drop, upstream does this now
+  * patches/21_skip_failing_tests.diff: refresh, drop more tests
+  * patches/22_consolidate-systemd-deps.diff: cherry-pick 46e9eed
+  * patches/23_disable-xprint.diff: cherry-pick 9e0cd04
+  * patches/29_fix_eio_deps.diff: cherry-pick 99c0c1cb
+  * patches/33_fix_ecore_fb_eapi.diff: fix EAPI in ecore_fb
+  * patches/35_adjust_lz4_deps.diff: fix emile finding liblz4
+  * patches/40_fix_elocation_pc.diff: fix pkgconfig file generation
+  * Rename packages (libe.*)1a? -> \1.15 for abi break
+  * Update symbols of existing libs with new abi
+  * libelocation: ship new library
+  * libemile: ship new library
+  * libelua: ship new library
+  * libector: ship new library
+  * libephysics: ship new library
+  * libecore-audio: ship new library
+  * libecore-avahi: ship new library
+  * libecore-dev: Add missing dep on libeet-dev
+  * Update files installed for existing packages
+  * libecore-bin: add package for ecore utilities
+  * Bump standards version to 3.9.6
+  * debian/copyright: fix wildcard
+  * libevas-bin: add package for evas utilities
+  * libeeze-bin: add package for eeze utilities
+  * libeina-bin: add package for eina utilities
+  * libefl-core-dev: metapackage for the dev pkgs here
+  * Weaken libevas-loaders to a Recommends
+  * Skip eeze tests - fails without running dbus
+  * Skip Ecore_Con tests - requires running dbus
+  * libevas-dev: depends on libharfbuzz-dev
+  * patches/45_disable_doc_pack: don't build extra binary doc package
+  * Update depends to enable building in clean chroots
+  * Add build-depend on systemd
+  * Add build-depend on autopoint (Closes: #757934)
+  * Make evas require an engine to be installed (Closes: #665951, #626009)
+  * patches/50-fix-edje_recc-bashism.diff: fix bashism (Closes: #772322)
+  * New upstream release 1.15.1
+    - includes giflib5 support (Closes: #803278)
+  * Add missing libephysics-dev extended description
+
+ -- Ross Vandegrift <ross@kallisti.us>  Sat, 07 Nov 2015 17:41:56 -0500
+
+efl (1.12.2-0.1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * New upstream version
+    + Unfuzz 03_no_ecore_audio_test.diff.
+    + Drop 04_eina_suite_lockup.diff. (Previously cherry-picked.)
+  * Update (build-)dependencies:
+    + liblua5.1-0-dev -> libluajit-5.1-dev.
+    + libgstreamer0.10-dev ->  libgstreamer1.0-dev (Closes: #785845)
+    + libgstreamer-plugins-base0.10-dev -> libgstreamer-plugins-base1.0-dev
+  * ./configure with --enable-i-really-know-what-i-am-doing-and-that-this-
+    will-probably-break-things-and-i-will-fix-them-myself-and-send-patches
+    -aba.
+  * Set --disable-silent-rules.
+  * 20_shorter_buildlog.diff: Strip down verbosity of testsuite, taking down
+    the buildlog from >= 150 MB to about 1,5 MB.
+  * debian/watch: point to .xz instead of .gz.
+  * 15_try_curl-gnutls.diff: Try to dlopen curl-gnutls (in addition to the
+    OpenSSL variant).
+  * 21_skip_failing_tests.diff: Skip ecore fb test (needs writeable /dev/tty0)
+    and eldbus_cxx test (needs running dbus daemon and $DISPLAY).
+  * Update symbol files.
+  * Invoke dh_install with "--list-missing" option.
+  * Consistently include cxx support files.
+  * Ship newly added libefl in libeina-dev/libeina1 package.
+  * Ship eolian code generator.
+  * Ship .eo files in -dev packages.
+  * Fix FTBFS on arch-all builds when "make doc" was invoked *before* the
+    regular build.
+  * Run dh_auto_configure with --verbose.
+
+ -- Andreas Metzler <ametzler@debian.org>  Mon, 17 Nov 2014 18:50:55 +0100
+
+efl (1.8.6-2.5) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix build failure with current gnutls. Closes: #782469.
+  * libemotion1: Remove gstreamer modules from the install file.
+
+ -- Matthias Klose <doko@debian.org>  Thu, 18 Feb 2016 10:11:18 +0100
+
+efl (1.8.6-2.4) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Disable gstreamer support. gstreamer 0.10 is being removed and
+    while efl 1.9 has support for gstreamer 1.0 that's too big of a
+    change for this NMU (Closes: #785845)
+
+ -- Moritz Muehlenhoff <jmm@debian.org>  Fri, 08 Jan 2016 15:58:51 +0100
+
+efl (1.8.6-2.3) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Build using giflib 5. Closes: #803278.
+
+ -- Matthias Klose <doko@debian.org>  Wed, 16 Dec 2015 04:38:40 +0000
+
+efl (1.8.6-2.2) unstable; urgency=medium
+
+  * Non-maintainer upload.
+
+  [ Graham Inggs ]
+  * Do not build with Xprint support. (Closes: #623646)
+
+  [ Andrew Starr-Bochicchio ]
+  * debian/rules: Respect DEB_BUILD_OPTIONS=nocheck (Closes: #757944).
+    Thanks to Jonas Smedegaard.
+
+ -- Andrew Starr-Bochicchio <asb@debian.org>  Sat, 20 Jun 2015 00:02:07 -0400
+
+efl (1.8.6-2.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * GnuTLS v3 transition: Change (build-)depends to libgnutls28-dev, add b-d
+    on libgcrypt-dev. Closes: #753025
+  * efl-doc built with doxygen 1.8.7-3 to work around #762272.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sat, 20 Sep 2014 14:47:56 +0200
+
+efl (1.8.6-2) unstable; urgency=medium
+
+  * patches/04_eina_suite_lockup: cherry-pick f5c125 to fix eina suite lockup
+
+ -- Albin Tonnerre <lutin@debian.org>  Sun, 04 May 2014 13:54:21 +0200
+
+efl (1.8.6-1) unstable; urgency=medium
+
+  * New upstream version
+  * debian/watch: update watch file to correctly parse alpha/beta versions
+  * patches/{04_magic_debug_abi,05_eina_time_get}: remove, applied upstream
+
+ -- Albin Tonnerre <lutin@debian.org>  Sun, 09 Mar 2014 12:31:42 +0100
+
+efl (1.8.5-3) unstable; urgency=medium
+
+  * debian/control: libedje1, libeio1, libeeze1, efl-dbg are now M-A: same
+  * debian: add new package for Emotion
+  * debian: add new packages for Ethumb/Ethumb-Client
+
+ -- Albin Tonnerre <lutin@debian.org>  Sat, 01 Mar 2014 14:42:35 +0100
+
+efl (1.8.5-2) unstable; urgency=medium
+
+  * debian: enable GLES insead of regular GL on armel and armhf
+  * debian/patches/04_magic_debug_abi: disable 'magic debug' to not break ABI.
+    Eina uses a 'magic' number to perform checks on its data structures, but
+    enabling this 'magic' number changes to ABI. Eina in debian is currently
+    compiled without magic debug, so we need to this patch to keep ABI
+    compatibility
+  * debian/patches/05_eina_time_get: fix issues with clock_gettime on hurd/*bsd
+  * Upload to unstable
+
+ -- Albin Tonnerre <lutin@debian.org>  Sat, 22 Feb 2014 11:34:32 +0100
+
+efl (1.8.5-1) experimental; urgency=medium
+
+  * New upstream release
+  * patches/04_eina_file_hash_fix: remove, applied upstream
+  * debian/control: allow efl-dbg to be installed on platforms lacking ecore-fb
+  * debian/control: allow efl to build on non-linux architectures
+    libudev-dev, libmount-dev and libbkid-dev are all linux-specific
+    packages. When they're not present the build system disables libeeze, so
+    that package is now linux-any.
+  * debian/copyright: fix missing licenses for some files (Closes: #736914)
+
+ -- Albin Tonnerre <lutin@debian.org>  Fri, 31 Jan 2014 13:48:50 +0100
+
+efl (1.8.4-2) experimental; urgency=medium
+
+  * debian/control: use misc:Pre-Depends instead of hardcoded multiarch-support
+  * debian/control: all libecore packages are now Multi-Arch: same
+  * debian: add the libefreet-bin package, necessary for proper efreet operation
+  * debian: update the efreet packaging to work with Multi-Arch
+    libefreet1 and efreetd communicate via d-bus, and there is a circular
+    dependency between libefreet1 and efreetd, which make things difficult
+    with Multi-Arch (as the helper binary had to be in a separate package).
+    To avoid that circular dependency issue, libefreet1 is now a
+    transitional package to libefreet1a and libefreet-bin and the
+    libefreet1a shlibs file forces a Depends: libefreet-bin. Thanks to
+    Josselin Mouette for the suggestion!
+  * debian: add packaging information for Eeze
+
+ -- Albin Tonnerre <lutin@debian.org>  Sun, 26 Jan 2014 20:14:58 +0100
+
+efl (1.8.4-1) experimental; urgency=low
+
+  * New upstream release
+  * debian/control: Build-Depend on libudev-dev only for Linux architectures
+  * debian/control: libevas1 Depends: libevas-loaders to support more formats
+  * debian/control: drop B-D on librsvg2-dev, svg is handled via evas-loaders
+  * debian/control: use Architecture: linux-any instead of hardcoded list
+  * debian/control: mark libeet1 and libevas1 packages as Multi-Arch: same
+  * debian/control: bump Standards-Version to 3.9.5, no changes required
+  * patches/03_ecore_evas_extn_abi: remove, applied upstream
+  * patches/03_no_ecore_audio_test: disable the Ecore_Audio testsuite.
+    We don't ship libecore-audio but the testsuite seems to have issues at
+    least on s390x. Since the library has other problems that make
+    debugging difficult, disable the tests until it gets fixed.
+  * patches/04_eina_file_hash_fix: cherry-pick cad0db51 to fix FTBFS on Sparc
+  * debian/rules: use a large testsuite timeout to fix issues on slow buildds
+  * debian: merge all libe*-doc into a single efl-doc package.
+    The initial upload erroenously copied the complete doc in all the -doc
+    packages, reuslting in much bigger packages than expected. Now that all
+    libs are in the same source package, keeping separate -doc binary
+    packages does not make much sense, so merge them all.
+
+ -- Albin Tonnerre <lutin@debian.org>  Sun, 19 Jan 2014 12:13:11 +0100
+
+efl (1.8.3-1) experimental; urgency=low
+
+  * First upload of the merged EFL tree (Closes: #729751)
+  * debian: add control and packages information from previous EFL packages
+  * debian: bring back and refresh applicable patches from previous EFL packages
+  * debian: move to a single debug symbols package for EFL
+  * debian: core evas engines now ship with libevas1, drop libevas-engines-core
+  * debian: upstream no longer provides static libraries
+  * debian: fix install path for ecore and edje utility libraries
+  * debian: remove evas loaders install; they'll be split in a separate package
+  * debian: update Build-Depends as per new EFL requirements
+  * debian/rules: always run autoreconf during build to get a recent version
+  * debian/rules: force build with dev profile
+  * debian/rules: add support for parallel builds
+  * debian: add packaging information for EO.
+    Since this a base EFL that all other libs depend on, integrate it with
+    the eina package
+  * debian: add packaging information for Eldbus.
+    To avoid a circular dependency between eldbus and ecore (ecore modules
+    depend on eldbus, eldbus depends on ecore), put the eldbus library in
+    the libecore package
+  * debian: refactor packages dependencies to be easier to maintain.
+    Upstream always generates the .pc files to have dependencies between
+    libs with the upstream version (ie. for EFL 1.8.3 all .pc files refer to
+    1.8.3), so there's no point in trying to be clever: just use the
+    source:Upstream-Version. Also, include Efl_Config.h in eina and make
+    sure all -dev packages depend on libeina-dev to get that config header
+  * debian/libevas1.symbols: mark all evas_common symbols as optional.
+    Even if the evas_common symbols are exported, they are internal to
+    Evas: they are only part of the internal engine API, but the symbols
+    have to be exported because Evas module use them and we need to be able
+    to resolve references to those symbols
+  * debian/libecore-evas1.symbols: drop windows-only symbol removed from EFL 1.8
+  * add patches/03_ecore_evas_extn_abi: cherry-pick e1b1296 to fix ABI issue
+  * debian: add new symbols from this version in the symbols files
+  * debian: add a DEP5-compliant copyright file
+
+ -- Albin Tonnerre <lutin@debian.org>  Mon, 06 Jan 2014 12:05:43 +0100

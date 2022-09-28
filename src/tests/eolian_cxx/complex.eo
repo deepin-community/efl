@@ -1,0 +1,216 @@
+class Complex extends Efl.Object {
+   data: Complex_Data;
+   methods {
+      // container test
+      inptrcont @beta {
+         params {
+           l: list<string>;
+         }
+      }
+      inclasscont @beta {
+         params {
+           l: list<Efl.Object>;
+         }
+      }
+      incontcont @beta {
+         params {
+           l: list<list<string>>;
+         }
+      }
+      incontcontown @beta {
+         params {
+           l: list<list<string>> @move;
+         }
+      }
+      incontowncontown @beta {
+         params {
+           l: list<list<string> @move> @move;
+         }
+      }
+      incontowncont @beta {
+         params {
+           l: list<list<string> @move>;
+         }
+      }
+      instringcont @beta {
+         params {
+           l: list<string>;
+         }
+      }
+      instringowncont @beta {
+         params {
+           l: list<mstring @move>;
+         }
+      }
+      instringcontown @beta {
+         params {
+           l: list<string> @move;
+         }
+      }
+      inarray {
+         [[Docs for method inarray. @since 1.66]]
+         params {
+           l: array<string>;
+         }
+      }
+      inarrayown {
+         [[Docs for method inarrayown. @since 1.66]]
+         params {
+           l: array<string> @move;
+         }
+      }
+      inhash @beta {
+         params {
+           l: hash<string, string>;
+         }
+      }
+      inhashown @beta {
+         params {
+           l: hash<string, string> @move;
+         }
+      }
+      initerator {
+         [[Docs for method initerator. @since 1.66]]
+         params {
+           l: iterator<int>;
+         }
+      }
+      initeratorown {
+         [[Docs for method initeratorown. @since 1.66]]
+         params {
+           l: iterator<int> @move;
+         }
+      }
+      inaccessor {
+         [[Docs for method inacessor. @since 1.66]]
+         params {
+           l: accessor<int>;
+         }
+      }
+      inaccessorown {
+         [[Docs for method inaccessorown. @since 1.66]]
+         params {
+           l: accessor<int> @move;
+         }
+      }
+      // out
+      outclasscont @beta {
+         params {
+           @out l: list<Efl.Object>;
+         }
+      }
+      outcontcont @beta {
+         params {
+           @out l: list<list<string>>;
+         }
+      }
+      outcontcontown @beta {
+         params {
+           @out l: list<list<string>> @move;
+         }
+      }
+      outcontowncontown @beta {
+         params {
+           @out l: list<list<string> @move> @move;
+         }
+      }
+      outcontowncont @beta {
+         params {
+           @out l: list<list<string> @move>;
+         }
+      }
+      outstringcont @beta {
+         params {
+           @out l: list<string>;
+         }
+      }
+      outstringowncont @beta {
+         params {
+           @out l: list<mstring @move>;
+         }
+      }
+      outstringcontown @beta {
+         params {
+           @out l: list<string> @move;
+         }
+      }
+      outarray {
+         [[Docs for method outarray. @since 1.66]]
+         params {
+           @out l: array<string>;
+         }
+      }
+      outarrayown {
+         [[Docs for method outarryown. @since 1.66]]
+         params {
+           @out l: array<string> @move;
+         }
+      }
+      outhash @beta {
+         params {
+           @out l: hash<string, string>;
+         }
+      }
+      outhashown @beta {
+         params {
+           @out l: hash<string, string> @move;
+         }
+      }
+      outiterator {
+         [[Docs for method outiterator. @since 1.66]]
+         params {
+           @out l: iterator<int>;
+         }
+      }
+      outiteratorown {
+         [[Docs for method outiteratorown. @since 1.66]]
+         params {
+           @out l: iterator<int> @move;
+         }
+      }
+      outaccessor {
+         [[Docs for method outaccessor. @since 1.66]]
+         params {
+           @out l: accessor<int>;
+         }
+      }
+      outaccessorown {
+         [[Docs for method outaccessorown. @since 1.66]]
+         params {
+           @out l: accessor<int> @move;
+         }
+      }
+      foo @beta {
+         params {
+            l: list<string>;
+         }
+      }
+      bar {
+         [[Docs for method bar. @since 1.66]]
+         return: array<string>;
+      }
+      wrapper_r {
+         [[Docs for method wrapper_r. @since 1.66]]
+         return: Complex;
+      }
+      wrapper_in {
+         [[Docs for method wrapper_in. @since 1.66]]
+         params {
+            @in a1: Complex;
+         }
+      }
+      wrapper_inout {
+         [[Docs for method wrapper_inout. @since 1.66]]
+         params {
+            @inout a1: Complex;
+         }
+      }
+      wrapper_out {
+         [[Docs for method wrapper_out. @since 1.66]]
+         params {
+            @out a1: Complex;
+         }
+      }
+   }
+}
+

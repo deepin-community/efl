@@ -1,0 +1,1062 @@
+Source: efl
+Section: libs
+Priority: optional
+Maintainer: Debian Pkg-e Team <pkg-e-devel@lists.alioth.debian.org>
+Uploaders:
+ Albin Tonnerre <lutin@debian.org>,
+ Ross Vandegrift <rvandegrift@debian.org>,
+ Andreas Metzler <ametzler@debian.org>,
+Build-Conflicts: systemctl
+Build-Depends:
+ debhelper-compat (= 13),
+ libblkid-dev [linux-any],
+ libcurl4-gnutls-dev,
+ libdbus-1-dev,
+ libedje-bin <cross>,
+ libeet-bin <cross>,
+ libelementary-bin <cross>,
+ libeolian-bin <cross>,
+ libfontconfig1-dev,
+ libfreetype6-dev,
+ libfribidi-dev,
+ libgbm-dev,
+ libgcrypt-dev,
+ libgif-dev,
+ libgles2-mesa-dev,
+ libglib2.0-dev,
+ libgnutls28-dev,
+ libgstreamer-plugins-base1.0-dev,
+ libgstreamer1.0-dev,
+ libharfbuzz-dev,
+ libinput-dev,
+ libjpeg-dev,
+ liblua5.2-dev [alpha arm64 hppa ia64 m68k powerpc riscv64 s390x sh4 sparc64 x32],
+ libluajit-5.1-dev [!alpha !arm64 !hppa !ia64 !m68k !powerpc !riscv64 !s390x !sh4 !sparc64 !x32],
+ liblz4-dev,
+ libmount-dev [linux-any],
+ libopenjp2-7-dev,
+ libpixman-1-dev,
+ libpng-dev,
+ libpoppler-cpp-dev,
+ libpulse-dev,
+ libraw-dev,
+ librsvg2-dev,
+ libscim-dev,
+ libsndfile-dev,
+ libspectre-dev,
+ libsystemd-dev,
+ libtiff-dev,
+ libudev-dev [linux-any],
+ libunwind-dev [amd64 arm64 armel armhf hppa i386 ia64 mips mips64 mips64el mipsel powerpc powerpcspe ppc64 ppc64el sh4],
+ libvlc-dev,
+ libwayland-dev,
+ libwebp-dev,
+ libx11-dev,
+ libx11-xcb-dev,
+ libxcb-image0-dev,
+ libxcb-shm0-dev,
+ libxcb1-dev,
+ libxcomposite-dev,
+ libxcursor-dev,
+ libxdamage-dev,
+ libxext-dev,
+ libxi-dev,
+ libxinerama-dev,
+ libxkbcommon-x11-dev,
+ libxpm-dev,
+ libxrandr-dev,
+ libxrender-dev,
+ libxss-dev,
+ libxtst-dev,
+ mesa-common-dev,
+ meson,
+ pkg-config,
+ systemd,
+ wayland-protocols,
+ x11proto-xext-dev,
+ zlib1g-dev,
+Build-Depends-Indep: doxygen, ghostscript, imagemagick, texlive-font-utils
+Standards-Version: 4.5.0
+Vcs-Git: https://salsa.debian.org/pkg-e-team/efl.git
+Vcs-Browser: https://salsa.debian.org/pkg-e-team/efl
+Homepage: https://www.enlightenment.org
+Rules-Requires-Root: no
+
+Package: libeina1a
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Conflicts: libeina0, libeina1
+Breaks:
+ libecore-avahi1 (<= 1.23.3-8),
+ libecore-bin (<= ${source:Upstream-Version}),
+ libedje-bin (<= ${source:Upstream-Version}),
+ libeet-bin (<= ${source:Upstream-Version}),
+ libeet1 (<= 1.4.0~beta+1.4.0),
+ libeeze-bin (<= ${source:Upstream-Version}),
+ libefreet-bin (<= ${source:Upstream-Version}),
+ libeina-bin (<= ${source:Upstream-Version}),
+ libeina1 (<= 1.18.1-2),
+ libelementary-bin (<= ${source:Upstream-Version}),
+ libelementary-data (<= ${source:Upstream-Version}),
+ libelocation1 (<= 1.23.3-8),
+ libelua-bin (<= ${source:Upstream-Version}),
+ libembryo-bin (<= ${source:Upstream-Version}),
+ libemotion-players (<= 1.23.3-8),
+ libeolian-bin (<= ${source:Upstream-Version}),
+ libephysics1 (<= 1.23.3-8),
+ libethumb-client-bin (<= ${source:Upstream-Version}),
+ libevas-loaders (<= ${source:Upstream-Version}),
+ libevas-bin (<= 1.21.1-5),
+ libevas1-engines-drm (<= ${source:Upstream-Version}),
+ libevas1-engines-fb (<= ${source:Upstream-Version}),
+ libevas1-engines-wayland (<= ${source:Upstream-Version}),
+ libevas1-engines-x (<= ${source:Upstream-Version}),
+Description: EFL optimized data types
+ The Eina library is a library which implements an API for data types
+ in an efficient way. It also provides some useful tools like opening
+ shared libraries, error management, type conversion, time accounting
+ and memory pools.
+ .
+ Please refer to the documentation for a list of included data types
+ and tools.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libeina-bin
+Architecture: linux-any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: EFL optimized data types - extra tools
+ The Eina library is a library which implements an API for data types
+ in an efficient way. It also provides some useful tools like opening
+ shared libraries, error management, type conversion, time accounting
+ and memory pools.
+ .
+ Please refer to the documentation for a list of included data types
+ and tools.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains some additional tools that may be useful for
+ debugging eina issues.
+
+Package: libeet1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL file chunk reading/writing
+ Eet is a tiny library designed to write an arbitrary set of chunks of data to a
+ file and optionally compress each chunk (very much like a zip file) and allows
+ fast random-access reading of the file later on. It does not do zip as zip
+ itself has more complexity than needed, and it was much simpler to implement
+ this once here.
+ .
+ It's small, fast, and does a job. It's heavily commented and fully documented.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libeet-bin
+Architecture: linux-any
+Multi-Arch: foreign
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: EFL file chunk reading/writing - utilities
+ Eet is a tiny library designed to write an arbitrary set of chunks of data to a
+ file and optionally compress each chunk (very much like a zip file) and allows
+ fast random-access reading of the file later on. It does not do zip as zip
+ itself has more complexity than needed, and it was much simpler to implement
+ this once here.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains eet, an utility that allows you to extract, insert,
+ encode and decode config blobs created with libeet.
+
+Package: libevas1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends:
+ libevas1-engines-x | libevas1-engine,
+ ${misc:Depends},
+ ${shlibs:Depends},
+Recommends:
+ libevas-loaders,
+ libevas1-engines-drm,
+ libevas1-engines-fb,
+ libevas1-engines-wayland,
+ libevas1-engines-x,
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL advanced canvas library
+ Evas is a clean display canvas API for several target display systems
+ that can draw anti-aliased text, smooth super- and sub-sampled scaled
+ images, alpha-blend objects and more.
+ .
+ It abstracts the graphics drawing characteristics of the display
+ system by implementing a canvas where graphical objects can be
+ created, manipulated, and modified. It then handles the rendering
+ pipeline in an optimal way for the underlying device in order to
+ minimize redraws, via a programmatically efficient API.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the core library and a set of image loaders
+ and/or savers for various formats: eet, gif, jpeg, png, svg, tiff and
+ xpm
+
+Package: libevas1-engines-x
+Architecture: linux-any
+Multi-Arch: same
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Replaces: libevas-engines, libevas-engines-extras
+Provides: libevas1-engine, libevas1-engine-gl-x11, libevas1-engine-software-x11
+Description: Evas module providing the X11 engines
+ Evas is a clean display canvas API for several target display systems
+ that can draw anti-aliased text, smooth super- and sub-sampled scaled
+ images, alpha-blend objects and more.
+ .
+ It abstracts the graphics drawing characteristics of the display
+ system by implementing a canvas where graphical objects can be
+ created, manipulated, and modified. It then handles the rendering
+ pipeline in an optimal way for the underlying device in order to
+ minimize redraws, via a programmatically efficient API.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the X11-related Evas engine modules:
+  - GL/X11
+  - Software/X11 (Xlib/XCB)
+
+Package: libevas1-engines-fb
+Architecture: linux-any
+Multi-Arch: same
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Replaces: libevas-engines-extras, libevas1-engine-fb
+Provides: libevas1-engine
+Description: Evas module providing the Framebuffer engine
+ Evas is a clean display canvas API for several target display systems
+ that can draw anti-aliased text, smooth super- and sub-sampled scaled
+ images, alpha-blend objects and more.
+ .
+ It abstracts the graphics drawing characteristics of the display
+ system by implementing a canvas where graphical objects can be
+ created, manipulated, and modified. It then handles the rendering
+ pipeline in an optimal way for the underlying device in order to
+ minimize redraws, via a programmatically efficient API.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the framebuffer Evas engine module.
+
+Package: libevas1-engines-drm
+Architecture: linux-any
+Multi-Arch: same
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Replaces: libevas-engines, libevas-engines-extras
+Provides: libevas1-engine
+Description: Evas module providing the DRM engine
+ Evas is a clean display canvas API for several target display systems
+ that can draw anti-aliased text, smooth super- and sub-sampled scaled
+ images, alpha-blend objects and more.
+ .
+ It abstracts the graphics drawing characteristics of the display
+ system by implementing a canvas where graphical objects can be
+ created, manipulated, and modified. It then handles the rendering
+ pipeline in an optimal way for the underlying device in order to
+ minimize redraws, via a programmatically efficient API.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the DRM-related Evas engine modules.
+
+Package: libevas1-engines-wayland
+Architecture: linux-any
+Multi-Arch: same
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks:
+ libeina1a (<< ${source:Upstream-Version}),
+ enlightenment (<< 0.24.0-1),
+Replaces: libevas-engines, libevas-engines-extras
+Provides: libevas1-engine
+Description: Evas module providing the Wayland engine
+ Evas is a clean display canvas API for several target display systems
+ that can draw anti-aliased text, smooth super- and sub-sampled scaled
+ images, alpha-blend objects and more.
+ .
+ It abstracts the graphics drawing characteristics of the display
+ system by implementing a canvas where graphical objects can be
+ created, manipulated, and modified. It then handles the rendering
+ pipeline in an optimal way for the underlying device in order to
+ minimize redraws, via a programmatically efficient API.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Wayland-related Evas engine modules.
+
+Package: libecore1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL core abstraction layer
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libecore-audio1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for audio playback and recording
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This package contains the Ecore wrapper and convenience functions for
+ audio playback and recording.
+
+Package: libecore-con1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends:
+ libecore-bin (>= ${source:Upstream-Version}),
+ ${misc:Depends},
+ ${shlibs:Depends},
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for network connections
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Ecore Connection Library, which provides
+ simple mechanisms for communications between programs using reliable
+ sockets.
+
+Package: libecore-drm2-1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for DRM
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Ecore wrapper and convenience functions for using
+ drm, virtual terminals.
+
+Package: libecore-evas1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for the Evas wrapper
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Ecore Evas wrapper functions.
+
+Package: libecore-fb1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for frame buffer displays
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Ecore frame buffer system functions.
+
+Package: libecore-file1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for files and directories
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Ecore File Library.
+
+Package: libecore-imf1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for Input Method Framework
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Ecore Input Method Framework module, and
+ the Evas helper functions for it.
+
+Package: libecore-input1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for input devices
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Ecore input device module.
+
+Package: libecore-ipc1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for inter-process communication
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Ecore inter-process communication functions.
+
+Package: libecore-wl2-1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for Wayland displays
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This package contains the Ecore wrapper and convenience functions for
+ using Wayland.
+
+Package: libecore-x1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: Ecore functions for X Window System displays
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the Ecore wrapper and convenience functions for using
+ the X Window System.
+
+Package: libecore-bin
+Architecture: linux-any
+Multi-Arch: foreign
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: EFL core abstraction layer - utilities
+ Ecore is a library of convenience functions. It provides abstractions
+ for handling timers selections, Xdnd, event loops, and much
+ more. Much of Ecore's functionality is implemented in external
+ modules.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains code generation utilities used in building EFL
+ apps and a libproxy abstraction binary used by ecore_con.
+
+Package: libector1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL vector graphics capabilities
+ Ector provides a new retained rendering library that is used by Evas
+ to provide Evas_Object_VG. This is a new Evas_Object that provides a
+ vector graphics scene graph following the SVG specification. It will
+ be considered a bug if some behaviour does not follow the SVG
+ standard. Evas_Object_VG provides 3 kind of objects for now: shape,
+ as well as linear and radial gradients.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package provides the libector1 library.
+
+Package: libefl-all-dev
+Section: libdevel
+Architecture: linux-any
+Pre-Depends: ${misc:Pre-Depends}
+Depends:
+ libblkid-dev [linux-any],
+ libbullet-dev,
+ libcurl4-gnutls-dev,
+ libdbus-1-dev,
+ libecore-audio1 (= ${binary:Version}),
+ libecore-con1 (= ${binary:Version}),
+ libecore-drm2-1 (= ${binary:Version}),
+ libecore-evas1 (= ${binary:Version}),
+ libecore-fb1 (= ${binary:Version}) [linux-any],
+ libecore-file1 (= ${binary:Version}),
+ libecore-imf1 (= ${binary:Version}),
+ libecore-input1 (= ${binary:Version}),
+ libecore-ipc1 (= ${binary:Version}),
+ libecore-wl2-1 (= ${binary:Version}),
+ libecore-x1 (= ${binary:Version}),
+ libecore1 (= ${binary:Version}),
+ libector1 (= ${binary:Version}),
+ libedje-bin (= ${binary:Version}),
+ libedje1 (= ${binary:Version}),
+ libeet1 (= ${binary:Version}),
+ libeeze1 (= ${binary:Version}) [linux-any],
+ libefreet1a (= ${binary:Version}),
+ libeina1a (= ${binary:Version}),
+ libeio1 (= ${binary:Version}),
+ libelementary1 (= ${binary:Version}),
+ libelput1 (= ${binary:Version}),
+ libelua1 (= ${binary:Version}) [!alpha !arm64 !hppa !ia64 !m68k !powerpc !riscv64 !s390x !sh4 !sparc64 !x32],
+ libembryo1 (= ${binary:Version}),
+ libemile1 (= ${binary:Version}),
+ libemotion1 (= ${binary:Version}),
+ libeolian-bin (= ${binary:Version}),
+ libeolian1 (= ${binary:Version}),
+ libethumb-client1 (= ${binary:Version}),
+ libethumb1 (= ${binary:Version}),
+ libevas1 (= ${binary:Version}),
+ libfontconfig1-dev,
+ libfreetype6-dev,
+ libfribidi-dev,
+ libgbm-dev,
+ libglib2.0-dev,
+ libgnutls28-dev,
+ libgstreamer-plugins-base1.0-dev,
+ libgstreamer1.0-dev,
+ libharfbuzz-dev,
+ libinput-dev,
+ libjpeg-dev,
+ liblua5.2-dev [alpha arm64 hppa ia64 m68k powerpc riscv64 s390x sh4 sparc64 x32],
+ libluajit-5.1-dev [!alpha !arm64 !hppa !ia64 !m68k !powerpc !riscv64 !s390x !sh4 !sparc64 !x32],
+ liblz4-dev,
+ libpng-dev,
+ libmount-dev [linux-any],
+ libpulse-dev,
+ libsndfile-dev,
+ libsystemd-dev,
+ libudev-dev [linux-any],
+ libunwind-dev [amd64 arm64 armel armhf hppa i386 ia64 mips mips64 mips64el mipsel powerpc powerpcspe ppc64 ppc64el sh4],
+ libwayland-dev,
+ libx11-dev,
+ libx11-xcb-dev,
+ libxcb1-dev,
+ libxcomposite-dev,
+ libxcursor-dev,
+ libxdamage-dev,
+ libxext-dev,
+ libxi-dev,
+ libxinerama-dev,
+ libxkbcommon-x11-dev,
+ libxrandr-dev,
+ libxrender-dev,
+ libxss-dev,
+ libxtst-dev,
+ mesa-common-dev,
+ pkg-config,
+ python3,
+ x11proto-xext-dev,
+ zlib1g-dev,
+ ${misc:Depends},
+ ${shlibs:Depends},
+Breaks:
+ libecore-dev (<< 1.20.5-1),
+ libector-dev (<< 1.20.5-1),
+ libedje-dev (<< 1.20.5-1),
+ libeet-dev (<< 1.20.5-1),
+ libeeze-dev (<< 1.20.5-1),
+ libefreet-dev (<< 1.20.5-1),
+ libeina-dev (<< 1.20.5-1),
+ libeio-dev (<< 1.20.5-1),
+ libelementary-dev (<< 1.20.5-1),
+ libelput-dev (<< 1.20.5-1),
+ libelua-dev (<< 1.20.5-1),
+ libembryo-dev (<< 1.20.5-1),
+ libemile-dev (<< 1.20.5-1),
+ libemotion-dev (<< 1.20.5-1),
+ libeolian-dev (<< 1.20.5-1),
+ libethumb-dev (<< 1.20.5-1),
+ libevas-dev (<< 1.20.5-1),
+Replaces:
+ libecore-dev (<< 1.20.5-1),
+ libector-dev (<< 1.20.5-1),
+ libedje-dev (<< 1.20.5-1),
+ libeet-dev (<< 1.20.5-1),
+ libeeze-dev (<< 1.20.5-1),
+ libefreet-dev (<< 1.20.5-1),
+ libeina-dev (<< 1.20.5-1),
+ libeio-dev (<< 1.20.5-1),
+ libelementary-dev (<< 1.20.5-1),
+ libelput-dev (<< 1.20.5-1),
+ libelua-dev (<< 1.20.5-1),
+ libembryo-dev (<< 1.20.5-1),
+ libemile-dev (<< 1.20.5-1),
+ libemotion-dev (<< 1.20.5-1),
+ libeolian-dev (<< 1.20.5-1),
+ libethumb-dev (<< 1.20.5-1),
+ libevas-dev (<< 1.20.5-1),
+Recommends: efl-doc
+Description: Enlightenment Foundation Libraries development files
+ The Enlightenment Foundation Libraries (EFL) is a stack of libraries
+ providing a wide degree of functionality.  Originally written to
+ support development of the Enlightenment window manager, the
+ libraries have increasingly been used in embedded systems.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package provides the development files for all of EFL.
+
+Package: libefreet1a
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libefreet1 (<= 1.8.4-1), libeina1a (<< ${source:Upstream-Version})
+Description: EFL freedesktop.org spec implementations
+ Efreet is a library designed to help apps work several of the
+ Freedesktop.org standards regarding Icons, Desktop files and
+ Menus. To that end it implements the following specifications:
+  - XDG Base Directory Specification
+  - Icon Theme Specification
+  - Desktop Entry Specification
+  - Desktop Menu Specification
+  - FDO URI Specification
+  - Shared Mime Info Specification
+  - Trash Specification
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libefreet-bin
+Architecture: linux-any
+Multi-arch: foreign
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: EFL helper program to create efreet data caches
+ Efreet is a library designed to help apps work several of the
+ Freedesktop.org standards regarding Icons, Desktop files and
+ Menus. To that end it implements the following specifications:
+  - XDG Base Directory Specification
+  - Icon Theme Specification
+  - Desktop Entry Specification
+  - Desktop Menu Specification
+  - FDO URI Specification
+  - Shared Mime Info Specification
+  - Trash Specification
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package provides the D-Bus activated helper binary and the
+ associated service file that are internally used by libefreet.
+
+Package: libembryo1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Suggests: libembryo-bin
+Description: EFL SMALL-based abstract machine (AMX) bytecode interpreter
+ Embryo is a tiny library designed to interpret limited Small programs
+ compiled by the included compiler, embryo_cc. It is mostly a cleaned
+ up and smaller version of the original Small abstract machine. The
+ compiler is mostly untouched.
+ .
+ Refer to the EFL documentation for an introduction to SMALL.  See
+ https://www.compuphase.com/pawn/pawn.htm for details on PAWN, the
+ upstream successor to SMALL.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libembryo-bin
+Section: devel
+Architecture: linux-any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: EFL SMALL-based abstract machine (AMX) compiler
+ Embryo is a tiny library designed to interpret limited Small programs
+ compiled by the included compiler, embryo_cc. It is mostly a cleaned
+ up and smaller version of the original Small abstract machine. The
+ compiler is mostly untouched.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the embryo compiler: embryo_cc.
+
+Package: libedje-bin
+Architecture: linux-any
+Multi-Arch: foreign
+Section: devel
+Depends:
+ libembryo-bin (>= 0.9.9.050+svn20090204),
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: EFL layout and animation tools - utilities
+ Edje is a graphical layout and animation library for animated resizable,
+ compressed and scalable themes. It is the theming engine behind
+ Enlightenment.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains binaries for the creation & debugging of edje
+ themes.
+
+Package: libedje1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version}), libelementary1 (<= 1.7.7-1)
+Suggests: libedje-bin (= ${binary:Version})
+Description: EFL layout and animation tools
+ Edje is a graphical layout and animation library for animated resizable,
+ compressed and scalable themes. It is the theming engine behind
+ Enlightenment.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libeio1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL non-blocking, threaded I/O
+ Eio library is a library that implements an API for asynchronous
+ input/output.  It provides non-blocking IO by using thread for all
+ operations that may block. It should integrate all the
+ features/functions of Ecore_File that could block.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libeeze1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL udev device manipulation
+ Eeze is a library for manipulating devices through udev with a simple
+ and fast api. It interfaces directly with libudev, avoiding such
+ middleman daemons as udisks/upower or hal, to immediately gather
+ device information the instant it becomes known to the system.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libeeze-bin
+Architecture: linux-any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: EFL udev device manipulation - utilities
+ Eeze is a library for manipulating devices through udev with a simple
+ and fast api. It interfaces directly with libudev, avoiding such
+ middleman daemons as udisks/upower or hal, to immediately gather
+ device information the instant it becomes known to the system.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains command-line utilities that allow mounting,
+ scanning, and unmounting devices with eeze.
+
+Package: libelua1
+Architecture: amd64 armel armhf i386 mips mips64el mipsel powerpcspe ppc64 ppc64el
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL Lua wrapper and convenience layer
+ The Elua library provides all necessary infrastructure required to
+ set up a fully functional Lua state able of running Elua
+ scripts. This is provided as a library in order to encourage reuse
+ from different libraries and apps.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libelua-bin
+Architecture: amd64 armel armhf i386 mips mips64el mipsel powerpcspe ppc64 ppc64el
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: EFL Lua wrapper and convenience layer - binaries
+ The Elua library provides all necessary infrastructure required to
+ set up a fully functional Lua state able of running Elua
+ scripts. This is provided as a library in order to encourage reuse
+ from different libraries and apps.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains elua, the main entry point for all EFL/LuaJIT
+ powered applications.
+
+Package: libemile1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL compression and encryption
+ Emile provides a library to bring together serialization, compression
+ and ciphering. It is a low-level library and can be used by anything
+ above Eina.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libemotion1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL media object functionality
+ Emotion is a library that allows playing audio and video files, using
+ one of its backends (GStreamer, xine or generic shm player).
+ .
+ It is integrated into Ecore through its mainloop, and is transparent
+ to the user of the library how the decoding of audio and video is
+ being done. Once the objects are created, the user can set callbacks
+ to the specific events and set options to this object, all in the
+ main loop.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libethumb1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL for thumbnail image creation
+ Ethumb uses Evas to generate thumbnail images of given files. The API allows
+ great customization of the generated files and also helps complying to
+ FreeDesktop.Org Thumbnail Specification.
+ .
+ It also provide a D-Bus server to reduce the performance costs of
+ thumbnail generation and management. Ethumb-Client creates thumbnails
+ by communicating with a thumbnail generation server using standard
+ D-Bus protocol.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the D-Bus server library.
+
+Package: libethumb-client1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL client for ethumb
+ Ethumb uses Evas to generate thumbnail images of given files. The API allows
+ great customization of the generated files and also helps complying to
+ FreeDesktop.Org Thumbnail Specification.
+ .
+ It also provide a D-Bus server to reduce the performance costs of
+ thumbnail generation and management. Ethumb-Client creates thumbnails
+ by communicating with a thumbnail generation server using standard
+ D-Bus protocol.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the D-Bus client library.
+
+Package: libethumb-client-bin
+Architecture: linux-any
+Multi-Arch: foreign
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: EFL ethumb helper binary
+ Ethumb uses Evas to generate thumbnail images of given files. The API allows
+ great customization of the generated files and also helps complying to
+ FreeDesktop.Org Thumbnail Specification.
+ .
+ It also provide a D-Bus server to reduce the performance costs of
+ thumbnail generation and management. Ethumb-Client creates thumbnails
+ by communicating with a thumbnail generation server using standard
+ D-Bus protocol.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package provides the ethumbd helper binary and the associated D-Bus
+ service file that are internally used by libethumb-client.
+
+Package: libeolian-bin
+Architecture: linux-any
+Multi-Arch: foreign
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libefl-all-dev (<< 1.23.3-7)
+Replaces: libefl-all-dev (<< 1.23.3-7)
+Description: EFL object parser and C code generator - C code generator
+ Eolian parses Enlightenment's meta-data (.eo) files and can then
+ generate C code along with header files.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the C code generator for Eo, eolian_gen.
+
+Package: libeolian1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL object parser and C code generator
+ Eolian parses Enlightenment's meta-data (.eo) files and can then
+ generate C code along with header files.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libelput1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libeina1a (<< ${source:Upstream-Version})
+Description: EFL abstraction for libinput
+ Elput abstraction for the libinput library.  It can be used by
+ various other subsystems (ecore_fb, ecore_drm, etc) to handle
+ interfacing with libinput without having to duplicate the code in
+ each subsystem.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: efl-doc
+Architecture: all
+Multi-Arch: foreign
+Section: doc
+Depends: ttf-bitstream-vera, ${misc:Depends}
+Breaks:
+ libecore-doc   (<= 1.8.3),
+ libedje-doc    (<= 1.8.3),
+ libeet-doc     (<= 1.8.3),
+ libefreet-doc  (<= 1.8.3),
+ libeina-doc    (<= 1.8.3),
+ libeio-doc     (<= 1.8.3),
+ libembryo-doc  (<= 1.8.3),
+ libevas-doc    (<= 1.8.3),
+Replaces:
+ libecore-doc   (<= 1.8.3),
+ libedje-doc    (<= 1.8.3),
+ libeet-doc     (<= 1.8.3),
+ libefreet-doc  (<= 1.8.3),
+ libeina-doc    (<= 1.8.3),
+ libeio-doc     (<= 1.8.3),
+ libembryo-doc  (<= 1.8.3),
+ libevas-doc    (<= 1.8.3),
+Description: Documentation for the Enlightenment Foundation Libraries
+ The Enlightenment Foundation Libraries (EFL) is a set of libraries
+ providing building blocks used in the Enlightenment window manager.
+ This package contains the Doxygen-generated HTML documentation and
+ examples for the API of the EFL.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libelementary1
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Breaks: libeina1 (<< ${source:Upstream-Version}), libelementary2 (<< 1.15)
+Replaces: libelementary2 (<< 1.15)
+Depends:
+ libelementary-data (= ${source:Version}),
+ ${misc:Depends},
+ ${shlibs:Depends},
+Recommends:
+ libelementary-bin (= ${source:Version}),
+Description: EFL widget set
+ Elementary is a widget set based on the Enlightenment Foundation
+ Libraries, primarily aimed at creating graphical user interfaces for
+ mobile and embedded devices.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+
+Package: libelementary-bin
+Architecture: linux-any
+Multi-Arch: foreign
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libefl-all-dev (<= 1.23.3-7)
+Replaces: libefl-all-dev (<= 1.23.3-7)
+Description: EFL widget set - helper programs
+ Elementary is a widget set based on the Enlightenment Foundation
+ Libraries, primarily aimed at creating graphical user interfaces for
+ mobile and embedded devices.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains the elementary_config program and tools to
+ assist in the development & debugging of elementary programs.
+
+Package: libelementary-data
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Description: EFL widget set - data files
+ Elementary is a widget set based on the Enlightenment Foundation
+ Libraries, primarily aimed at creating graphical user interfaces for
+ mobile and embedded devices.
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).
+ .
+ This package contains graphics and styles needed by applications
+ using elementary.
+
+Package: libevas-loaders
+Architecture: linux-any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Replaces: libevas1 (<< 1.7.7-5)
+Description: EFL additional loaders for Evas
+ This package contains programs that allow Evas to load many image and
+ document formats for which it has no built-in support, including:
+  - XCF
+  - SVG
+  - PS
+  - RAW
+  - LibreOffice
+ .
+ This is part of the Enlightenment Foundation Libraries (EFL).

@@ -1,0 +1,9 @@
+class @beta Ector.Software.Buffer extends Efl.Object implements Ector.Software.Buffer.Base
+{
+   [[Ector software buffer class]]
+   data: null;
+   implements {
+      Efl.Object.constructor;
+      Efl.Object.destructor;
+   }
+}

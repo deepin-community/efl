@@ -1,0 +1,2 @@
+libevas1-engines-wayland: package-name-doesnt-match-sonames libefl-canvas-wl1
+libevas1-engines-wayland: symbols-file-contains-debian-revision

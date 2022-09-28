@@ -1,0 +1,65 @@
+<!--(include)-->doc_macros.include<!--(end)-->#!
+~~Title: EFL Reference~~
+{{page>:develop:api-include:reference:general&nouser&nolink&nodate}}
+
+====== Python-EFL documentation preview ======
+This is just a work in progress for the future development of the
+Python-EFL Unified API.
+
+Practically there is nothing python related currently in this documentation,
+so it can be considered valid for all languages.
+
+
+<!--(for ns in nspaces)-->
+===== ${ns.name}$ (namespace) =====
+
+   <!--(for i, cls in enumerate(sorted(ns.regulars)))-->
+      <!--(if i == 0)-->
+^ Regular Classes ^^
+      <!--(end)-->
+| ${CLS_LINK}$ ${OBJ_TAGS(obj=cls)}$ | ${BEST_SUMMARY(obj=cls)}$ |
+   <!--(end)-->
+#!
+   <!--(for i, cls in enumerate(sorted(ns.abstracts)))-->
+      <!--(if i == 0)-->
+^ Abstract Classes ^^
+      <!--(end)-->
+| ${CLS_LINK}$ ${OBJ_TAGS(obj=cls)}$ | ${BEST_SUMMARY(obj=cls)}$ |
+   <!--(end)-->
+#!
+   <!--(for i, cls in enumerate(sorted(ns.mixins)))-->
+      <!--(if i == 0)-->
+^ Mixins ^^
+      <!--(end)-->
+| ${CLS_LINK}$ ${OBJ_TAGS(obj=cls)}$ | ${BEST_SUMMARY(obj=cls)}$ |
+   <!--(end)-->
+#!
+   <!--(for i, cls in enumerate(sorted(ns.interfaces)))-->
+      <!--(if i == 0)-->
+^ Interfaces ^^
+      <!--(end)-->
+| ${CLS_LINK}$ ${OBJ_TAGS(obj=cls)}$ | ${BEST_SUMMARY(obj=cls)}$ |
+   <!--(end)-->
+#!
+   <!--(for i, typedecl in enumerate(sorted(ns.aliases)))-->
+      <!--(if i == 0)-->
+^ Aliases ^^
+      <!--(end)-->
+| ${TYPEDECL_LINK}$ ${OBJ_TAGS(obj=typedecl)}$ | ${BEST_SUMMARY(obj=typedecl)}$ |
+   <!--(end)-->
+#!
+   <!--(for i, typedecl in enumerate(sorted(ns.structs)))-->
+      <!--(if i == 0)-->
+^ Structures ^^
+      <!--(end)-->
+| ${TYPEDECL_LINK}$ ${OBJ_TAGS(obj=typedecl)}$ | ${BEST_SUMMARY(obj=typedecl)}$ |
+   <!--(end)-->
+#!
+   <!--(for i, typedecl in enumerate(sorted(ns.enums)))-->
+      <!--(if i == 0)-->
+^ Enumerations ^^
+      <!--(end)-->
+| ${TYPEDECL_LINK}$ ${OBJ_TAGS(obj=typedecl)}$ | ${BEST_SUMMARY(obj=typedecl)}$ |
+   <!--(end)-->
+
+<!--(end)-->

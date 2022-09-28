@@ -1,0 +1,2 @@
+usr/lib/*/libeeze.so.*
+usr/lib/*/eeze/modules/sensor/*/*/module.so

@@ -1,0 +1,10 @@
+class @beta Elm.Entry.Part extends Efl.Ui.Layout_Part_Legacy
+{
+   [[Elementary entry internal part class]]
+   data: null;
+   implements {
+      Efl.Content.content { set; }
+      Efl.Content.content_unset;
+      Efl.Text.text { get; set; }
+   }
+}

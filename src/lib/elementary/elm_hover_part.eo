@@ -1,0 +1,9 @@
+class @beta Elm.Hover.Part extends Efl.Ui.Layout_Part_Legacy
+{
+   [[elementary hover internal part class]]
+   data: null;
+   implements {
+      Efl.Content.content { get; set; }
+      Efl.Content.content_unset;
+   }
+}

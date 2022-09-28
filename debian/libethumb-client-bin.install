@@ -1,0 +1,8 @@
+usr/bin/ethumb
+usr/bin/ethumbd
+usr/bin/ethumbd_client
+usr/lib/*/ethumb_client/utils/*/ethumbd_slave
+usr/share/dbus-1/services/org.enlightenment.Ethumb.service
+usr/lib/systemd/user/ethumb.service
+usr/share/ethumb/frames/default.edj
+usr/lib/systemd/user/ethumb.service

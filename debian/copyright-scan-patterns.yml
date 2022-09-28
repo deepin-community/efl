@@ -1,0 +1,40 @@
+---
+check:
+  suffixes:
+    - "*"
+
+ignore:
+  pattern:
+    - po/Makevars
+    - src/tests/efreet/data/entry
+    - licenses/*
+  suffixes:
+    # cme/licensecheck barfs up garbage if binaries aren't excluded
+    - bmp
+    - dds
+    - edc
+    - eet
+    - eps
+    - gif
+    - j2k
+    - jp2
+    - jpg
+    - jpeg
+    - md2
+    - mo
+    - ogg
+    - ply
+    - png
+    - psd
+    - svg
+    - svgz
+    - tga
+    - tgv
+    - ttf
+    - wav
+    - wbmp
+    - webp
+    - x
+    - xcf
+    - xcf.gz
+    - xpm

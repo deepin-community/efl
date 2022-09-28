@@ -1,0 +1,15 @@
+class @beta Ector.Renderer.GL.Gradient.Linear extends Ector.Renderer.GL implements Ector.Renderer.Gradient, Ector.Renderer.Gradient.Linear, Efl.Gfx.Path
+{
+   [[Ector GL renderer gradient linear]]
+   c_prefix: ector_renderer_gl_gradient_linear;
+   implements {
+      Ector.Renderer.prepare;
+      Ector.Renderer.draw;
+      Efl.Gfx.Path.bounds_get;
+      Ector.Renderer.crc { get; }
+      Ector.Renderer.GL.op_fill;
+      Efl.Object.constructor;
+      Efl.Object.destructor;
+      Efl.Gfx.Gradient.stop { set; }
+   }
+}

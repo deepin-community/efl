@@ -1,0 +1,10 @@
+# This cycle cannot be removed.  libeio1 depends on libefreet1a, and
+# libefreet1a requires libefreet-bin.  Since libefreet1a is MA: same
+# and libefreet-bin is MA: foreign, they cannot be combined.  The
+# libeio1 Depends on libefreet-bin is new to 1.25.  But I don't know
+# why it wasn't generated before - the libefreet1a symbols file has
+# required it since db5f4e3ecd2.
+#
+# Upstream is working on merging most EFL shared objects.  At that
+# point, this will be eliminated.
+intra-source-package-circular-dependency libefreet-bin libeio1

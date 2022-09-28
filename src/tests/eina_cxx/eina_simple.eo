@@ -1,0 +1,7 @@
+class Eina_Simple extends Efl.Object {
+   [[Docs for Eona_Simple. @since 1.66]]
+   data: null;
+   implements {
+      Efl.Object.constructor;
+   }
+}

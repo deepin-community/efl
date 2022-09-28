@@ -1,0 +1,18 @@
+class Simple extends Efl.Object {
+   [[Docs for class Simple. @since 1.66]]
+   data: null;
+   methods {
+      simple_get {
+         return: bool;
+      }
+      name_get {
+         params {
+            @out name: string;
+         }
+         return: bool;
+      }
+   }
+   implements {
+      Efl.Object.constructor;
+   }
+}

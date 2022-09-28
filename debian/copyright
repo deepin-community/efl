@@ -1,0 +1,1544 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: efl
+Source: git://git.enlightenment.org/core/efl.git
+
+Files: *
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: data/ecore/ecore_wayland/*
+Copyright: 2012-2015, Collabora, Ltd.
+License: NTP~disclaimer
+
+Files: data/elementary/themes/fdo/*
+Copyright: s & Credits
+License: GPL-3
+
+Files: data/elementary/themes/fdo/index.theme
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: data/embryo/default.inc
+Copyright: 2004, Carsten Haitzler
+  1999, Artran, Inc.
+License: BSD-2-clause
+
+Files: doc/docfx/default_efl/*
+Copyright: Microsoft.
+License: Expat
+
+Files: doc/docfx/default_efl/styles/*
+Copyright: Microsoft Corporation.
+License: Expat
+
+Files: old/ChangeLog.evil.0
+Copyright: update
+License: BSD-2-clause
+
+Files: po/*
+Copyright: 2012-2014, Enlightenment development team
+License: public-domain
+ File contains:
+ .
+ This file is put in the public domain.
+
+Files: po/LINGUAS
+  po/POTFILES.in
+  po/POTFILES.skip
+  po/ar.po
+  po/az_IR.po
+  po/fa.po
+  po/he.po
+  po/ko_KR.po
+  po/meson.build
+  po/ps.po
+  po/ur.po
+  po/yi.po
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: po/da.po
+  po/zh_CN.po
+Copyright: 2012, 2017, Enlightenment development team
+License: BSD-2-clause
+
+Files: po/eo.po
+Copyright: 2012, Rosetta Contributors and Canonical Ltd 2012
+License: BSD-2-clause
+
+Files: po/fi.po
+Copyright: 2014, Rosetta Contributors and Canonical Ltd 2014
+License: BSD-2-clause
+
+Files: po/gl.po
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: public-domain
+ File contains:
+ .
+ This file is put in the public domain.
+
+Files: po/lt.po
+  po/tr.po
+Copyright: 2010, Rosetta Contributors and Canonical Ltd 2010
+License: BSD-2-clause
+
+Files: po/sr.po
+Copyright: 2013, Rosetta Contributors and Canonical Ltd 2013
+License: BSD-2-clause
+
+Files: src/benchmarks/eina/city.cc
+  src/benchmarks/eina/city.h
+Copyright: 2011, Google, Inc.
+License: Expat
+
+Files: src/benchmarks/eina/eina_bench.c
+  src/benchmarks/eina/eina_bench.h
+  src/benchmarks/eina/eina_bench_array.c
+  src/benchmarks/eina/eina_bench_convert.c
+  src/benchmarks/eina/eina_bench_mempool.c
+  src/benchmarks/eina/eina_bench_rectangle_pool.c
+  src/benchmarks/eina/eina_bench_sort.c
+  src/benchmarks/eina/eina_bench_stringshare.c
+Copyright: 2002-2008, 2010-2018, 20011, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/benchmarks/eina/eina_bench_quad.c
+Copyright: 2008, 2010, Cedric BAIL
+License: LGPL-2.1+
+
+Files: src/bin/edje/epp/*
+Copyright: 87, 89, 92-94, 1986, 1995, Free Software Foundation, Inc.
+  2003-2011, Kim Woelders
+License: GPL-2+
+
+Files: src/bin/edje/epp/cppexp.c
+Copyright: 2003-2011, Kim Woelders
+  1987, 1992, 1994, 1995, Free Software Foundation.
+License: GPL-2+
+
+Files: src/bin/edje/epp/cpphash.h
+  src/bin/edje/epp/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/bin/edje/epp/cpplib.h
+Copyright: 1995, Free Software Foundation, Inc.
+License: GPL-2+
+
+Files: src/bin/edje/epp/cppmain.c
+Copyright: 2003-2011, Kim Woelders
+  1995, Free Software Foundation, Inc.
+License: GPL-2+
+
+Files: src/bin/efl/*
+Copyright: 2002-2008, 2010, 2011, 2015, 2017, Carsten Haitzler
+License: LGPL-2.1+
+
+Files: src/bin/efl/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/bin/efl_mono_msbuild_gen/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/bin/eina/eina_btlog/eina_btlog.c
+Copyright: 2002-2008, 2010, 2011, 2015, 2017, Carsten Haitzler
+License: LGPL-2.1+
+
+Files: src/bin/eina/eina_modinfo/eina_modinfo.c
+Copyright: 2016, Amitesh Singh
+License: LGPL-2.1+
+
+Files: src/bin/elementary/test_glview_manygears.c
+Copyright: 1999-2001, Brian Paul
+License: Expat
+
+Files: src/bin/embryo/*
+Copyright: ITB CompuPhase, 1997-2003
+License: Zlib
+
+Files: src/bin/embryo/embryo_cc_prefix.c
+  src/bin/embryo/embryo_cc_prefix.h
+  src/bin/embryo/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/bin/embryo/embryo_cc_sc.h
+Copyright: T. Riemersma, 1997-2003, / R. Cain, 1980, / J.E. Hendrix, 1982, 1983
+License: Zlib
+
+Files: src/bin/embryo/embryo_cc_sc5.scp
+  src/bin/embryo/embryo_cc_sc7.scp
+Copyright: ITB CompuPhase, 2000-2003
+License: Zlib
+
+Files: src/bin/embryo/embryo_cc_scexpand.c
+Copyright: 1996, Philip Gage
+License: BSD-2-clause
+
+Files: src/bin/embryo/embryo_cc_sclist.c
+Copyright: ITB CompuPhase, 2001-2003
+License: Zlib
+
+Files: src/bin/eolian_cxx/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/bin/eolian_mono/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/bin/ethumb/ethumb.c
+Copyright: 2009, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/bin/ethumb_client/*
+Copyright: 2009, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/bin/ethumb_client/ethumbd_private.h
+  src/bin/ethumb_client/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/bin/exactness/exactness_play.in
+  src/bin/exactness/exactness_record.in
+Copyright: 2017-2020, Enlightenment
+License: BSD-2-clause
+
+Files: src/bindings/cxx/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/bindings/cxx/ecore_cxx/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/cxx/eet_cxx/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/cxx/efl_cxx/*
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/cxx/eina_cxx/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/cxx/eldbus_cxx/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/cxx/elementary_cxx/*
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/cxx/eo_cxx/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/cxx/eolian_cxx/*
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/cxx/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/mono/*
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/mono/efl_mono.dll.config.in
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/bindings/mono/efl_mono/efl_all.cs
+  src/bindings/mono/efl_mono/efl_csharp_application.cs
+  src/bindings/mono/efl_mono/efl_libs.cs.in
+  src/bindings/mono/efl_mono/efl_libs.csv.in
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/bindings/mono/eina_mono/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/bindings/mono/eina_mono/eina_environment.cs
+  src/bindings/mono/eina_mono/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/mono/eldbus_mono/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/bindings/mono/eldbus_mono/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/bindings/mono/eo_mono/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/bindings/mono/eo_mono/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: Apache-2.0
+
+Files: src/examples/efl_mono/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/examples/efl_mono/example_numberwrapper.eo
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/examples/eina/EinaArray01.cs
+  src/examples/eina/EinaBinbuf01.cs
+  src/examples/eina/EinaError01.cs
+  src/examples/eina/EinaHash01.cs
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/examples/eina_cxx/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/examples/eldbus/dbusmodel.c
+Copyright: quits / license and help
+License: BSD-2-clause
+
+Files: src/examples/elementary/bg_cxx_example_01.cc
+  src/examples/elementary/bg_cxx_example_02.cc
+  src/examples/elementary/box_cxx_example_02.cc
+  src/examples/elementary/button_cxx_example_00.cc
+  src/examples/elementary/button_cxx_example_01.cc
+  src/examples/elementary/calendar_cxx_example_01.cc
+  src/examples/elementary/calendar_cxx_example_02.cc
+  src/examples/elementary/calendar_cxx_example_03.cc
+  src/examples/elementary/calendar_cxx_example_04.cc
+  src/examples/elementary/calendar_cxx_example_05.cc
+  src/examples/elementary/clock_cxx_example.cc
+  src/examples/elementary/efl_ui_slider_mono.cs
+  src/examples/elementary/efl_ui_unit_converter.cs
+  src/examples/elementary/icon_cxx_example_01.cc
+  src/examples/elementary/menu_cxx_example_01.cc
+  src/examples/elementary/popup_cxx_example.cc
+  src/examples/elementary/radio_cxx_example_01.cc
+  src/examples/elementary/slider_cxx_example.cc
+  src/examples/elementary/spinner_cxx_example.cc
+  src/examples/elementary/table_cxx_example_01.cc
+  src/examples/elementary/table_cxx_example_02.cc
+  src/examples/elementary/toolbar_cxx_example_01.cc
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/examples/eolian_cxx/colourable_cxx.cc
+  src/examples/eolian_cxx/colourablesquare_cxx.cc
+  src/examples/eolian_cxx/eolian_cxx_callbacks_01.cc
+  src/examples/eolian_cxx/eolian_cxx_simple_01.cc
+  src/examples/eolian_cxx/eolian_cxx_simple_01_cxx_impl.cc
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/examples/ethumb_client/ethumb_dbus.c
+Copyright: 2009, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/examples/evas/evas_cxx_rectangle.cc
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/generic/evas/xcf/main.c
+  src/generic/evas/xcf/pixelfuncs.c
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: GPL-2+
+
+Files: src/lib/ecore/Ecore_Getopt.h
+Copyright: version and eventually others you may
+License: BSD-2-clause
+
+Files: src/lib/ecore_drm/*
+Copyright: 2011, 2012, Collabora, Ltd.
+  2010-2012, Intel Corporation
+  2010, Red Hat <mjg@redhat.com>
+  2010, 2011, Benjamin Franzke
+  2008-2012, Kristian Høgsberg
+License: BSD-2-clause
+
+Files: src/lib/ecore_drm/Ecore_Drm.h
+  src/lib/ecore_drm/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/lib/ecore_fb/ecore_fb_li.c
+Copyright: Brad Hards (1999-2002)
+License: BSD-2-clause
+
+Files: src/lib/ecore_wayland/ecore_wl_dnd.c
+Copyright: 2012, 2013, Collabora, Ltd.
+  2008, Kristian Høgsberg
+License: BSD-2-clause
+
+Files: src/lib/ecore_wayland/ivi-application-client-protocol.h
+  src/lib/ecore_wayland/ivi-application-protocol.c
+Copyright: 2013, DENSO CORPORATION
+  2013, BMW Car IT GmbH
+License: Expat
+
+Files: src/lib/ecore_wayland/subsurface-client-protocol.h
+  src/lib/ecore_wayland/subsurface-protocol.c
+Copyright: 2012-2015, Collabora, Ltd.
+License: NTP~disclaimer
+
+Files: src/lib/ecore_wayland/xdg-shell-client-protocol.h
+  src/lib/ecore_wayland/xdg-shell-protocol.c
+Copyright: 2013, Rafael Antognolli
+  2013, Jasper St. Pierre
+  2010-2013, Intel Corporation
+  2008-2013, Kristian Høgsberg
+License: NTP~disclaimer
+
+Files: src/lib/ecore_wl2/ecore_wl2_dnd.c
+  src/lib/ecore_wl2/ecore_wl2_input.c
+Copyright: 2012, 2013, Collabora, Ltd.
+  2008, Kristian Høgsberg
+License: BSD-2-clause
+
+Files: src/lib/ector/ector_gl_internal.h
+Copyright: 2013-2016, The Khronos Group Inc.
+License: Khronos
+
+Files: src/lib/ector/ector_main.c
+Copyright: 2002-2008, 2010-2018, 20011, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/lib/efl_canvas_wl/dmabuf.c
+  src/lib/efl_canvas_wl/dmabuf.h
+Copyright: 2012-2015, Collabora, Ltd.
+License: NTP~disclaimer
+
+Files: src/lib/efl_mono/efl_custom_exports_mono.c
+  src/lib/efl_mono/efl_mono_accessors.c
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/lib/eina/Eina.h
+Copyright: 2008-2013, 2015, 2016, Enlightenment Developers:
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_abi.c
+  src/lib/eina/eina_accessor.c
+  src/lib/eina/eina_accessor.h
+  src/lib/eina/eina_array.c
+  src/lib/eina/eina_array.h
+  src/lib/eina/eina_benchmark.c
+  src/lib/eina/eina_benchmark.h
+  src/lib/eina/eina_counter.h
+  src/lib/eina/eina_cow.c
+  src/lib/eina/eina_cow.h
+  src/lib/eina/eina_file_common.c
+  src/lib/eina/eina_file_common.h
+  src/lib/eina/eina_hamster.c
+  src/lib/eina/eina_hamster.h
+  src/lib/eina/eina_inline_private.h
+  src/lib/eina/eina_iterator.c
+  src/lib/eina/eina_iterator.h
+  src/lib/eina/eina_magic.c
+  src/lib/eina/eina_magic.h
+  src/lib/eina/eina_main.c
+  src/lib/eina/eina_main.h
+  src/lib/eina/eina_quadtree.c
+  src/lib/eina/eina_quaternion.h
+  src/lib/eina/eina_rbtree.h
+  src/lib/eina/eina_refcount.h
+  src/lib/eina/eina_thread.c
+  src/lib/eina/eina_thread.h
+  src/lib/eina/eina_xattr.c
+  src/lib/eina/eina_xattr.h
+Copyright: 2002-2008, 2010-2018, 20011, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_alloca.h
+  src/lib/eina/eina_matrixsparse.c
+  src/lib/eina/eina_matrixsparse.h
+  src/lib/eina/eina_safety_checks.c
+  src/lib/eina/eina_safety_checks.h
+  src/lib/eina/eina_simple_xml_parser.c
+  src/lib/eina/eina_simple_xml_parser.h
+Copyright: 2008-2011, 2013, Gustavo Sverzut Barbieri
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_bezier.c
+  src/lib/eina/eina_bezier.h
+Copyright: 2015, Subhransu Mohanty
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_binshare.c
+  src/lib/eina/eina_debug.c
+  src/lib/eina/eina_debug.h
+  src/lib/eina/eina_debug_bt.c
+  src/lib/eina/eina_debug_bt_file.c
+  src/lib/eina/eina_debug_chunk.c
+  src/lib/eina/eina_debug_thread.c
+  src/lib/eina/eina_debug_timer.c
+  src/lib/eina/eina_evlog.c
+  src/lib/eina/eina_evlog.h
+  src/lib/eina/eina_mmap.c
+  src/lib/eina/eina_prefix.c
+  src/lib/eina/eina_share_common.c
+  src/lib/eina/eina_stringshare.c
+  src/lib/eina/eina_tmpstr.c
+  src/lib/eina/eina_ustringshare.c
+Copyright: 2002-2008, 2010, 2011, 2015, 2017, Carsten Haitzler
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_binshare.h
+  src/lib/eina/eina_share_common.h
+  src/lib/eina/eina_stringshare.h
+  src/lib/eina/eina_tmpstr.h
+  src/lib/eina/eina_ustringshare.h
+Copyright: 2002-2012, Carsten Haitzler, Jorge Luis Zapata Muga, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_clist.h
+Copyright: 2011, Mike McCormack (adapted for Eina)
+  2002, Alexandre Julliard
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_convert.c
+  src/lib/eina/eina_convert.h
+Copyright: 2008-2010, Cedric BAIL, Vincent Torri
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_counter.c
+Copyright: 2008, Cedric Bail, Vincent Torri
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_cpu.c
+  src/lib/eina/eina_cpu.h
+  src/lib/eina/eina_file.h
+  src/lib/eina/eina_lalloc.c
+  src/lib/eina/eina_lalloc.h
+  src/lib/eina/eina_mempool.c
+  src/lib/eina/eina_mempool.h
+  src/lib/eina/eina_module.h
+  src/lib/eina/eina_rectangle.h
+  src/lib/eina/eina_tiler.h
+Copyright: 2007, 2008, Jorge Luis Zapata Muga
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_error.c
+  src/lib/eina/eina_error.h
+  src/lib/eina/eina_log.h
+Copyright: 2007, 2008, Jorge Luis Zapata Muga, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_file.c
+Copyright: 2010, 2011, Cedric Bail
+  2007, 2008, Jorge Luis Zapata Muga, Vincent Torri
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_file_win32.c
+  src/lib/eina/eina_lock.h
+  src/lib/eina/eina_util.c
+  src/lib/eina/eina_util.h
+Copyright: 2010, 2011, 2015, 2017, Vincent Torri
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_fp.h
+Copyright: 2009, Cedric BAIL
+  2007, 2008, Jorge Luis Zapata Muga
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_hash.c
+  src/lib/eina/eina_hash.h
+Copyright: 2002-2008, Carsten Haitzler, Gustavo Sverzut Barbieri
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_inarray.c
+Copyright: 2012, - ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_inarray.h
+  src/lib/eina/eina_value.c
+  src/lib/eina/eina_value.h
+Copyright: 2012, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_inlist.c
+  src/lib/eina/eina_inlist.h
+Copyright: 2002-2008, Carsten Haitzler, Vincent Torri
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_list.c
+Copyright: 2002-2008, Carsten Haitzler, Gustavo Sverzut Barbieri, Tilman Sauerbeck
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_list.h
+  src/lib/eina/eina_private.h
+  src/lib/eina/eina_trash.h
+  src/lib/eina/eina_types.h
+Copyright: 2002-2008, Carsten Haitzler, Vincent Torri, Jorge Luis Zapata Muga
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_log.c
+Copyright: 2007-2009, Jorge Luis Zapata Muga, Cedric Bail, Andre Dieb
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_matrix.c
+  src/lib/eina/eina_matrix.h
+  src/lib/eina/eina_quad.c
+  src/lib/eina/eina_quad.h
+  src/lib/eina/eina_quaternion.c
+Copyright: 2007-2014, Jorge Luis Zapata
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_module.c
+Copyright: 2007, 2008, Jorge Luis Zapata Muga, Cedric BAIL
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_quadtree.h
+Copyright: 2008, 2010, Cedric BAIL
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_range.h
+Copyright: 2020, Ali Alzyod
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_rbtree.c
+Copyright: 2011, Alexandre Becoulet
+  2008, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_rectangle.c
+Copyright: 2007, 2008, Cedric BAIL, Carsten Haitzler
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_safepointer.h
+Copyright: 2015, 2016, Carsten Haitzler, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_sched.c
+  src/lib/eina/eina_sched.h
+Copyright: 2010, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_slice.h
+Copyright: 2016, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_str.c
+Copyright: 1998, Todd C. Miller <Todd.Miller@courtesan.com>
+License: ISC
+
+Files: src/lib/eina/eina_tiler.c
+Copyright: 2007, 2008, Gustavo Sverzut Barbieri, Jorge Luis Zapata Muga
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_unicode.c
+Copyright: 2010, Tom Hacohen
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_value_util.c
+  src/lib/eina/eina_value_util.h
+Copyright: 2013, 2014, Mike Blumenkrantz
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_vector.h
+Copyright: 2016, Sergey Osadchy
+License: LGPL-2.1+
+
+Files: src/lib/eio/*
+Copyright: 2008-2013, 2015, 2016, Enlightenment Developers:
+License: LGPL-2.1+
+
+Files: src/lib/eio/Eio.hh
+  src/lib/eio/Eio_Eo.h
+  src/lib/eio/Eio_Legacy.h
+  src/lib/eio/efl_io_manager.eo
+  src/lib/eio/efl_io_model.c
+  src/lib/eio/efl_io_model.eo
+  src/lib/eio/efl_io_model_private.h
+  src/lib/eio/eio_private.h
+  src/lib/eio/eio_sentry.eo
+  src/lib/eio/eio_sentry_private.h
+  src/lib/eio/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/lib/elementary/Elementary.h
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: LGPL-2
+
+Files: src/lib/elput/elput_input.c
+Copyright: 2008-2013, Intel Corporation
+License: BSD-2-clause
+
+Files: src/lib/embryo/embryo_amx.c
+Copyright: ITB CompuPhase, 1997-2003, / Carsten Haitzler, 2004-2010, <raster@rasterman.com>
+License: Zlib
+
+Files: src/lib/embryo/embryo_float.c
+Copyright: Carsten Haitzler, 2004, <raster@rasterman.com> / Artran, Inc. 1999
+License: Zlib
+
+Files: src/lib/emile/Emile.h
+Copyright: 2008-2013, 2015, 2016, Enlightenment Developers:
+License: LGPL-2.1+
+
+Files: src/lib/eolian_cxx/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/lib/eolian_cxx/grammar/counter.hpp
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/lib/ethumb/ethumb.c
+Copyright: 2009, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/lib/ethumb/md5.c
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: public-domain
+ File explicitly disclaims copyright:
+ .
+ This code implements the MD5 message-digest algorithm.
+ The algorithm is due to Ron Rivest.  This code was
+ written by Colin Plumb in 1993, no copyright is claimed.
+ This code is in the public domain; do with it what you wish.
+ .
+ Equivalent code is available from RSA Data Security, Inc.
+ This code has been tested against that, and is equivalent,
+ except that you don't need to include two pages of legalese
+ with every copy.
+ .
+ To compute the message digest of a chunk of bytes, declare an
+ MD5Context structure, pass it to MD5Init, call MD5Update as
+ needed on buffers full of bytes, and then call MD5Final, which
+ will fill a supplied 16-byte array with the digest.
+
+Files: src/lib/ethumb_client/ethumb_client.c
+Copyright: 2009, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/lib/evas/Evas_GL.h
+Copyright: 2013-2016, The Khronos Group Inc.
+License: Khronos
+
+Files: src/lib/evas/Evas_Loader.h
+Copyright: 2013, Enlightenment Developers:
+License: BSD-2-clause
+
+Files: src/lib/evas/common/evas_op_copy/op_copy_neon.S
+Copyright: 2009, Nokia Corporation
+License: BSD-2-clause
+
+Files: src/lib/evas/common/region.c
+  src/lib/evas/common/region.h
+Copyright: 1987-1989, 1998, The Open Group
+License: BSD-2-clause
+
+Files: src/modules/ecore_imf/wayland/*
+Copyright: 2012, 2013, Intel Corporation
+License: NTP~disclaimer
+
+Files: src/modules/ecore_imf/wayland/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/modules/eina/mp/chained_pool/eina_chained_mempool.c
+Copyright: 2008-2010, Cedric BAIL, Vincent Torri
+License: LGPL-2.1+
+
+Files: src/modules/eina/mp/one_big/eina_one_big.c
+Copyright: 2008-2010, Cedric BAIL, Vincent Torri
+License: LGPL-2.1+
+
+Files: src/modules/eina/mp/pass_through/eina_pass_through.c
+Copyright: 2008, 2010, Cedric BAIL
+License: LGPL-2.1+
+
+Files: src/modules/evas/engines/fb/evas_fb.h
+  src/modules/evas/engines/fb/evas_fb_main.c
+Copyright: 1999, - Carsten Haitzler (The Rasterman)
+License: BSD-2-clause
+
+Files: src/modules/evas/engines/gl_common/evas_gl_define.h
+Copyright: 2013-2016, The Khronos Group Inc.
+License: Khronos
+
+Files: src/modules/evas/engines/wayland_shm/evas_engine.h
+Copyright: 2011, 2012, Collabora, Ltd.
+  2010-2012, Intel Corporation
+  2010, Red Hat <mjg@redhat.com>
+  2010, 2011, Benjamin Franzke
+  2008-2012, Kristian Høgsberg
+License: BSD-2-clause
+
+Files: src/scripts/elua/modules/getopt.lua
+Copyright: 2014, Daniel "q66" Kolesa <quaker66@gmail.com>
+License: Expat
+
+Files: src/static_libs/atspi/atspi-constants.h
+Copyright: 2012, SUSE LINUX Products GmbH, Nuernberg, Germany.
+  2010, 2011, Novell, Inc.
+License: LGPL-2+
+
+Files: src/static_libs/freetype/*
+Copyright: 1996-2014, David Turner, Robert Wilhelm, and Werner Lemberg.
+License: FTL
+
+Files: src/static_libs/freetype/meson.build
+  src/static_libs/freetype/sw_ft_types.h
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/static_libs/http-parser/contrib/parsertrace.c
+Copyright: Joyent, Inc. and other Node contributors. / Igor Sysoev
+License: Expat
+
+Files: src/static_libs/http-parser/http_parser.c
+Copyright: Joyent, Inc. and other Node contributors. / Igor Sysoev
+License: Expat
+
+Files: src/static_libs/http-parser/http_parser.h
+  src/static_libs/http-parser/test.c
+Copyright: Joyent, Inc. and other Node contributors.
+License: Expat
+
+Files: src/static_libs/libdrm/*
+Copyright: 2008-2013, Intel Corporation
+License: BSD-2-clause
+
+Files: src/static_libs/libdrm/drm.h
+  src/static_libs/libdrm/xf86drm.h
+Copyright: 2000, VA Linux Systems, Inc., Sunnyvale, California.
+  1999, 2000, Precision Insight, Inc., Cedar Park, Texas.
+License: BSD-2-clause
+
+Files: src/static_libs/libdrm/drm_mode.h
+Copyright: 2008, Red Hat Inc.
+  2007, Jakob Bornecrantz <wallbraker@gmail.com>
+  2007, Dave Airlie <airlied@linux.ie>
+  2007, 2008, Tungsten Graphics, Inc., Cedar Park, TX., USA
+  2007, 2008, Intel Corporation
+License: Expat
+
+Files: src/static_libs/libdrm/exynos_drm.h
+  src/static_libs/libdrm/exynos_drmif.h
+Copyright: 2011, 2012, Samsung Electronics Co., Ltd.
+License: BSD-2-clause
+
+Files: src/static_libs/libdrm/i915_drm.h
+Copyright: 2003, Tungsten Graphics, Inc., Cedar Park, Texas.
+License: BSD-2-clause
+
+Files: src/static_libs/libdrm/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/static_libs/libdrm/vc4_drm.h
+Copyright: 2014, 2015, Broadcom
+License: BSD-2-clause
+
+Files: src/static_libs/libdrm/xf86drmMode.h
+Copyright: 2007, 2008, Tungsten Graphics, Inc., Cedar Park, Texas.
+  2007, 2008, Jakob Bornecrantz <wallbraker@gmail.com>
+  2007, 2008, Dave Airlie <airlied@linux.ie>
+License: Expat
+
+Files: src/static_libs/libunibreak/*
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+ 2016, Andreas Röver <roever at users dot sf dot net>
+  2013, Petr Filipsky <philodej at gmail dot com>
+  2012-2016, Tom Hacohen <tom at stosb dot com>
+  2008-2016, Wu Yongwei <wuyongwei at gmail dot com>
+License: BSD-2-clause
+
+Files: src/static_libs/libunibreak/AUTHORS
+  src/static_libs/libunibreak/NEWS
+  src/static_libs/libunibreak/README.md
+  src/static_libs/libunibreak/graphemebreakdata.c
+  src/static_libs/libunibreak/linebreakdata.c
+  src/static_libs/libunibreak/meson.build
+  src/static_libs/libunibreak/wordbreakdata.c
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/static_libs/libunibreak/ChangeLog
+Copyright: header.
+License: BSD-2-clause
+
+Files: src/static_libs/libunibreak/graphemebreak.c
+  src/static_libs/libunibreak/graphemebreak.h
+  src/static_libs/libunibreak/graphemebreakdef.h
+Copyright: 2016, Andreas Röver <roever at users dot sf dot net>
+License: BSD-2-clause
+
+Files: src/static_libs/libunibreak/linebreak.c
+  src/static_libs/libunibreak/linebreakdef.h
+Copyright: 2013, Petr Filipsky <philodej at gmail dot com>
+  2008-2016, Wu Yongwei <wuyongwei at gmail dot com>
+License: BSD-2-clause
+
+Files: src/static_libs/libunibreak/linebreak.h
+  src/static_libs/libunibreak/linebreakdef.c
+  src/static_libs/libunibreak/unibreakbase.c
+  src/static_libs/libunibreak/unibreakbase.h
+  src/static_libs/libunibreak/unibreakdef.c
+  src/static_libs/libunibreak/unibreakdef.h
+Copyright: 2008-2016, Wu Yongwei <wuyongwei at gmail dot com>
+License: BSD-2-clause
+
+Files: src/static_libs/libunibreak/wordbreak.c
+  src/static_libs/libunibreak/wordbreak.h
+  src/static_libs/libunibreak/wordbreakdef.h
+Copyright: 2013-2016, Tom Hacohen <tom at stosb dot com>
+License: BSD-2-clause
+
+Files: src/static_libs/lz4/*
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+ 2011-2016, Yann Collet
+License: BSD-2-clause
+
+Files: src/static_libs/lz4/NEWS
+  src/static_libs/lz4/README.md
+  src/static_libs/lz4/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/static_libs/lz4/lz4.c
+  src/static_libs/lz4/lz4.h
+  src/static_libs/lz4/lz4frame.c
+  src/static_libs/lz4/lz4frame.h
+  src/static_libs/lz4/lz4frame_static.h
+  src/static_libs/lz4/lz4hc.c
+  src/static_libs/lz4/lz4hc.h
+  src/static_libs/lz4/xxhash.h
+Copyright: 2011-2020, Yann Collet.
+License: BSD-2-clause
+
+Files: src/static_libs/lz4/xxhash.c
+Copyright: 2011-2016, Yann Collet
+License: BSD-2-clause
+
+Files: src/static_libs/rg_etc/*
+Copyright: 2012, Rich Geldreich
+License: Zlib
+
+Files: src/static_libs/rg_etc/etc2_encoder.c
+  src/static_libs/rg_etc/rg_etc2.c
+Copyright: 2014, Jean-Philippe ANDRE
+License: BSD-2-clause
+
+Files: src/static_libs/rg_etc/meson.build
+  src/static_libs/rg_etc/rg_etc1.c
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/static_libs/rg_etc/rg_etc1.h
+Copyright: 2012, Rich Geldreich
+License: BSD-2-clause
+
+Files: src/tests/ecore_audio_cxx/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/ecore_cxx/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/ecore_cxx/ecore_cxx_suite.h
+  src/tests/ecore_cxx/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/tests/ector/cxx_compile_test/*
+Copyright: 2012, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/tests/ector/suite/ector_suite.c
+  src/tests/ector/suite/ector_test_init.c
+Copyright: 2002-2008, 2010-2018, 20011, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/tests/edje_cxx/cxx_compile_test.cc
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/eet_cxx/eet_cxx_suite.cc
+  src/tests/eet_cxx/eet_cxx_test_descriptors.cc
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/efl/*
+Copyright: 2002-2008, 2010-2018, 20011, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/tests/efl/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/tests/efl_mono/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/efl_mono/Array.cs
+  src/tests/efl_mono/Hash.cs
+  src/tests/efl_mono/List.cs
+  src/tests/efl_mono/Model.cs
+  src/tests/efl_mono/dummy_child.eo
+  src/tests/efl_mono/dummy_constructible_object.eo
+  src/tests/efl_mono/dummy_event_manager.eo
+  src/tests/efl_mono/dummy_hidden_object.c
+  src/tests/efl_mono/dummy_hidden_object.eo
+  src/tests/efl_mono/dummy_inherit_helper.eo
+  src/tests/efl_mono/dummy_inherit_iface.eo
+  src/tests/efl_mono/dummy_numberwrapper.eo
+  src/tests/efl_mono/dummy_part_holder.eo
+  src/tests/efl_mono/dummy_test_iface.eo
+  src/tests/efl_mono/dummy_test_object.eo
+  src/tests/efl_mono/efl-mono-suite.runtimeconfig.json
+  src/tests/efl_mono/efl_sharp_test_suite.csproj.in
+  src/tests/efl_mono/meson.build
+  src/tests/efl_mono/mono_test_driver.sh
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/tests/eina/*
+Copyright: 2002-2008, 2010-2018, 20011, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/tests/eina/cxx_compile_test.cxx
+  src/tests/eina/eina_test_inarray.c
+  src/tests/eina/eina_test_value.c
+Copyright: 2012, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_abstract_content.c
+  src/tests/eina/eina_test_clist.c
+  src/tests/eina/eina_test_crc.c
+  src/tests/eina/eina_test_debug.c
+  src/tests/eina/eina_test_freeq.c
+  src/tests/eina/eina_test_matrixsparse.c
+  src/tests/eina/eina_test_module_dummy.c
+  src/tests/eina/eina_test_quad.c
+  src/tests/eina/eina_test_slstr.c
+  src/tests/eina/eina_test_vpath.c
+  src/tests/eina/meson.build
+  src/tests/eina/sample.gpx
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/tests/eina/eina_test_barrier.c
+Copyright: 2013, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_bezier.c
+Copyright: 2015, Subhransu Mohanty <sub.mohanty@samsung.com>
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_binbuf.c
+  src/tests/eina/eina_test_trash.c
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_range.c
+Copyright: 2020, Ali Alzyod
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_rectangle.c
+Copyright: 2007, 2008, Cedric BAIL, Carsten Haitzler
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_slice.c
+Copyright: 2016, ProFUSION embedded systems
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_str.c
+Copyright: 2008-2011, 2013, Gustavo Sverzut Barbieri
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_strbuf.c
+Copyright: 2010, Sebastian Dransfeld
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_tiler.c
+Copyright: 2009, Rafael Antognolli
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_tmpstr.c
+Copyright: 2013, Vlad Brovko
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_ustr.c
+Copyright: 2010, Brett Nash
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_vector.c
+Copyright: 2016, Sergey Osadchy
+License: LGPL-2.1+
+
+Files: src/tests/eina/eina_test_xattr.c
+Copyright: 2015, Vivek Ellur
+License: LGPL-2.1+
+
+Files: src/tests/eina_cxx/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/eina_cxx/eina_cxx_suite.h
+  src/tests/eina_cxx/eina_simple.eo
+  src/tests/eina_cxx/meson.build
+  src/tests/eina_cxx/simple.c
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/tests/eldbus_cxx/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/eldbus_cxx/eldbus_cxx_suite.h
+  src/tests/eldbus_cxx/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/tests/elementary/efl_ui_test_select_model.c
+  src/tests/elementary/efl_ui_test_view_model.c
+Copyright: 2002-2008, 2010-2018, 20011, Cedric Bail
+License: LGPL-2.1+
+
+Files: src/tests/elementary/elm_cxx_suite.cc
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/elementary_cxx/*
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/elementary_cxx/meson.build
+Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
+License: BSD-2-clause
+
+Files: src/tests/eo_cxx/eo_cxx_suite.cc
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/eolian/data/class_simple_ref.c
+Copyright: c = 1337.600000;
+License: BSD-2-clause
+
+Files: src/tests/eolian/data/override_ref.c
+Copyright: c = pd->c;
+License: BSD-2-clause
+
+Files: src/tests/eolian_cxx/complex_cxx.cc
+  src/tests/eolian_cxx/eolian_cxx_suite.cc
+  src/tests/eolian_cxx/eolian_cxx_test_address_of.cc
+  src/tests/eolian_cxx/eolian_cxx_test_binding.cc
+  src/tests/eolian_cxx/eolian_cxx_test_cyclic.cc
+  src/tests/eolian_cxx/eolian_cxx_test_documentation.cc
+  src/tests/eolian_cxx/eolian_cxx_test_generate.cc
+  src/tests/eolian_cxx/eolian_cxx_test_inheritance.cc
+  src/tests/eolian_cxx/eolian_cxx_test_parse.cc
+  src/tests/eolian_cxx/eolian_cxx_test_wrapper.cc
+  src/tests/eolian_cxx/name_name_cxx.cc
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/evas/dicts/*
+Copyright: 2007, TeX Users Group.
+License: BSD-2-clause
+
+Files: src/tests/evas/dicts/hyph_de_DE.dic
+Copyright: Marco Huggenberger <marco@by-night.ch>
+ Daniel Naber
+License: LGPL-2.1+
+
+Files: src/tests/evas_cxx/cxx_compile_test.cc
+Copyright: 2019, its authors. See AUTHORS.
+License: Apache-2.0
+
+Files: src/tests/evil/*
+Copyright: 2010, 2011, 2015, 2017, Vincent Torri
+License: LGPL-2.1+
+
+License: Apache-2.0
+ This software is Copyright (c) 2020 by foo.
+ This is free software, licensed under:
+ The Apache License, Version 2.0, January 2004
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS"BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ On Debian systems, the complete text of the Apache License,
+ Version 2.0 can be found in '/usr/share/common-licenses/Apache-2.0'.
+
+License: BSD-2-clause
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ .
+    1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+    2. Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in the
+       documentation and/or other materials provided with the distribution.
+ .
+ THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+License: Expat
+ This software is Copyright (c) 2019 by foo.
+ This is free software, licensed under:
+ The MIT (X11) License
+ The MIT License
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated
+ documentation files (the "Software"), to deal in the Software
+ without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense,
+ and/or sell copies of the Software, and to permit persons to
+ whom the Software is furnished to do so, subject to the
+ following conditions:
+ The above copyright notice and this permission notice shall
+ be included in all copies or substantial portions of the
+ Software.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT
+ WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+ SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+License: FTL
+                     The FreeType Project LICENSE
+                     ----------------------------
+ .
+                             2006-Jan-27
+ .
+                     Copyright 1996-2002, 2006 by
+           David Turner, Robert Wilhelm, and Werner Lemberg
+ .
+ .
+ .
+ Introduction
+ ============
+ .
+   The FreeType  Project is distributed in  several archive packages;
+   some of them may contain, in addition to the FreeType font engine,
+   various tools and  contributions which rely on, or  relate to, the
+   FreeType Project.
+ .
+   This  license applies  to all  files found  in such  packages, and
+   which do not  fall under their own explicit  license.  The license
+   affects  thus  the  FreeType   font  engine,  the  test  programs,
+   documentation and makefiles, at the very least.
+ .
+   This  license   was  inspired  by  the  BSD,   Artistic,  and  IJG
+   (Independent JPEG  Group) licenses, which  all encourage inclusion
+   and  use of  free  software in  commercial  and freeware  products
+   alike.  As a consequence, its main points are that:
+ .
+     o We don't promise that this software works. However, we will be
+       interested in any kind of bug reports. (`as is' distribution)
+ .
+     o You can  use this software for whatever you  want, in parts or
+       full form, without having to pay us. (`royalty-free' usage)
+ .
+     o You may not pretend that  you wrote this software.  If you use
+       it, or  only parts of it,  in a program,  you must acknowledge
+       somewhere  in  your  documentation  that  you  have  used  the
+       FreeType code. (`credits')
+ .
+   We  specifically  permit  and  encourage  the  inclusion  of  this
+   software, with  or without modifications,  in commercial products.
+   We  disclaim  all warranties  covering  The  FreeType Project  and
+   assume no liability related to The FreeType Project.
+ .
+ .
+   Finally,  many  people  asked  us  for  a  preferred  form  for  a
+   credit/disclaimer to use in compliance with this license.  We thus
+   encourage you to use the following text:
+ .
+    """
+     Portions of this software are copyright � <year> The FreeType
+     Project (www.freetype.org).  All rights reserved.
+    """
+ .
+   Please replace <year> with the value from the FreeType version you
+   actually use.
+ .
+ .
+ Legal Terms
+ ===========
+ .
+ 0. Definitions
+ --------------
+ .
+   Throughout this license,  the terms `package', `FreeType Project',
+   and  `FreeType  archive' refer  to  the  set  of files  originally
+   distributed  by the  authors  (David Turner,  Robert Wilhelm,  and
+   Werner Lemberg) as the `FreeType Project', be they named as alpha,
+   beta or final release.
+ .
+   `You' refers to  the licensee, or person using  the project, where
+   `using' is a generic term including compiling the project's source
+   code as  well as linking it  to form a  `program' or `executable'.
+   This  program is  referred to  as  `a program  using the  FreeType
+   engine'.
+ .
+   This  license applies  to all  files distributed  in  the original
+   FreeType  Project,   including  all  source   code,  binaries  and
+   documentation,  unless  otherwise  stated   in  the  file  in  its
+   original, unmodified form as  distributed in the original archive.
+   If you are  unsure whether or not a particular  file is covered by
+   this license, you must contact us to verify this.
+ .
+   The FreeType  Project is copyright (C) 1996-2000  by David Turner,
+   Robert Wilhelm, and Werner Lemberg.  All rights reserved except as
+   specified below.
+ .
+ 1. No Warranty
+ --------------
+ .
+   THE FREETYPE PROJECT  IS PROVIDED `AS IS' WITHOUT  WARRANTY OF ANY
+   KIND, EITHER  EXPRESS OR IMPLIED,  INCLUDING, BUT NOT  LIMITED TO,
+   WARRANTIES  OF  MERCHANTABILITY   AND  FITNESS  FOR  A  PARTICULAR
+   PURPOSE.  IN NO EVENT WILL ANY OF THE AUTHORS OR COPYRIGHT HOLDERS
+   BE LIABLE  FOR ANY DAMAGES CAUSED  BY THE USE OR  THE INABILITY TO
+   USE, OF THE FREETYPE PROJECT.
+ .
+ 2. Redistribution
+ -----------------
+ .
+   This  license  grants  a  worldwide, royalty-free,  perpetual  and
+   irrevocable right  and license to use,  execute, perform, compile,
+   display,  copy,   create  derivative  works   of,  distribute  and
+   sublicense the  FreeType Project (in  both source and  object code
+   forms)  and  derivative works  thereof  for  any  purpose; and  to
+   authorize others  to exercise  some or all  of the  rights granted
+   herein, subject to the following conditions:
+ .
+     o Redistribution of  source code  must retain this  license file
+       (`FTL.TXT') unaltered; any  additions, deletions or changes to
+       the original  files must be clearly  indicated in accompanying
+       documentation.   The  copyright   notices  of  the  unaltered,
+       original  files must  be  preserved in  all  copies of  source
+       files.
+ .
+     o Redistribution in binary form must provide a  disclaimer  that
+       states  that  the software is based in part of the work of the
+       FreeType Team,  in  the  distribution  documentation.  We also
+       encourage you to put an URL to the FreeType web page  in  your
+       documentation, though this isn't mandatory.
+ .
+   These conditions  apply to any  software derived from or  based on
+   the FreeType Project,  not just the unmodified files.   If you use
+   our work, you  must acknowledge us.  However, no  fee need be paid
+   to us.
+ .
+ 3. Advertising
+ --------------
+ .
+   Neither the  FreeType authors and  contributors nor you  shall use
+   the name of the  other for commercial, advertising, or promotional
+   purposes without specific prior written permission.
+ .
+   We suggest,  but do not require, that  you use one or  more of the
+   following phrases to refer  to this software in your documentation
+   or advertising  materials: `FreeType Project',  `FreeType Engine',
+   `FreeType library', or `FreeType Distribution'.
+ .
+   As  you have  not signed  this license,  you are  not  required to
+   accept  it.   However,  as  the FreeType  Project  is  copyrighted
+   material, only  this license, or  another one contracted  with the
+   authors, grants you  the right to use, distribute,  and modify it.
+   Therefore,  by  using,  distributing,  or modifying  the  FreeType
+   Project, you indicate that you understand and accept all the terms
+   of this license.
+ .
+ 4. Contacts
+ -----------
+ .
+   There are two mailing lists related to FreeType:
+ .
+     o freetype@nongnu.org
+ .
+       Discusses general use and applications of FreeType, as well as
+       future and  wanted additions to the  library and distribution.
+       If  you are looking  for support,  start in  this list  if you
+       haven't found anything to help you in the documentation.
+ .
+     o freetype-devel@nongnu.org
+ .
+       Discusses bugs,  as well  as engine internals,  design issues,
+       specific licenses, porting, etc.
+ .
+   Our home page can be found at
+ .
+     http://www.freetype.org
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or (at
+ your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this package; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-2'.
+
+License: GPL-3
+ This software is Copyright (c) 2019 by foo.
+ This is free software, licensed under:
+ The GNU General Public License, Version 3, June 2007
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; version 3 dated June, 2007.
+ On Debian systems, the complete text of version 3 of the GNU General
+ Public License can be found in '/usr/share/common-licenses/GPL-3'.
+
+License: ISC
+ Permission to use, copy, modify, and/or distribute this software for any
+ purpose with or without fee is hereby granted, provided that the above
+ copyright notice and this permission notice appear in all copies.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ PERFORMANCE OF THIS SOFTWARE.
+
+License: Khronos
+ Permission is hereby granted, free of charge, to any person obtaining a
+ copy of this software and/or associated documentation files (the
+ "Materials"), to deal in the Materials without restriction, including
+ without limitation the rights to use, copy, modify, merge, publish,
+ distribute, sublicense, and/or sell copies of the Materials, and to
+ permit persons to whom the Materials are furnished to do so, subject to
+ the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included
+ in all copies or substantial portions of the Materials.
+ .
+ THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+
+License: LGPL-2
+ This software is Copyright (c) 2019 by foo.
+ This is free software, licensed under:
+ The GNU Library General Public License, Version 2, June 1991
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Library General Public License as published by the
+ Free Software Foundation; version 2 of the License.
+ On Debian systems, the complete text of version 2 of the GNU Library
+ General Public License can be found in '/usr/share/common-licenses/LGPL-2'.
+
+License: LGPL-2+
+ This software is Copyright (c) 2019 by foo.
+ This is free software, licensed under:
+ The GNU Library General Public License, Version 2, June 1991
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Library General Public License as published by the
+ Free Software Foundation; version 2 of the License, or (at
+ your option) any later version.
+ On Debian systems, the complete text of version 2 of the GNU Library
+ General Public License can be found in '/usr/share/common-licenses/LGPL-2'.
+
+License: LGPL-2.1+
+ The GNU C Library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+ .
+ The GNU C Library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU Lesser General Public
+ License along with the GNU C Library; if not, write to the Free
+ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ 02110-1301, USA.
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License can be found in `/usr/share/common-licenses/LGPL-2.1'.
+
+License: NTP~disclaimer
+ Permission to use, copy, modify, distribute, and sell this
+ software and its documentation for any purpose is hereby granted
+ without fee, provided that the above copyright notice appear in
+ all copies and that both that copyright notice and this permission
+ notice appear in supporting documentation, and that the name of
+ the copyright holders not be used in advertising or publicity
+ pertaining to distribution of the software without specific,
+ written prior permission.  The copyright holders make no
+ representations about the suitability of this software for any
+ purpose.  It is provided "as is" without express or implied
+ warranty.
+ .
+ THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
+ SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+ AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+ THIS SOFTWARE.
+
+License: Zlib
+ This software is provided 'as-is', without any express or implied
+ warranty. In no event will the authors be held liable for any damages
+ arising from the use of this software.
+ .
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ .
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+ .
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+ .
+   3. This notice may not be removed or altered from any source
+   distribution.

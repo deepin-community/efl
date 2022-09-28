@@ -1,0 +1,67 @@
+
+================================================================================
+Namespace:    ${namespace.name}$  ${namespace.namespaces}$
+================================================================================
+
+Regular Classes:
+================
+<!--(for cls in namespace.regulars)-->
+ * ${cls.name}$
+<!--(else)-->
+ no classes available
+<!--(end)-->
+
+Abstract Classes:
+================
+<!--(for cls in namespace.abstracts)-->
+ * ${cls.name}$
+<!--(else)-->
+ no classes available
+<!--(end)-->
+
+Mixins:
+=======
+<!--(for cls in namespace.mixins)-->
+ * ${cls.name}$
+<!--(else)-->
+ no classes available
+<!--(end)-->
+
+Interfaces:
+===========
+<!--(for cls in namespace.interfaces)-->
+ * ${cls.name}$
+<!--(else)-->
+ no classes available
+<!--(end)-->
+
+Aliases:
+========
+<!--(for typedecl in namespace.aliases)-->
+ * ${typedecl.name}$
+<!--(else)-->
+ no alias available
+<!--(end)-->
+
+Structs:
+========
+<!--(for typedecl in namespace.structs)-->
+ * ${typedecl.name}$
+    <!--(for field in typedecl.struct_fields)-->
+    ${field.type.name}$ ${field.name}$
+    <!--(end)-->
+<!--(else)-->
+ no structs available
+<!--(end)-->
+
+Enums:
+======
+<!--(for typedecl in namespace.enums)-->
+ * ${typedecl.name}$
+    <!--(for field in typedecl.enum_fields)-->
+    ${field.c_constant}$ = ${field.value.serialize}$
+    <!--(end)-->
+<!--(else)-->
+ no enums available
+<!--(end)-->
+

@@ -1,0 +1,10 @@
+class @beta Efl.Canvas.Surface_Tbm extends Efl.Canvas.Surface
+{
+   [[Native Tizen Buffer Manager surface for Efl canvas]]
+
+   implements {
+      Efl.Object.constructor;
+      Efl.Object.destructor;
+      Efl.Canvas.Surface.native_buffer { set; }
+   }
+}
