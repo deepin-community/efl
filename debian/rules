@@ -11,14 +11,6 @@ export DEB_CFLAGS_MAINT_APPEND = -fvisibility=hidden -O3
 export DEB_CXXFLAGS_MAINT_APPEND = -fvisibility=hidden -O3
 export DEB_LDFLAGS_MAINT_APPEND = -Wl,-z,defs -Wl,--as-needed
 
-ifneq (,$(filter $(DEB_HOST_ARCH), alpha arm64 hppa ia64 m68k powerpc riscv64 s390x sh4 sparc64 x32))
-	lua_flags = -Dlua-interpreter=lua -Delua=false -Dbindings=
-	dhinstallflags += --exclude=elua
-else
-	lua_flags = -Delua=true -Dbindings=lua
-
-endif
-
 ifneq (,$(filter $(DEB_HOST_ARCH), armhf armel))
 	arch_flags += -Dnative-arch-optimization=false
 endif
@@ -44,7 +36,7 @@ endif
 	$(CURDIR)/debian/validate_symvers.sh
 
 	dh_auto_configure --verbose -- \
-		-Dcrypto=gnutls \
+		-Dcrypto=openssl \
 		-Dtslib=false \
 		-Dembedded-lz4=false \
 		-Devas-loaders-disabler=json,avif \
@@ -52,9 +44,10 @@ endif
 		-Dwl=true \
 		-Ddrm=true \
 		-Dbuild-tests=false \
+		-Dlua-interpreter=lua \
+		-Dbindings= \
 		$(arch_flags) \
-		$(fb_flags) \
-		$(lua_flags)
+		$(fb_flags)
 
 override_dh_auto_build:
 	# ensure shaders are rebuilt from sources
@@ -62,38 +55,29 @@ override_dh_auto_build:
 	cd src && lib/ector/gl/shader/gen_shaders.sh
 	cd src && modules/evas/engines/gl_common/shader/gen_shaders.sh
 
-	$(CURDIR)/debian/fake_home.sh env \
-		dh_auto_build --verbose
+	dh_auto_build --verbose
 ifeq ($(filter efl-doc,$(BINPKGS)),efl-doc)
 ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
-	$(CURDIR)/debian/fake_home.sh dh_auto_build -- doc
+	dh_auto_build -- doc
 endif
 endif
 
 override_dh_auto_build-indep:
 ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
-	$(CURDIR)/debian/fake_home.sh dh_auto_build -- doc
+	dh_auto_build -- doc
 endif
 
 execute_before_dh_install:
 	# dh_fixperms misses this one for some reason
 	chmod -x debian/tmp/usr/share/elementary/images/animated_webp_image.webp
 
-override_dh_install:
-	dh_install $(dhinstallflags)
-
+execute_after_dh_install:
 	# remove unused file, fail otherwise
 	rm -f obj-$(DEB_HOST_GNU_TYPE)/html/jquery.js
 	if grep -qr jquery.js obj-$(DEB_HOST_GNU_TYPE)/html/ ; \
 		then echo jquery is used ; false ; fi
 	# this is shipped under /usr/share/docs
 	rm -f debian/libelementary-data/usr/share/icons/Enlightenment-X/README
-
-execute_before_dh_missing:
-ifneq ($(filter libelua1,$(BINPKGS)),libelua1)
-	# upstream installs some elua files even if elua is disabled
-	echo 'usr/share/elua*' >> debian/not-installed
-endif
 
 override_dh_makeshlibs:
 	dh_makeshlibs -Xmodule.so
@@ -107,7 +91,7 @@ override_dh_clean:
 	find -name '*.luac' -exec rm {} \;
 
 override_dh_installexamples:
-	dh_installexamples -X.gitignore -XVera.ttf
+	dh_installexamples -X.gitignore
 
 override_dh_auto_test-indep:
 

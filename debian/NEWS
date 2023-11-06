@@ -1,3 +1,27 @@
+efl (1.26.3-1) unstable; urgency=medium
+
+  This release includes some significant changes:
+
+  * luajit support has been disabled on all architectures.  It's been
+    progressively more fragile, and hasn't been the upstream default for a
+    few releases.  This means that libelua1 is dropped; there are no rdeps
+    outside of src:efl.
+
+  * OpenSSL has been adopted as the crypto provider.  Since it's now
+    considered a system library for purposes of the GPL's linking
+    exception, there's no further reason to prefer GnuTLS - especially
+    since it doesn't get much attention from EFL upstream.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sun, 18 Sep 2022 22:10:47 -0700
+
+efl (1.26.0-1) unstable; urgency=medium
+
+  This release includes a major overhaul of EFL's visual style.  A new
+  flat theme will be used for all apps.  You can customize the color
+  schemes with elementary_config.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Thu, 06 Jan 2022 10:24:38 -0800
+
 efl (1.23.2-1) experimental; urgency=medium
 
   This release includes significant changes:

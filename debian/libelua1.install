@@ -1,4 +1,0 @@
-usr/lib/*/libelua.so.*
-usr/share/elua/modules/benchmark.lua
-usr/share/elua/modules/getopt.lua
-usr/share/elua/core/*

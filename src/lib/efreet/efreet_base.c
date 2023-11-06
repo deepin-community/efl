@@ -51,7 +51,7 @@ static const char *xdg_pictures_dir = NULL;
 static const char *xdg_videos_dir = NULL;
 static const char *hostname = NULL;
 
-static Eina_Prefix *pfx= NULL;
+Eina_Prefix *_efreet_pfx= NULL;
 
 static void efreet_dirs_init(void);
 static const char *efreet_dir_get(const char *key, const char *fallback);
@@ -74,7 +74,7 @@ efreet_base_init(void)
         EINA_LOG_ERR("Efreet: Could not create a log domain for efreet_base.\n");
         return 0;
     }
-    if (!pfx) pfx = eina_prefix_new
+    if (!_efreet_pfx) _efreet_pfx = eina_prefix_new
         (NULL, efreet_init, "EFREET", "efreet", "checkme",
          PACKAGE_BIN_DIR, PACKAGE_LIB_DIR, PACKAGE_DATA_DIR, PACKAGE_DATA_DIR);
     efreet_dirs_init();
@@ -110,10 +110,10 @@ efreet_base_shutdown(void)
 
     IF_RELEASE(hostname);
 
-    if (pfx)
+    if (_efreet_pfx)
     {
-        eina_prefix_free(pfx);
-        pfx = NULL;
+        eina_prefix_free(_efreet_pfx);
+        _efreet_pfx = NULL;
     }
     eina_log_domain_unregister(_efreet_base_log_dom);
     _efreet_base_log_dom = -1;
@@ -134,7 +134,13 @@ EAPI const char *
 efreet_desktop_dir_get(void)
 {
     if (xdg_desktop_dir) return xdg_desktop_dir;
-    xdg_desktop_dir = efreet_user_dir_get("XDG_DESKTOP_DIR", _("Desktop"));
+    xdg_desktop_dir = efreet_user_dir_get("XDG_DESKTOP_DIR",
+#ifdef _WIN32
+                                          "Desktop"
+#else
+                                          _("Desktop")
+#endif
+                                          );
     return xdg_desktop_dir;
 }
 
@@ -142,7 +148,13 @@ EAPI const char *
 efreet_download_dir_get(void)
 {
     if (xdg_download_dir) return xdg_download_dir;
-    xdg_download_dir = efreet_user_dir_get("XDG_DOWNLOAD_DIR", _("Downloads"));
+    xdg_download_dir = efreet_user_dir_get("XDG_DOWNLOAD_DIR",
+#ifdef _WIN32
+                                           "Downloads"
+#else
+                                           _("Downloads")
+#endif
+                                           );
     return xdg_download_dir;
 }
 
@@ -151,7 +163,12 @@ efreet_templates_dir_get(void)
 {
     if (xdg_templates_dir) return xdg_templates_dir;
     xdg_templates_dir = efreet_user_dir_get("XDG_TEMPLATES_DIR",
-                                            _("Templates"));
+#ifdef _WIN32
+                                            "Templates"
+#else
+                                            _("Templates")
+#endif
+                                            );
     return xdg_templates_dir;
 }
 
@@ -177,7 +194,13 @@ EAPI const char *
 efreet_music_dir_get(void)
 {
     if (xdg_music_dir) return xdg_music_dir;
-    xdg_music_dir = efreet_user_dir_get("XDG_MUSIC_DIR", _("Music"));
+    xdg_music_dir = efreet_user_dir_get("XDG_MUSIC_DIR",
+#ifdef _WIN32
+                                        "Music"
+#else
+                                        _("Music")
+#endif
+                                        );
     return xdg_music_dir;
 }
 
@@ -185,7 +208,13 @@ EAPI const char *
 efreet_pictures_dir_get(void)
 {
     if (xdg_pictures_dir) return xdg_pictures_dir;
-    xdg_pictures_dir = efreet_user_dir_get("XDG_PICTURES_DIR", _("Pictures"));
+    xdg_pictures_dir = efreet_user_dir_get("XDG_PICTURES_DIR",
+#ifdef _WIN32
+                                           "Pictures"
+#else
+                                           _("Pictures")
+#endif
+                                           );
     return xdg_pictures_dir;
 }
 
@@ -193,7 +222,13 @@ EAPI const char *
 efreet_videos_dir_get(void)
 {
     if (xdg_videos_dir) return xdg_videos_dir;
-    xdg_videos_dir = efreet_user_dir_get("XDG_VIDEOS_DIR", _("Videos"));
+    xdg_videos_dir = efreet_user_dir_get("XDG_VIDEOS_DIR",
+#ifdef _WIN32
+                                         "Videos"
+#else
+                                         _("Videos")
+#endif
+                                         );
     return xdg_videos_dir;
 }
 
@@ -305,9 +340,9 @@ efreet_dirs_init(void)
     xdg_cache_home = efreet_dir_get("XDG_CACHE_HOME", "/.cache");
 
     /* xdg_data_dirs */
-    if (pfx)
+    if (_efreet_pfx)
     {
-        const char *dir = eina_prefix_get(pfx);
+        const char *dir = eina_prefix_get(_efreet_pfx);
         if (dir)
         {
             size_t len = strlen(dir);

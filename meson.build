@@ -1,6 +1,6 @@
 project('efl', ['c','cpp'],
-  version: '1.25.1',
-  default_options : ['buildtype=release', 'cpp_std=c++11'],
+  version: '1.26.3',
+  default_options : ['buildtype=plain', 'cpp_std=c++11'],
   meson_version : '>=0.50'
 )
 
@@ -330,7 +330,7 @@ subprojects = [
   ['ecore_ipc'        ,[]                    , false,  true, false,  false,  false,     false,  true, ['eina'], []],
   ['ecore_buffer'     ,['buffer']            ,  true,  true,  true,  false,  false,     false,  true, ['eina'], []],
   ['ector'            ,[]                    , false,  true, false,  false,   true,     false,  true, ['eina', 'efl'], ['draw', 'triangulator', 'freetype']],
-  ['elput'            ,['drm']               , false,  true, false,  false,   true,     false,  true, ['eina', 'eldbus'], []],
+  ['elput'            ,['input']             , false,  true, false,  false,   true,     false,  true, ['eina', 'eldbus'], []],
   ['ecore_drm2'       ,['drm']               , false,  true, false,  false,  false,     false,  true, ['ecore'], ['libdrm']],
   ['ecore_cocoa'      ,['cocoa']             , false,  true, false,  false,  false,     false,  true, ['eina'], []],
   ['evas'             ,[]                    ,  true,  true, false,  false,   true,      true,  true, ['eina', 'efl', 'eo'], ['vg_common', 'libunibreak']],
@@ -636,6 +636,8 @@ efl_config_h.set('EFL_BUILD_ID', get_option('build-id'))
 
 # FIXME placeholder
 efl_config_h.set('EFL_API_LEGACY_DEF', '#define EFL_API_LEGACY_DEF "FIXME NOT IMPLEMENTED"')
+
+config_h.set('EFL_MAX_FD_SIZE', get_option('max-fd-size'))
 
 configure_file(
   output: 'config.h',

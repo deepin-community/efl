@@ -214,6 +214,7 @@ extern "C" {
 #include <eina_types.h>
 #include <eina_alloca.h>
 #include <eina_main.h>
+#include <eina_fnmatch.h>
 #include <eina_fp.h>
 #include <eina_rectangle.h>
 #include <eina_range.h>
@@ -241,7 +242,6 @@ extern "C" {
 #include <eina_benchmark.h>
 #include <eina_convert.h>
 #include <eina_cpu.h>
-#include <eina_sched.h>
 #include <eina_tiler.h>
 #include <eina_hamster.h>
 #include <eina_matrixsparse.h>
@@ -278,8 +278,6 @@ extern "C" {
 #include <eina_vpath.h>
 #include <eina_abstract_content.h>
 
-#undef EAPI
-#define EAPI
 
 #ifdef __cplusplus
 }

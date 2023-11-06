@@ -1453,6 +1453,16 @@ EAPI void edje_password_show_last_timeout_set(double password_show_last_timeout)
 EAPI Eina_Bool    edje_color_class_set            (const char *color_class, int r, int g, int b, int a, int r2, int g2, int b2, int a2, int r3, int g3, int b3, int a3);
 
 /**
+ * @brief Applies changes mad when setting Edje color classes.
+ *
+ * This forces all changes to color classes made by (for example)
+ * edje_color_class_set() to actually take effect.
+ * 
+ * @since 1.26
+ */
+EAPI void         edje_color_class_apply          (void);
+
+/**
  * @brief Gets Edje color class.
  *
  * @param color_class
@@ -1796,6 +1806,37 @@ EAPI Eina_List        *edje_mmap_collection_list(Eina_File *f);
  * Frees the list returned by edje_mmap_collection_list().
  */
 EAPI void              edje_mmap_collection_list_free(Eina_List *lst);
+
+/**
+ * @brief Returns a list of colorclasses used in this edje file
+ * @param f The mapped file
+ *
+ * @return A list of strings freed by edje_file_color_class_used_free()
+ *
+ * @since 1.26
+ */
+EAPI Eina_List        *edje_mmap_color_class_used_list(Eina_File *f);
+
+/**
+ * @brief Returns a list of colorclasses used in this edje file
+ * @param file The file path
+ *
+ * @return A list of strings freed by edje_file_color_class_used_free()
+ *
+ * @since 1.26
+ */
+EAPI Eina_List        *edje_file_color_class_used_list(const char *file);
+
+/**
+ * @brief Frees a list of color classes used
+ * @param The list
+ *
+ * This frees the list returned by edje_mmap_color_class_used_list() or 
+ * edje_file_color_class_used_list() when you no longer need it.
+ *
+ * @since 1.26
+ */
+EAPI void              edje_file_color_class_used_free(Eina_List *lst);
 
 /**
  * @brief Determines whether a group matching glob exists in an edje mapped file.

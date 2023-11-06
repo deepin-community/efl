@@ -2,4 +2,4 @@
 libevas1: symbols-file-contains-debian-revision
 
 # false positive, #896012
-libevas1: library-not-linked-against-libc usr/lib/x86_64-linux-gnu/evas/modules/image_loaders/wbmp/v-1.25/module.so
+libevas1: library-not-linked-against-libc [usr/lib/*/evas/modules/image_loaders/wbmp/*/module.so]

@@ -10,28 +10,27 @@ Build-Conflicts: systemctl
 Build-Depends:
  debhelper-compat (= 13),
  libblkid-dev [linux-any],
- libcurl4-gnutls-dev,
+ libcurl4-openssl-dev,
  libdbus-1-dev,
  libedje-bin <cross>,
  libeet-bin <cross>,
  libelementary-bin <cross>,
  libeolian-bin <cross>,
- libfontconfig1-dev,
- libfreetype6-dev,
+ libfontconfig-dev,
+ libfreetype-dev,
  libfribidi-dev,
  libgbm-dev,
  libgcrypt-dev,
  libgif-dev,
  libgles2-mesa-dev,
  libglib2.0-dev,
- libgnutls28-dev,
  libgstreamer-plugins-base1.0-dev,
  libgstreamer1.0-dev,
  libharfbuzz-dev,
+ libheif-dev,
  libinput-dev,
  libjpeg-dev,
- liblua5.2-dev [alpha arm64 hppa ia64 m68k powerpc riscv64 s390x sh4 sparc64 x32],
- libluajit-5.1-dev [!alpha !arm64 !hppa !ia64 !m68k !powerpc !riscv64 !s390x !sh4 !sparc64 !x32],
+ liblua5.1-dev,
  liblz4-dev,
  libmount-dev [linux-any],
  libopenjp2-7-dev,
@@ -44,6 +43,7 @@ Build-Depends:
  libscim-dev,
  libsndfile-dev,
  libspectre-dev,
+ libssl-dev,
  libsystemd-dev,
  libtiff-dev,
  libudev-dev [linux-any],
@@ -75,7 +75,7 @@ Build-Depends:
  wayland-protocols,
  x11proto-xext-dev,
  zlib1g-dev,
-Build-Depends-Indep: doxygen, ghostscript, imagemagick, texlive-font-utils
+Build-Depends-Indep: doxygen
 Standards-Version: 4.5.0
 Vcs-Git: https://salsa.debian.org/pkg-e-team/efl.git
 Vcs-Browser: https://salsa.debian.org/pkg-e-team/efl
@@ -89,26 +89,18 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Conflicts: libeina0, libeina1
 Breaks:
- libecore-avahi1 (<= 1.23.3-8),
  libecore-bin (<= ${source:Upstream-Version}),
  libedje-bin (<= ${source:Upstream-Version}),
  libeet-bin (<= ${source:Upstream-Version}),
- libeet1 (<= 1.4.0~beta+1.4.0),
  libeeze-bin (<= ${source:Upstream-Version}),
  libefreet-bin (<= ${source:Upstream-Version}),
  libeina-bin (<= ${source:Upstream-Version}),
- libeina1 (<= 1.18.1-2),
  libelementary-bin (<= ${source:Upstream-Version}),
  libelementary-data (<= ${source:Upstream-Version}),
- libelocation1 (<= 1.23.3-8),
- libelua-bin (<= ${source:Upstream-Version}),
  libembryo-bin (<= ${source:Upstream-Version}),
- libemotion-players (<= 1.23.3-8),
  libeolian-bin (<= ${source:Upstream-Version}),
- libephysics1 (<= 1.23.3-8),
  libethumb-client-bin (<= ${source:Upstream-Version}),
  libevas-loaders (<= ${source:Upstream-Version}),
- libevas-bin (<= 1.21.1-5),
  libevas1-engines-drm (<= ${source:Upstream-Version}),
  libevas1-engines-fb (<= ${source:Upstream-Version}),
  libevas1-engines-wayland (<= ${source:Upstream-Version}),
@@ -211,7 +203,6 @@ Architecture: linux-any
 Multi-Arch: same
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Breaks: libeina1a (<< ${source:Upstream-Version})
-Replaces: libevas-engines, libevas-engines-extras
 Provides: libevas1-engine, libevas1-engine-gl-x11, libevas1-engine-software-x11
 Description: Evas module providing the X11 engines
  Evas is a clean display canvas API for several target display systems
@@ -235,7 +226,6 @@ Architecture: linux-any
 Multi-Arch: same
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Breaks: libeina1a (<< ${source:Upstream-Version})
-Replaces: libevas-engines-extras, libevas1-engine-fb
 Provides: libevas1-engine
 Description: Evas module providing the Framebuffer engine
  Evas is a clean display canvas API for several target display systems
@@ -257,7 +247,6 @@ Architecture: linux-any
 Multi-Arch: same
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Breaks: libeina1a (<< ${source:Upstream-Version})
-Replaces: libevas-engines, libevas-engines-extras
 Provides: libevas1-engine
 Description: Evas module providing the DRM engine
  Evas is a clean display canvas API for several target display systems
@@ -280,8 +269,6 @@ Multi-Arch: same
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Breaks:
  libeina1a (<< ${source:Upstream-Version}),
- enlightenment (<< 0.24.0-1),
-Replaces: libevas-engines, libevas-engines-extras
 Provides: libevas1-engine
 Description: Evas module providing the Wayland engine
  Evas is a clean display canvas API for several target display systems
@@ -533,8 +520,7 @@ Architecture: linux-any
 Pre-Depends: ${misc:Pre-Depends}
 Depends:
  libblkid-dev [linux-any],
- libbullet-dev,
- libcurl4-gnutls-dev,
+ libcurl4-openssl-dev,
  libdbus-1-dev,
  libecore-audio1 (= ${binary:Version}),
  libecore-con1 (= ${binary:Version}),
@@ -558,7 +544,6 @@ Depends:
  libeio1 (= ${binary:Version}),
  libelementary1 (= ${binary:Version}),
  libelput1 (= ${binary:Version}),
- libelua1 (= ${binary:Version}) [!alpha !arm64 !hppa !ia64 !m68k !powerpc !riscv64 !s390x !sh4 !sparc64 !x32],
  libembryo1 (= ${binary:Version}),
  libemile1 (= ${binary:Version}),
  libemotion1 (= ${binary:Version}),
@@ -567,24 +552,23 @@ Depends:
  libethumb-client1 (= ${binary:Version}),
  libethumb1 (= ${binary:Version}),
  libevas1 (= ${binary:Version}),
- libfontconfig1-dev,
- libfreetype6-dev,
+ libfontconfig-dev,
+ libfreetype-dev,
  libfribidi-dev,
  libgbm-dev,
  libglib2.0-dev,
- libgnutls28-dev,
  libgstreamer-plugins-base1.0-dev,
  libgstreamer1.0-dev,
  libharfbuzz-dev,
  libinput-dev,
  libjpeg-dev,
- liblua5.2-dev [alpha arm64 hppa ia64 m68k powerpc riscv64 s390x sh4 sparc64 x32],
- libluajit-5.1-dev [!alpha !arm64 !hppa !ia64 !m68k !powerpc !riscv64 !s390x !sh4 !sparc64 !x32],
+ liblua5.1-dev,
  liblz4-dev,
  libpng-dev,
  libmount-dev [linux-any],
  libpulse-dev,
  libsndfile-dev,
+ libssl-dev,
  libsystemd-dev,
  libudev-dev [linux-any],
  libunwind-dev [amd64 arm64 armel armhf hppa i386 ia64 mips mips64 mips64el mipsel powerpc powerpcspe ppc64 ppc64el sh4],
@@ -610,43 +594,7 @@ Depends:
  zlib1g-dev,
  ${misc:Depends},
  ${shlibs:Depends},
-Breaks:
- libecore-dev (<< 1.20.5-1),
- libector-dev (<< 1.20.5-1),
- libedje-dev (<< 1.20.5-1),
- libeet-dev (<< 1.20.5-1),
- libeeze-dev (<< 1.20.5-1),
- libefreet-dev (<< 1.20.5-1),
- libeina-dev (<< 1.20.5-1),
- libeio-dev (<< 1.20.5-1),
- libelementary-dev (<< 1.20.5-1),
- libelput-dev (<< 1.20.5-1),
- libelua-dev (<< 1.20.5-1),
- libembryo-dev (<< 1.20.5-1),
- libemile-dev (<< 1.20.5-1),
- libemotion-dev (<< 1.20.5-1),
- libeolian-dev (<< 1.20.5-1),
- libethumb-dev (<< 1.20.5-1),
- libevas-dev (<< 1.20.5-1),
-Replaces:
- libecore-dev (<< 1.20.5-1),
- libector-dev (<< 1.20.5-1),
- libedje-dev (<< 1.20.5-1),
- libeet-dev (<< 1.20.5-1),
- libeeze-dev (<< 1.20.5-1),
- libefreet-dev (<< 1.20.5-1),
- libeina-dev (<< 1.20.5-1),
- libeio-dev (<< 1.20.5-1),
- libelementary-dev (<< 1.20.5-1),
- libelput-dev (<< 1.20.5-1),
- libelua-dev (<< 1.20.5-1),
- libembryo-dev (<< 1.20.5-1),
- libemile-dev (<< 1.20.5-1),
- libemotion-dev (<< 1.20.5-1),
- libeolian-dev (<< 1.20.5-1),
- libethumb-dev (<< 1.20.5-1),
- libevas-dev (<< 1.20.5-1),
-Recommends: efl-doc
+Recommends: efl-doc, libeina-bin, libelementary-bin
 Description: Enlightenment Foundation Libraries development files
  The Enlightenment Foundation Libraries (EFL) is a stack of libraries
  providing a wide degree of functionality.  Originally written to
@@ -662,7 +610,7 @@ Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: libefreet1 (<= 1.8.4-1), libeina1a (<< ${source:Upstream-Version})
+Breaks: libeina1a (<< ${source:Upstream-Version})
 Description: EFL freedesktop.org spec implementations
  Efreet is a library designed to help apps work several of the
  Freedesktop.org standards regarding Icons, Desktop files and
@@ -755,7 +703,7 @@ Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: libeina1a (<< ${source:Upstream-Version}), libelementary1 (<= 1.7.7-1)
+Breaks: libeina1a (<< ${source:Upstream-Version})
 Suggests: libedje-bin (= ${binary:Version})
 Description: EFL layout and animation tools
  Edje is a graphical layout and animation library for animated resizable,
@@ -805,34 +753,6 @@ Description: EFL udev device manipulation - utilities
  .
  This package contains command-line utilities that allow mounting,
  scanning, and unmounting devices with eeze.
-
-Package: libelua1
-Architecture: amd64 armel armhf i386 mips mips64el mipsel powerpcspe ppc64 ppc64el
-Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: libeina1a (<< ${source:Upstream-Version})
-Description: EFL Lua wrapper and convenience layer
- The Elua library provides all necessary infrastructure required to
- set up a fully functional Lua state able of running Elua
- scripts. This is provided as a library in order to encourage reuse
- from different libraries and apps.
- .
- This is part of the Enlightenment Foundation Libraries (EFL).
-
-Package: libelua-bin
-Architecture: amd64 armel armhf i386 mips mips64el mipsel powerpcspe ppc64 ppc64el
-Depends: ${misc:Depends}, ${shlibs:Depends}
-Description: EFL Lua wrapper and convenience layer - binaries
- The Elua library provides all necessary infrastructure required to
- set up a fully functional Lua state able of running Elua
- scripts. This is provided as a library in order to encourage reuse
- from different libraries and apps.
- .
- This is part of the Enlightenment Foundation Libraries (EFL).
- .
- This package contains elua, the main entry point for all EFL/LuaJIT
- powered applications.
 
 Package: libemile1
 Architecture: linux-any
@@ -928,8 +848,6 @@ Package: libeolian-bin
 Architecture: linux-any
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: libefl-all-dev (<< 1.23.3-7)
-Replaces: libefl-all-dev (<< 1.23.3-7)
 Description: EFL object parser and C code generator - C code generator
  Eolian parses Enlightenment's meta-data (.eo) files and can then
  generate C code along with header files.
@@ -968,25 +886,7 @@ Package: efl-doc
 Architecture: all
 Multi-Arch: foreign
 Section: doc
-Depends: ttf-bitstream-vera, ${misc:Depends}
-Breaks:
- libecore-doc   (<= 1.8.3),
- libedje-doc    (<= 1.8.3),
- libeet-doc     (<= 1.8.3),
- libefreet-doc  (<= 1.8.3),
- libeina-doc    (<= 1.8.3),
- libeio-doc     (<= 1.8.3),
- libembryo-doc  (<= 1.8.3),
- libevas-doc    (<= 1.8.3),
-Replaces:
- libecore-doc   (<= 1.8.3),
- libedje-doc    (<= 1.8.3),
- libeet-doc     (<= 1.8.3),
- libefreet-doc  (<= 1.8.3),
- libeina-doc    (<= 1.8.3),
- libeio-doc     (<= 1.8.3),
- libembryo-doc  (<= 1.8.3),
- libevas-doc    (<= 1.8.3),
+Depends: ${misc:Depends}
 Description: Documentation for the Enlightenment Foundation Libraries
  The Enlightenment Foundation Libraries (EFL) is a set of libraries
  providing building blocks used in the Enlightenment window manager.
@@ -999,14 +899,13 @@ Package: libelementary1
 Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
-Breaks: libeina1 (<< ${source:Upstream-Version}), libelementary2 (<< 1.15)
-Replaces: libelementary2 (<< 1.15)
+Breaks: libeina1 (<< ${source:Upstream-Version})
 Depends:
  libelementary-data (= ${source:Version}),
  ${misc:Depends},
  ${shlibs:Depends},
 Recommends:
- libelementary-bin (= ${source:Version}),
+ libelementary-bin,
 Description: EFL widget set
  Elementary is a widget set based on the Enlightenment Foundation
  Libraries, primarily aimed at creating graphical user interfaces for
@@ -1018,8 +917,6 @@ Package: libelementary-bin
 Architecture: linux-any
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: libefl-all-dev (<= 1.23.3-7)
-Replaces: libefl-all-dev (<= 1.23.3-7)
 Description: EFL widget set - helper programs
  Elementary is a widget set based on the Enlightenment Foundation
  Libraries, primarily aimed at creating graphical user interfaces for
@@ -1049,7 +946,6 @@ Architecture: linux-any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Replaces: libevas1 (<< 1.7.7-5)
 Description: EFL additional loaders for Evas
  This package contains programs that allow Evas to load many image and
  document formats for which it has no built-in support, including:
