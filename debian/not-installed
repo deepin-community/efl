@@ -1,6 +1,9 @@
 # c++ bindings aren't built, but the cmake files are still generated
 usr/lib/*/cmake/*Cxx
 
+# elua is now disabled, but the cmake files are still generated
+usr/lib/*/cmake/Elua/*.cmake
+
 # would require a separate binary package to avoid circular
 # dependencies, and isn't needed by anything in the archive.  Can be
 # likely be shipped after library bundling.

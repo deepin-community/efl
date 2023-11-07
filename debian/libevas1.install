@@ -3,3 +3,4 @@ usr/lib/*/evas/modules/image_loaders/*/*/*.so
 usr/lib/*/evas/modules/image_savers/*/*/*.so
 usr/lib/*/evas/modules/engines/buffer/*/module.so
 usr/share/evas/filters/lua/color.lua
+usr/share/mime/packages/evas.xml

@@ -31,7 +31,8 @@ _is_socket(SOCKET s)
  *
  */
 
-int fcntl(int fd, int cmd, ...)
+EVIL_API int
+fcntl(int fd, int cmd, ...)
 {
    va_list va;
    int     res = -1;
@@ -113,7 +114,7 @@ int fcntl(int fd, int cmd, ...)
              if (length != -1L)
                res = 0;
           }
-        fl->l_len = length - fl->l_start - 1;
+        fl->l_len = length - fl->l_start;
 
         pos = _lseek(fd, fl->l_start, fl->l_whence);
         if (pos != -1L)

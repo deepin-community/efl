@@ -2166,6 +2166,7 @@ EAPI void                                      ecore_x_randr_events_select(Ecore
 EAPI void                                      ecore_x_randr_screen_current_size_get(Ecore_X_Window root, int *w, int *h, int *w_mm, int *h_mm);
 EAPI void                                      ecore_x_randr_screen_size_range_get(Ecore_X_Window root, int *wmin, int *hmin, int *wmax, int *hmax);
 EAPI void                                      ecore_x_randr_screen_reset(Ecore_X_Window root);
+EAPI void                                      ecore_x_randr_screen_refresh(Ecore_X_Window root); /**< @since 1.26 */
 EAPI Eina_Bool                                 ecore_x_randr_screen_current_size_set(Ecore_X_Window root, int w, int h, int w_mm, int h_mm);
 EAPI Ecore_X_Randr_Mode_Info                 **ecore_x_randr_modes_info_get(Ecore_X_Window root, int *num);
 EAPI Ecore_X_Randr_Mode                        ecore_x_randr_mode_info_add(Ecore_X_Window root, Ecore_X_Randr_Mode_Info *mode_info);
@@ -2529,10 +2530,11 @@ struct _Ecore_X_Event_Xkb
    int base_group; /** @since 1.21 */
    int latched_group; /** @since 1.21 */
    int locked_group; /** @since 1.21 */
-   unsigned int	mods; /** @since 1.21 */
+   unsigned int mods; /** @since 1.21 */
    unsigned int base_mods; /** @since 1.21 */
-   unsigned int	latched_mods; /** @since 1.21 */
-   unsigned int	locked_mods; /** @since 1.21 */
+   unsigned int latched_mods; /** @since 1.21 */
+   unsigned int locked_mods; /** @since 1.21 */
+   Eina_Bool map_notify; /** @since 1.27 */
 };
 typedef struct _Ecore_X_Event_Xkb Ecore_X_Event_Xkb; /** @since 1.7 */
 typedef struct _Ecore_X_Event_Xkb Ecore_X_Xkb_State; /** @since 1.21 */
@@ -2610,6 +2612,7 @@ EAPI void          *ecore_x_input_device_property_get(int slot, const char *prop
 EAPI void           ecore_x_input_device_property_set(int slot, const char *prop, void *data, int num, Ecore_X_Atom format, int unit_size); /**< @since 1.24 */
 
 EAPI Eina_Bool      ecore_x_vsync_animator_tick_source_set(Ecore_X_Window win);
+EAPI void           ecore_x_vsync_animator_tick_delay_set(double delay); /** < @since 1.26 */
 
 typedef enum _Ecore_X_Gesture_Event_Mask
 {
@@ -2801,6 +2804,11 @@ EAPI Eina_Bool                             ecore_x_window_keygrab_unset(Ecore_X_
 //this API for keyrouter protocol
 EAPI void                                  ecore_x_e_keyrouter_set(Ecore_X_Window root, Eina_Bool on); /**< @since 1.15 */ //Key router set keyrouter flag using this
 EAPI Eina_Bool                             ecore_x_e_keyrouter_get(Ecore_X_Window root); /**< @since 1.15 */ //Client check the existence of keyrouter using this
+
+EAPI void                                  ecore_x_rersource_load(const char *file); /** @since 1.26 */
+EAPI void                                  ecore_x_resource_db_string_set(const char *key, const char *val); /** @since 1.26 */
+EAPI const char                           *ecore_x_resource_db_string_get(const char *key); /** @since 1.26 */
+EAPI void                                  ecore_x_resource_db_flush(void); /** @since 1.26 */
 
 #ifdef EFL_BETA_API_SUPPORT
 // XXX: FIXME: re-evaluate this after looking at xdg foreign in wayland

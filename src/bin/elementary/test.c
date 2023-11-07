@@ -228,7 +228,6 @@ void test_calendar(void *data, Evas_Object *obj, void *event_info);
 void test_calendar2(void *data, Evas_Object *obj, void *event_info);
 void test_calendar3(void *data, Evas_Object *obj, void *event_info);
 void test_efl_ui_calendar(void *data, Evas_Object *obj, void *event_info);
-void test_map(void *data, Evas_Object *obj, void *event_info);
 void test_weather(void *data, Evas_Object *obj, void *event_info);
 void test_flip(void *data, Evas_Object *obj, void *event_info);
 void test_flip2(void *data, Evas_Object *obj, void *event_info);
@@ -1256,9 +1255,6 @@ add_tests:
    ADD_TEST(NULL, "Naviframe", "Naviframe: Complex", test_naviframe_complex);
 
    //------------------------------//
-   ADD_TEST(NULL, "Geographic", "Map", test_map);
-
-   //------------------------------//
    ADD_TEST(NULL, "Dividers", "Panel", test_panel);
    ADD_TEST(NULL, "Dividers", "Panel Scrollable", test_panel2);
    ADD_TEST(NULL, "Dividers", "Panes", test_panes);
@@ -1374,7 +1370,8 @@ add_tests:
      }
 
    /* set an initial window size */
-   evas_object_resize(win, 480 * elm_config_scale_get(), 490 * elm_config_scale_get());
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           490 * elm_config_scale_get());
    evas_object_show(win);
 }
 

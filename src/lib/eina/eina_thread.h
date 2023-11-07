@@ -52,6 +52,12 @@ typedef uintptr_t Eina_Thread;
 typedef void *(*Eina_Thread_Cb)(void *data, Eina_Thread t);
 
 /**
+ * @typedef Eina_Thread_Cleanup_Cb
+ * Type for the definition of a thread cleanup function
+ */
+typedef void (*Eina_Thread_Cleanup_Cb) (void *data);
+
+/**
  * @typedef Eina_Thread_Priority
  * Type to enumerate different thread priorities
  */
@@ -68,7 +74,7 @@ typedef enum _Eina_Thread_Priority
  * @return identifier of current thread.
  * @since 1.8
  */
-EAPI Eina_Thread eina_thread_self(void) EINA_WARN_UNUSED_RESULT;
+EINA_API Eina_Thread eina_thread_self(void) EINA_WARN_UNUSED_RESULT;
 
 /**
  * @brief Checks if two thread identifiers are the same.
@@ -77,7 +83,7 @@ EAPI Eina_Thread eina_thread_self(void) EINA_WARN_UNUSED_RESULT;
  * @return #EINA_TRUE if they are equal, #EINA_FALSE otherwise.
  * @since 1.8
  */
-EAPI Eina_Bool eina_thread_equal(Eina_Thread t1, Eina_Thread t2) EINA_WARN_UNUSED_RESULT;
+EINA_API Eina_Bool eina_thread_equal(Eina_Thread t1, Eina_Thread t2) EINA_WARN_UNUSED_RESULT;
 
 /**
  * @brief Creates a new thread, setting its priority and affinity.
@@ -90,7 +96,7 @@ EAPI Eina_Bool eina_thread_equal(Eina_Thread t1, Eina_Thread t2) EINA_WARN_UNUSE
  * @return #EINA_TRUE if thread was created, #EINA_FALSE on errors.
  * @since 1.8
  */
-EAPI Eina_Bool eina_thread_create(Eina_Thread *t,
+EINA_API Eina_Bool eina_thread_create(Eina_Thread *t,
                                   Eina_Thread_Priority prio, int affinity,
                                   Eina_Thread_Cb func, const void *data) EINA_ARG_NONNULL(1, 4) EINA_WARN_UNUSED_RESULT;
 
@@ -106,7 +112,7 @@ EAPI Eina_Bool eina_thread_create(Eina_Thread *t,
  *
  * @since 1.19
  */
-EAPI extern const void *EINA_THREAD_JOIN_CANCELED;
+EINA_API extern const void *EINA_THREAD_JOIN_CANCELED;
 
 /**
  * @brief Joins a currently running thread, waiting until it finishes.
@@ -123,7 +129,7 @@ EAPI extern const void *EINA_THREAD_JOIN_CANCELED;
  *         EINA_THREAD_JOIN_CANCELED.
  * @since 1.8
  */
-EAPI void *eina_thread_join(Eina_Thread t);
+EINA_API void *eina_thread_join(Eina_Thread t);
 
 /**
  * @brief Sets the name of a given thread for debugging purposes.
@@ -140,7 +146,7 @@ EAPI void *eina_thread_join(Eina_Thread t);
  *         otherwise.
  * @since 1.16
  */
-EAPI Eina_Bool eina_thread_name_set(Eina_Thread t, const char *name);
+EINA_API Eina_Bool eina_thread_name_set(Eina_Thread t, const char *name);
 
 /**
  * @brief Attempts to cancel a running thread.
@@ -163,7 +169,7 @@ EAPI Eina_Bool eina_thread_name_set(Eina_Thread t, const char *name);
  *
  * @since 1.19
  */
-EAPI Eina_Bool eina_thread_cancel(Eina_Thread t);
+EINA_API Eina_Bool eina_thread_cancel(Eina_Thread t);
 
 /**
  * @brief Enables or disables if the current thread can be canceled.
@@ -201,7 +207,7 @@ EAPI Eina_Bool eina_thread_cancel(Eina_Thread t);
  *
  * @since 1.19
  */
-EAPI Eina_Bool eina_thread_cancellable_set(Eina_Bool cancellable, Eina_Bool *was_cancellable);
+EINA_API Eina_Bool eina_thread_cancellable_set(Eina_Bool cancellable, Eina_Bool *was_cancellable);
 
 /**
  * If the current thread is cancellable, this introduces a
@@ -217,7 +223,7 @@ EAPI Eina_Bool eina_thread_cancellable_set(Eina_Bool cancellable, Eina_Bool *was
  *
  * @since 1.19
  */
-EAPI void eina_thread_cancel_checkpoint(void);
+EINA_API void eina_thread_cancel_checkpoint(void);
 
 /**
  * @def EINA_THREAD_CLEANUP_PUSH(cleanup, data)
@@ -248,8 +254,16 @@ EAPI void eina_thread_cancel_checkpoint(void);
  *
  * @since 1.19
  */
+#ifdef _WIN32
+EINA_API Eina_Bool
+eina_thread_cleanup_push(Eina_Thread_Cleanup_Cb fn, void *data);
+
+#define EINA_THREAD_CLEANUP_PUSH(cleanup, data) \
+  eina_thread_cleanup_push(cleanup, data)
+#else
 #define EINA_THREAD_CLEANUP_PUSH(cleanup, data) \
   pthread_cleanup_push(cleanup, data)
+#endif
 
 /**
  * @def EINA_THREAD_CLEANUP_POP(exec_cleanup)
@@ -278,8 +292,16 @@ EAPI void eina_thread_cancel_checkpoint(void);
  *
  * @since 1.19
  */
+#ifdef _WIN32
+EINA_API void
+eina_thread_cleanup_pop(int execute);
+
+#define EINA_THREAD_CLEANUP_POP(exec_cleanup) \
+  eina_thread_cleanup_pop(exec_cleanup)
+#else
 #define EINA_THREAD_CLEANUP_POP(exec_cleanup) \
   pthread_cleanup_pop(exec_cleanup)
+#endif
 
 /**
  * @typedef Eina_Thread_Cancellable_Run_Cb
@@ -331,7 +353,21 @@ typedef void *(*Eina_Thread_Cancellable_Run_Cb)(void *data);
  *
  * @since 1.19
  */
-EAPI void *eina_thread_cancellable_run(Eina_Thread_Cancellable_Run_Cb cb, Eina_Free_Cb cleanup_cb, void *data);
+EINA_API void *eina_thread_cancellable_run(Eina_Thread_Cancellable_Run_Cb cb, Eina_Free_Cb cleanup_cb, void *data);
+
+/**
+ * @brief Lowers the priority of the current thread.
+ *
+ * @details It's used by worker threads so that they use up the background CPU and do not stall
+ *          the main thread. If the current thread is running with real-time priority, we
+ *          decrease our priority by @c RTNICENESS. This is done in a portable way.
+ *
+ *          Otherwise, (we are running with the SCHED_OTHER policy) there's no portable way to
+ *          set the nice level on the current thread. In Linux, it does work and it's the
+ *          only one that is implemented as of now. In this case, the nice level is
+ *          incremented on this thread by @c NICENESS.
+ */
+EINA_API void eina_sched_prio_drop(void);
 
 /**
  * @}

@@ -712,6 +712,22 @@ edje_color_class_set(const char *color_class, int r, int g, int b, int a, int r2
    return result;
 }
 
+EAPI void
+edje_color_class_apply(void)
+{
+   Edje *ed;
+
+   EINA_INLIST_FOREACH(_edje_edjes, ed)
+     {
+        ed->dirty = EINA_TRUE;
+        ed->recalc_call = EINA_TRUE;
+#ifdef EDJE_CALC_CACHE
+        ed->all_part_change = EINA_TRUE;
+#endif
+        _edje_recalc(ed);
+     }
+}
+
 EOLIAN Eina_Bool
 _edje_global_efl_gfx_color_class_color_class_set(Eo *obj EINA_UNUSED, void *pd EINA_UNUSED,
                                                  const char *color_class, Efl_Gfx_Color_Class_Layer layer, int r, int g, int b, int a)
@@ -824,7 +840,7 @@ _edje_color_class_active_iterator_next(Eina_Iterator *it, void **data)
       It is being assumed that the color key are the same for all object here.
       This can some times not be the case, but for now we should be fine.
     */
-   cc = _edje_color_class_find(ed, tuple->key);
+   cc = _edje_color_class_recursive_find(ed, tuple->key);
    if (!cc) return EINA_FALSE;
    et->cc = *cc;
 
@@ -956,7 +972,7 @@ _efl_canvas_layout_efl_gfx_color_class_color_class_get(const Eo *obj EINA_UNUSED
    if (!color_class)
      cc = NULL;
    else
-     cc = _edje_color_class_find(ed, color_class);
+     cc = _edje_color_class_recursive_find(ed, color_class);
 
    return _edje_color_class_get_internal(cc, layer, r, g, b, a);
 }
@@ -970,7 +986,7 @@ edje_object_color_class_description_get(const Evas_Object *obj, const char *colo
 EOLIAN const char *
 _efl_canvas_layout_efl_gfx_color_class_color_class_description_get(const Eo *obj EINA_UNUSED, Edje *ed, const char *color_class)
 {
-   Edje_Color_Class *cc = _edje_color_class_find(ed, color_class);
+   Edje_Color_Class *cc = _edje_color_class_recursive_find(ed, color_class);
    return cc ? cc->desc : NULL;
 }
 
@@ -5796,7 +5812,6 @@ _edje_real_part_get(const Edje *ed, const char *part)
 void *
 _edje_hash_find_helper(const Eina_Hash *hash, const char *key)
 {
-   static const char *remember_key = NULL;
    void *data;
    int i, j;
    char **tokens;
@@ -5806,20 +5821,6 @@ _edje_hash_find_helper(const Eina_Hash *hash, const char *key)
    if (data)
      return data;
 
-   // We only receive pointer from Eet files as key, we can
-   // assume them constant over the life time of the program.
-   if (remember_key == key)
-     return NULL;
-
-   // It is usually faster to walk the string once to check
-   // if there will be any tokens to process, that to allocate
-   // an array, copy one token, and then just free it.
-   if (strchr(key, '/') == NULL)
-     {
-        remember_key = key;
-        return NULL;
-     }
-
    tokens = eina_str_split_full(key, "/", 0, &tokens_count);
    if ((tokens) && (tokens_count > 1))
      {
@@ -5827,15 +5828,15 @@ _edje_hash_find_helper(const Eina_Hash *hash, const char *key)
 
         buf = eina_strbuf_new();
 
-        for (i = tokens_count - 2; i >= 0; i--)
+        for (i = tokens_count - 1; i >= 0; i--)
           {
              for (j = 0; j < i; j++)
                {
                   eina_strbuf_append(buf, tokens[j]);
                   eina_strbuf_append(buf, "/");
                }
-             eina_strbuf_append(buf, tokens[tokens_count - 1]);
-
+             if (i == 0) eina_strbuf_append(buf, "/");
+             eina_strbuf_append(buf, tokens[i]);
              data = eina_hash_find(hash, eina_strbuf_string_get(buf));
              if (data) break;
 
@@ -5844,10 +5845,6 @@ _edje_hash_find_helper(const Eina_Hash *hash, const char *key)
 
         eina_strbuf_free(buf);
      }
-   else
-     {
-        remember_key = key;
-     }
 
    if (tokens)
      {
@@ -5855,29 +5852,6 @@ _edje_hash_find_helper(const Eina_Hash *hash, const char *key)
         free(tokens);
      }
    return data;
-}
-
-Edje_Color_Class *
-_edje_color_class_find(const Edje *ed, const char *color_class)
-{
-   Edje_Color_Class *cc = NULL;
-
-   if ((!ed) || (!color_class)) return NULL;
-
-   /* first look through the object scope */
-   cc = eina_hash_find(ed->color_classes, color_class);
-   if (cc) return cc;
-
-   /* next look through the global scope */
-   cc = eina_hash_find(_edje_color_class_hash, color_class);
-   if (cc) return cc;
-
-   /* finally, look through the file scope */
-   if (ed->file)
-     cc = eina_hash_find(ed->file->color_hash, color_class);
-   if (cc) return cc;
-
-   return NULL;
 }
 
 Edje_Color_Class *
@@ -5924,6 +5898,32 @@ _edje_color_class_recursive_find(const Edje *ed, const char *color_class)
      cc = _edje_color_class_recursive_find_helper(ed, ed->file->color_hash, color_class);
    if (cc) return cc;
 
+   // fall back to parent class. expecting classes like:
+   // /bg <- fallback for /bg/*
+   // /bg/normal <- fallback for /bg/normal/*
+   // /bg/normal/button <- mid grey
+   // etc.
+   if (color_class[0] == '/')
+     {
+        size_t len = strlen(color_class);
+        char *color_class_parent = alloca(len + 1);
+        const char *src = color_class;
+        char *last_slash = NULL, *dst = color_class_parent;
+
+        for (;; src++, dst++)
+          {
+             *dst = *src;
+             if (*dst == '/') last_slash = dst;
+             if (*dst == 0) break;
+          }
+        if (last_slash)
+          {
+             if (last_slash == color_class_parent)
+               return NULL;
+             *last_slash = 0;
+          }
+        return _edje_color_class_recursive_find(ed, color_class_parent);
+     }
    return NULL;
 }
 
@@ -6384,6 +6384,7 @@ _edje_real_part_swallow_clear(Edje *ed, Edje_Real_Part *rp)
                                          rp);
    evas_object_clip_unset(rp->typedata.swallow->swallowed_object);
    evas_object_data_del(rp->typedata.swallow->swallowed_object, "\377 edje.swallowing_part");
+   evas_object_data_del(rp->typedata.swallow->swallowed_object, ".edje");
    _edje_callbacks_del(rp->typedata.swallow->swallowed_object, ed);
    _edje_callbacks_focus_del(rp->typedata.swallow->swallowed_object, ed);
    rp->typedata.swallow->swallowed_object = NULL;

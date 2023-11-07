@@ -39,7 +39,7 @@ eolian_lib = library('eolian', eolian_src,
     include_directories: config_dir,
     dependencies: eina,
     install: true,
-    c_args : package_c_args,
+    c_args : [package_c_args, '-DEOLIAN_BUILD'],
     version : meson.project_version()
 )
 
@@ -52,6 +52,7 @@ eolian = declare_dependency(
 eolian_include_dir = join_paths(dir_data, 'eolian', 'include')
 
 eolian_header_src = [
+'eolian_api.h',
 'Eolian.h',
 'Eolian_Aux.h'
 ]

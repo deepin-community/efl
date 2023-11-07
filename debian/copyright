@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: efl
-Source: git://git.enlightenment.org/core/efl.git
+Source: https://git.enlightenment.org/enlightenment/efl.git
 
 Files: *
 Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
@@ -456,6 +456,7 @@ Files: src/lib/eina/eina_abi.c
   src/lib/eina/eina_refcount.h
   src/lib/eina/eina_thread.c
   src/lib/eina/eina_thread.h
+  src/lib/eina/eina_thread_posix.c
   src/lib/eina/eina_xattr.c
   src/lib/eina/eina_xattr.h
 Copyright: 2002-2008, 2010-2018, 20011, Cedric Bail
@@ -536,16 +537,22 @@ Files: src/lib/eina/eina_error.c
 Copyright: 2007, 2008, Jorge Luis Zapata Muga, Cedric Bail
 License: LGPL-2.1+
 
-Files: src/lib/eina/eina_file.c
+Files: src/lib/eina/eina_file_posix.c
 Copyright: 2010, 2011, Cedric Bail
   2007, 2008, Jorge Luis Zapata Muga, Vincent Torri
 License: LGPL-2.1+
 
 Files: src/lib/eina/eina_file_win32.c
+  src/lib/eina/eina_fnmatch.h
   src/lib/eina/eina_lock.h
   src/lib/eina/eina_util.c
   src/lib/eina/eina_util.h
-Copyright: 2010, 2011, 2015, 2017, Vincent Torri
+Copyright: 2010, 2011, 2015, 2017, 2021, Vincent Torri
+License: LGPL-2.1+
+
+Files: src/lib/eina/eina_fnmatch.c
+Copyright: 2021, Vincent Torri
+  2012, Rich Felker
 License: LGPL-2.1+
 
 Files: src/lib/eina/eina_fp.h
@@ -621,11 +628,6 @@ Files: src/lib/eina/eina_safepointer.h
 Copyright: 2015, 2016, Carsten Haitzler, Cedric Bail
 License: LGPL-2.1+
 
-Files: src/lib/eina/eina_sched.c
-  src/lib/eina/eina_sched.h
-Copyright: 2010, ProFUSION embedded systems
-License: LGPL-2.1+
-
 Files: src/lib/eina/eina_slice.h
 Copyright: 2016, ProFUSION embedded systems
 License: LGPL-2.1+
@@ -633,6 +635,10 @@ License: LGPL-2.1+
 Files: src/lib/eina/eina_str.c
 Copyright: 1998, Todd C. Miller <Todd.Miller@courtesan.com>
 License: ISC
+
+Files: src/lib/eina/eina_thread_win32.c
+Copyright: 2020, Expertise Solutions Cons em Inf
+License: LGPL-2.1+
 
 Files: src/lib/eina/eina_tiler.c
 Copyright: 2007, 2008, Gustavo Sverzut Barbieri, Jorge Luis Zapata Muga
@@ -788,6 +794,14 @@ Copyright: 2012, SUSE LINUX Products GmbH, Nuernberg, Germany.
   2010, 2011, Novell, Inc.
 License: LGPL-2+
 
+Files: src/static_libs/fnmatch/*
+Copyright: file in the directory
+License: BSD-2-clause
+
+Files: src/static_libs/fnmatch/COPYRIGHT
+Copyright: 2005-2020, Rich Felker, et al.
+License: Expat
+
 Files: src/static_libs/freetype/*
 Copyright: 1996-2014, David Turner, Robert Wilhelm, and Werner Lemberg.
 License: FTL
@@ -853,15 +867,13 @@ License: Expat
 
 Files: src/static_libs/libunibreak/*
 Copyright: 2002-2020, Enlightenment Developers (see AUTHORS)
- 2016, Andreas Röver <roever at users dot sf dot net>
-  2013, Petr Filipsky <philodej at gmail dot com>
-  2012-2016, Tom Hacohen <tom at stosb dot com>
-  2008-2016, Wu Yongwei <wuyongwei at gmail dot com>
+ Wu Yongwei <wuyongwei at gmail dot com> / Tom Hacohen <tom at stosb dot com> / Petr Filipsky <philodej at gmail dot com> / Andreas Röver <roever at users dot sf dot net>
 License: BSD-2-clause
 
 Files: src/static_libs/libunibreak/AUTHORS
   src/static_libs/libunibreak/NEWS
   src/static_libs/libunibreak/README.md
+  src/static_libs/libunibreak/emojidata.c
   src/static_libs/libunibreak/graphemebreakdata.c
   src/static_libs/libunibreak/linebreakdata.c
   src/static_libs/libunibreak/meson.build
@@ -873,16 +885,18 @@ Files: src/static_libs/libunibreak/ChangeLog
 Copyright: header.
 License: BSD-2-clause
 
-Files: src/static_libs/libunibreak/graphemebreak.c
+Files: src/static_libs/libunibreak/emojidef.c
+  src/static_libs/libunibreak/emojidef.h
+  src/static_libs/libunibreak/graphemebreak.c
   src/static_libs/libunibreak/graphemebreak.h
   src/static_libs/libunibreak/graphemebreakdef.h
-Copyright: 2016, Andreas Röver <roever at users dot sf dot net>
+Copyright: 2016-2019, Andreas Röver <roever at users dot sf dot net>
 License: BSD-2-clause
 
 Files: src/static_libs/libunibreak/linebreak.c
   src/static_libs/libunibreak/linebreakdef.h
 Copyright: 2013, Petr Filipsky <philodej at gmail dot com>
-  2008-2016, Wu Yongwei <wuyongwei at gmail dot com>
+  2008-2019, Wu Yongwei <wuyongwei at gmail dot com>
 License: BSD-2-clause
 
 Files: src/static_libs/libunibreak/linebreak.h
@@ -891,13 +905,14 @@ Files: src/static_libs/libunibreak/linebreak.h
   src/static_libs/libunibreak/unibreakbase.h
   src/static_libs/libunibreak/unibreakdef.c
   src/static_libs/libunibreak/unibreakdef.h
-Copyright: 2008-2016, Wu Yongwei <wuyongwei at gmail dot com>
+Copyright: 2008-2019, Wu Yongwei <wuyongwei at gmail dot com>
 License: BSD-2-clause
 
 Files: src/static_libs/libunibreak/wordbreak.c
   src/static_libs/libunibreak/wordbreak.h
   src/static_libs/libunibreak/wordbreakdef.h
-Copyright: 2013-2016, Tom Hacohen <tom at stosb dot com>
+Copyright: 2018, Wu Yongwei <wuyongwei at gmail dot com>
+  2013-2019, Tom Hacohen <tom at stosb dot com>
 License: BSD-2-clause
 
 Files: src/static_libs/lz4/*
@@ -919,7 +934,7 @@ Files: src/static_libs/lz4/lz4.c
   src/static_libs/lz4/lz4hc.c
   src/static_libs/lz4/lz4hc.h
   src/static_libs/lz4/xxhash.h
-Copyright: 2011-2020, Yann Collet.
+Copyright: 2011-2022, Yann Collet.
 License: BSD-2-clause
 
 Files: src/static_libs/lz4/xxhash.c
@@ -1067,6 +1082,10 @@ Files: src/tests/eina/eina_test_strbuf.c
 Copyright: 2010, Sebastian Dransfeld
 License: LGPL-2.1+
 
+Files: src/tests/eina/eina_test_thread.c
+Copyright: 2020, Expertise Solutions Cons em Inf
+License: LGPL-2.1+
+
 Files: src/tests/eina/eina_test_tiler.c
 Copyright: 2009, Rafael Antognolli
 License: LGPL-2.1+
@@ -1164,7 +1183,7 @@ Copyright: 2019, its authors. See AUTHORS.
 License: Apache-2.0
 
 Files: src/tests/evil/*
-Copyright: 2010, 2011, 2015, 2017, Vincent Torri
+Copyright: 2010, 2011, 2015, 2017, 2021, Vincent Torri
 License: LGPL-2.1+
 
 License: Apache-2.0

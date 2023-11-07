@@ -1,49 +1,22 @@
 group { name: "e/widgets/entry/scrollframe";
-   images.image: "inset_shadow.png" COMP;
-   images.image: "bevel_in.png" COMP;
    parts {
       part { name: "bg"; type: RECT;
          description { state: "default" 0.0;
-            rel1.to: "inset";
-            rel1.offset: 1 1;
-            rel2.to: "inset";
-            rel2.offset: -2 -2;
-            color: 48 48 48 255;
+            color_class: "/bg/normal/entry";
          }
       }
       part { name: "clipper"; type: RECT;
          description { state: "default" 0.0;
-            rel1.to: "bg";
-            rel2.to: "bg";
+            rel.to: "bg";
          }
       }
       part { name: "e.swallow.content"; type: SWALLOW;
-         mouse_events: 1;
+         scale: 1;
          clip_to: "clipper";
          description { state: "default" 0.0;
-            rel1.offset: 3 3;
-            rel2.offset: -4 -4;
-         }
-      }
-      part { name: "shadow"; mouse_events: 0; repeat_events: 1;
-         description { state: "default" 0.0;
-            image.normal: "inset_shadow.png";
-            image.border: 5 5 7 3;
-            image.middle: 0;
-            rel1.to: "bg";
-            rel2.to: "bg";
-            fill.smooth: 0;
-            color: 255 255 255 128;
-         }
-      }
-      part { name: "inset"; mouse_events: 0; repeat_events: 1;
-         description { state: "default" 0.0;
-            image.normal: "bevel_in.png";
-            image.border: 1 1 1 1;
-            image.middle: 0;
-            rel1.offset: 0 0;
-            rel2.offset: -1 -1;
-            fill.smooth: 0;
+            rel1.offset: 2 2;
+            rel2.offset: -3 -3;
+            offscale;
          }
       }
    }
@@ -52,10 +25,10 @@ group { name: "e/widgets/entry/scrollframe";
 group { name: "e/widgets/entry/text";
       styles {
          style { name: "entry_textblock_style";
-            base: "font="FN" font_size=10 color=#ffffffff style=shadow,bottom shadow_color=#00000080 text_class=entry color_class=entry_text";
+            base: "font="FN" font_size=10 color=cc:/fg/normal/entry text_class=entry left_margin=2 right_margin=2";
          }
          style { name: "entry_textblock_disabled_style";
-            base: "font="FN" font_size=10 color=#151515 style=shadow,bottom shadow_color=#ffffff19 text_class=entry color_class=entry_text_disabled";
+            base: "font="FN" font_size=10 color=cc:/fg/disabled/entry text_class=entry left_margin=2 right_margin=2";
          }
       }
    parts {
@@ -68,7 +41,6 @@ group { name: "e/widgets/entry/text";
          source: "e/widgets/entry/selection"; // selection under
          source4: "e/widgets/entry/cursor"; // cursorover
          description { state: "default" 0.0;
-            color_class: "entry_text";
             align: 0.0 0.5;
             text {
                style: "entry_textblock_style";
@@ -80,24 +52,19 @@ group { name: "e/widgets/entry/text";
          description { state: "disabled" 0.0;
             inherit: "default" 0.0;
             text.style: "entry_textblock_disabled_style";
-            color_class: "entry_text_disabled";
          }
       }
    }
    programs {
-      program { name: "focus";
-         signal: "load";
-         source: "";
+      program { signal: "load"; source: "";
          action: FOCUS_SET;
          target: "e.text.text";
       }
-      program {
-         signal: "e,state,disabled"; source: "e";
+      program { signal: "e,state,disabled"; source: "e";
          action: STATE_SET "disabled" 0.0;
          target: "e.text.text";
       }
-      program {
-         signal: "e,state,enabled"; source: "e";
+      program { signal: "e,state,enabled"; source: "e";
          action: STATE_SET "default" 0.0;
          target: "e.text.text";
       }
@@ -124,21 +91,17 @@ group { name: "e/widgets/entry/password";
 
 group { name: "e/widgets/entry/cursor";
    min: 1 0;
-   images.image: "white_bar_vert_glow.png" COMP;
    parts {
-      part { name: "cursor"; mouse_events: 0;
+      part { name: "cursor"; type: RECT; mouse_events: 0;
+         scale: 1;
          description { state: "default" 0.0;
-            rel1.offset: -4 -4;
-            rel2.offset: 3 3;
-            image.normal: "white_bar_vert_glow.png";
-            image.border: 4 4 4 4;
-            fill.smooth: 0;
-            color: 255 255 255 0;
-            min: 9 10;
+            min: 1 10;
+            color_class: "/fg/normal/entry/cursor";
+            visible: 0;
          }
          description { state: "visible" 0.0;
             inherit: "default" 0.0;
-            color: 255 255 255 255;
+            visible: 1;
          }
       }
    }
@@ -176,7 +139,6 @@ group { name: "e/widgets/entry/cursor";
       program { name: "cursor_hide";
          action: STATE_SET "default" 0.0;
          target: "cursor";
-         transition: SINUSOIDAL 0.2;
          after: "cursor_hide_timer";
       }
       program { name: "cursor_show_timer";
@@ -184,7 +146,7 @@ group { name: "e/widgets/entry/cursor";
          after: "cursor_hide";
       }
       program { name: "cursor_hide_timer";
-         in: 0.2 0.0;
+         in: 0.5 0.0;
          after: "cursor_show";
       }
    }
@@ -195,7 +157,7 @@ group { name: "e/widgets/entry/selection";
    parts {
       part { name: "selection"; type: RECT; mouse_events: 0;
          description { state: "default" 0.0;
-            color: 51 153 255 255;
+            color_class: "/bg/normal/entry/selection";
          }
       }
    }

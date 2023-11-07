@@ -46,6 +46,12 @@ option('drm',
   description : 'DRM/KMS advanced framebuffer/console support in efl'
 )
 
+option('input',
+  type : 'boolean',
+  value : true,
+  description : 'libinput abstraction in efl'
+)
+
 option('cocoa',
   type : 'boolean',
   value : false,
@@ -189,8 +195,8 @@ option('unmount-path',
 option('evas-loaders-disabler',
   type : 'array',
   description : 'List of modular image/vector loaders to disable in efl',
-  choices : ['', 'gst', 'pdf', 'ps', 'raw', 'svg', 'rsvg', 'xcf', 'bmp', 'dds', 'eet', 'generic', 'gif', 'ico', 'jp2k', 'jpeg', 'pmaps', 'png', 'psd', 'tga', 'tgv', 'tiff', 'wbmp', 'webp', 'xpm', 'json', 'avif'],
-  value : ['json', 'avif']
+  choices : ['', 'gst', 'pdf', 'ps', 'raw', 'svg', 'rsvg', 'xcf', 'bmp', 'dds', 'eet', 'generic', 'gif', 'ico', 'jp2k', 'jpeg', 'pmaps', 'png', 'psd', 'tga', 'tgv', 'tiff', 'wbmp', 'webp', 'xpm', 'json', 'avif', 'heif'],
+  value : ['json', 'avif', 'heif']
 )
 
 option('ecore-imf-loaders-disabler',
@@ -369,4 +375,10 @@ option('efl-one',
   type: 'boolean',
   value : false,
   description : 'Build special set of .so´s as a single .so'
+)
+
+option('max-fd-size',
+  type : 'string',
+  value : '8192',
+  description : 'This is the maximim set of fds and thus maximum fd value allowed +1 in the ecore main loop handler'
 )

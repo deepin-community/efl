@@ -27,27 +27,23 @@
 #include "ecore_evas_private.h"
 #include "ecore_evas_x11.h"
 
-#ifdef EAPI
-# undef EAPI
-#endif
-
 #ifdef _WIN32
-# ifdef DLL_EXPORT
-#  define EAPI __declspec(dllexport)
+# ifndef EFL_MODULE_STATIC
+#  define EMODAPI __declspec(dllexport)
 # else
-#  define EAPI
-# endif /* ! DLL_EXPORT */
+#  define EMODAPI
+# endif
 #else
 # ifdef __GNUC__
 #  if __GNUC__ >= 4
-#   define EAPI __attribute__ ((visibility("default")))
-#  else
-#   define EAPI
+#   define EMODAPI __attribute__ ((visibility("default")))
 #  endif
-# else
-#  define EAPI
 # endif
 #endif /* ! _WIN32 */
+
+#ifndef EMODAPI
+# define EMODAPI
+#endif
 
 #define ECORE_EVAS_X11_SELECTION 0x7F
 
@@ -1480,6 +1476,7 @@ _ecore_evas_x_event_window_damage(void *data EINA_UNUSED, int type EINA_UNUSED, 
    if (!ee) return ECORE_CALLBACK_PASS_ON; /* pass on event */
    edata = ee->engine.data;
    if (e->win != ee->prop.window) return ECORE_CALLBACK_PASS_ON;
+   ee->draw_block = EINA_FALSE;
    if (edata->using_bg_pixmap) return ECORE_CALLBACK_PASS_ON;
 //   printf("EXPOSE %p [%i] %i %i %ix%i\n", ee, ee->prop.avoid_damage, e->x, e->y, e->w, e->h);
    if (ee->prop.avoid_damage)
@@ -1943,7 +1940,7 @@ _ecore_evas_x_layer_update(Ecore_Evas *ee)
    /* FIXME: Set gnome layer */
 }
 
-EAPI void ecore_x_window_root_properties_select(void);
+EMODAPI void ecore_x_window_root_properties_select(void);
 
 static int
 _ecore_evas_x_init(void)
@@ -3792,32 +3789,50 @@ _search_fitting_type(Ecore_Evas *ee, Ecore_Evas_Engine_Data_X11 *edata, Ecore_Ev
 
    EINA_SAFETY_ON_NULL_RETURN(edata->selection_data[selection].acceptable_type);
 
+   // first pass - try find an EXACT mime type match
    for (unsigned int i = 0; i < eina_array_count(arr) && !found_conversion; ++i)
      {
         const char *x11_name = eina_array_data_get(arr, i);
+
         mime_type = _decrypt_type(x11_name);
 
         for (unsigned int j = 0; j < eina_array_count(edata->selection_data[selection].acceptable_type) && !found_conversion; ++j)
           {
-             const char *acceptable_type = (const char*) eina_array_data_get(edata->selection_data[selection].acceptable_type, j);
+             const char *acceptable_type = (const char *)eina_array_data_get(edata->selection_data[selection].acceptable_type, j);
 
              if (mime_type == acceptable_type)
-               HANDLE_TYPE()
-
-             //if there is no available type yet, check if we can convert to the desired type via this type
-             if (!found_conversion)
                {
+                  HANDLE_TYPE()
+               }
+          }
+        eina_stringshare_del(mime_type);
+     }
+   // second pass - exact match not found - look for conversions instead
+   if (!found_conversion)
+     {
+        for (unsigned int i = 0; i < eina_array_count(arr) && !found_conversion; ++i)
+          {
+             const char *x11_name = eina_array_data_get(arr, i);
+
+             mime_type = _decrypt_type(x11_name);
+
+             for (unsigned int j = 0; j < eina_array_count(edata->selection_data[selection].acceptable_type) && !found_conversion; ++j)
+               {
+                  const char *acceptable_type = (const char *)eina_array_data_get(edata->selection_data[selection].acceptable_type, j);
                   const char *convertion_type = NULL;
+
                   Eina_Iterator *iter = eina_content_converter_possible_conversions(mime_type);
                   EINA_ITERATOR_FOREACH(iter, convertion_type)
                     {
                        if (convertion_type == acceptable_type)
-                         HANDLE_TYPE()
+                         {
+                            HANDLE_TYPE()
+                         }
                     }
                   eina_iterator_free(iter);
                }
+             eina_stringshare_del(mime_type);
           }
-        eina_stringshare_del(mime_type);
      }
    if (found_conversion)
      {
@@ -4024,7 +4039,10 @@ _force_stop_self_dnd(Ecore_Evas *ee)
    //Selection buffer is freed as a response to the FINISHED event.
    ecore_x_pointer_ungrab();
    ecore_x_dnd_self_drop();
-   ecore_x_dnd_aware_set(ee->prop.window, EINA_FALSE);
+   if ((!ee->func.fn_dnd_drop) &&
+       (!ee->func.fn_dnd_state_change) &&
+       (!ee->func.fn_dnd_motion))
+     ecore_x_dnd_aware_set(ee->prop.window, EINA_FALSE);
    ecore_event_handler_del(edata->mouse_up_handler);
    edata->mouse_up_handler = NULL;
 
@@ -4760,7 +4778,7 @@ _ecore_evas_x_flush_post(void *data, Evas *e EINA_UNUSED, void *event_info EINA_
 #endif
 
 #ifdef BUILD_ECORE_EVAS_SOFTWARE_X11
-EAPI Ecore_Evas *
+EMODAPI Ecore_Evas *
 ecore_evas_software_x11_new_internal(const char *disp_name, Ecore_X_Window parent,
 				     int x, int y, int w, int h)
 {
@@ -4907,7 +4925,6 @@ ecore_evas_software_x11_new_internal(const char *disp_name, Ecore_X_Window paren
                redraw_debug = 0;
           }
 
-        einfo->info.backend = EVAS_ENGINE_INFO_SOFTWARE_X11_BACKEND_XLIB;
         einfo->info.connection = ecore_x_display_get();
         einfo->info.screen = NULL;
         einfo->info.drawable = ee->prop.window;
@@ -4963,7 +4980,7 @@ ecore_evas_software_x11_new_internal(const char *disp_name, Ecore_X_Window paren
    return ee;
 }
 
-EAPI Ecore_Evas *
+EMODAPI Ecore_Evas *
 ecore_evas_software_x11_pixmap_new_internal(const char *disp_name, Ecore_X_Window parent,
                                             int x, int y, int w, int h)
 {
@@ -5106,7 +5123,6 @@ ecore_evas_software_x11_pixmap_new_internal(const char *disp_name, Ecore_X_Windo
                redraw_debug = 0;
           }
 
-        einfo->info.backend = EVAS_ENGINE_INFO_SOFTWARE_X11_BACKEND_XLIB;
         einfo->info.connection = ecore_x_display_get();
         einfo->info.screen = NULL;
 
@@ -5277,7 +5293,7 @@ _ecore_evas_software_x11_extra_event_window_add(Ecore_Evas *ee, Ecore_X_Window w
 #endif
 
 #ifdef BUILD_ECORE_EVAS_OPENGL_X11
-EAPI Ecore_Evas *
+EMODAPI Ecore_Evas *
 ecore_evas_gl_x11_options_new_internal(const char *disp_name, Ecore_X_Window parent,
 				       int x, int y, int w, int h, const int *opt)
 {
@@ -5401,14 +5417,14 @@ ecore_evas_gl_x11_options_new_internal(const char *disp_name, Ecore_X_Window par
    return ee;
 }
 
-EAPI Ecore_Evas *
+EMODAPI Ecore_Evas *
 ecore_evas_gl_x11_new_internal(const char *disp_name, Ecore_X_Window parent,
                       int x, int y, int w, int h)
 {
    return ecore_evas_gl_x11_options_new_internal(disp_name, parent, x, y, w, h, NULL);
 }
 
-EAPI Ecore_Evas *
+EMODAPI Ecore_Evas *
 ecore_evas_gl_x11_pixmap_new_internal(const char *disp_name, Ecore_X_Window parent,
                                       int x, int y, int w, int h)
 {

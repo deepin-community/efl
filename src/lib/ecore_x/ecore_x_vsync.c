@@ -15,7 +15,6 @@
 #include <sys/stat.h>
 #include <sys/select.h>
 #include <fcntl.h>
-#include <fnmatch.h>
 
 #ifdef HAVE_PRCTL
 # include <sys/prctl.h>
@@ -28,6 +27,8 @@ static Ecore_X_Window vsync_root = 0;
 int _ecore_x_image_shm_check(void);
 
 static int _vsync_log_dom = -1;
+
+static double _ecore_x_vsync_animator_tick_delay = 0.0;
 
 #undef ERR
 #define ERR(...) EINA_LOG_DOM_ERR(_vsync_log_dom, __VA_ARGS__)
@@ -177,7 +178,7 @@ _fallback_timeout(void *data EINA_UNUSED)
 {
    if (drm_event_is_busy)
      {
-        _drm_send_time(ecore_loop_time_get());
+        _drm_send_time(ecore_time_get());
         return EINA_TRUE;
      }
    fallback_timer = NULL;
@@ -197,7 +198,7 @@ _fail_timeout(void *data EINA_UNUSED)
             (1.0 / 60.0, _fallback_timeout, NULL);
      }
    if (drm_event_is_busy)
-     _drm_send_time(ecore_loop_time_get());
+     _drm_send_time(ecore_time_get());
    return EINA_FALSE;
 }
 
@@ -288,17 +289,58 @@ _drm_send_time(double t)
 {
    if (threaded_vsync)
      {
+        static double t_last = 0.0;
         double *tim = malloc(sizeof(*tim));
+
+        // you won't believe this
+        if (t <= t_last)
+          {
+             fprintf(stderr, "EEEEEEK! time went backwards! %1.5f -> %1.5f\n", t_last, t);
+             t = ecore_time_get();
+             if (t <= t_last) t = t_last + 0.001;
+          }
         if (tim)
           {
              *tim = t;
              DBG("   ... send %1.8f", t);
+             // if we are the wm/compositor we need to offset out vsync by 1/2
+             // a frame ... we should never offset by more than
+             // frame_time - render_time though ... but we don't know what
+             // this is and this varies... so for now this will do.a
+             if (_ecore_x_vsync_animator_tick_delay > 0.0)
+               {
+                  static double t_delta_hist[10] = { 0.0 };
+                  double t_delta = t - t_last;
+                  double t_delta_min = 0.0;
+                  double t_sleep = 0.0;
+
+                  // if time delta is sane like 1/20th of a sec or less..
+                  if (t_delta < (1.0 / 20.0))
+                    {
+                       int i;
+
+                       for (i = 0; i < 9; i++)
+                         t_delta_hist[i] = t_delta_hist[i + 1];
+                       t_delta_hist[9] = t_delta;
+                       t_delta_min = t_delta_hist[0];
+                       for (i = 1; i < 10; i++)
+                         {
+                            if (t_delta_hist[i] < t_delta_min)
+                              t_delta_min = t_delta_hist[i];
+                         }
+                       t_sleep = t_delta_min * _ecore_x_vsync_animator_tick_delay;
+                       // if w'ere sleeping too long - don't sleep at all.
+                       if (t_sleep > (1.0 / 20.0)) t_sleep = 0.0;
+                    }
+                  if (t_sleep > 0.0) usleep(t_sleep * 1000000.0);
+               }
              D("    @%1.5f   ... send %1.8f\n", ecore_time_get(), t);
              eina_spinlock_take(&tick_queue_lock);
              tick_queue_count++;
              eina_spinlock_release(&tick_queue_lock);
              ecore_thread_feedback(drm_thread, tim);
           }
+        t_last = t;
      }
    else
      {
@@ -340,42 +382,43 @@ _drm_vblank_handler(int fd EINA_UNUSED,
         D("    @%1.5f vblank %i\n", ecore_time_get(), frame);
         if (pframe != frame)
           {
-#define DELTA_COUNT 10
+#if 0 // disable timestamp from vblank and use time event arrived
              double t = (double)sec + ((double)usec / 1000000);
-             double tnow = ecore_time_get();
-             static double tdelta[DELTA_COUNT];
-             static double tdelta_avg = 0.0;
-             static int tdelta_n = 0;
+             unsigned long long tusec, ptusec, tdelt = 0;
+             static unsigned int psec = 0, pusec = 0;
 
-             if (t > tnow)
+             tusec = ((unsigned long long)sec) * 1000000 + usec;
+             ptusec = ((unsigned long long)psec) * 1000000 + pusec;
+             if (tusec <= ptusec)
                {
-                  if (tdelta_n > DELTA_COUNT)
-                    {
-                       t = t + tdelta_avg;
-                    }
-                  else if (tdelta_n < DELTA_COUNT)
-                    {
-                       tdelta[tdelta_n] = tnow - t;
-                       tdelta_n++;
-                       t = tnow;
-                    }
-                  else if (tdelta_n == DELTA_COUNT)
-                    {
-                       int i;
-
-                       for (i = 0; i < DELTA_COUNT; i++)
-                         tdelta_avg += tdelta[i];
-                       tdelta_avg /= (double)(DELTA_COUNT);
-                       tdelta_n++;
-                    }
+                  fprintf(stderr,
+                          "EEEEEEK! drm time went backwards! %u.%06u -> %u.%06u\n",
+                          psec, pusec, sec, usec);
                }
              else
                {
-                  tdelta_avg = 0.0;
-                  tdelta_n = 0;
+                  if (frame > pframe)
+                    {
+                       tdelt = (tusec - ptusec) / (frame - pframe);
+                       // go back in time 1/8th of a frame to account for
+                       // vlnbak gap - this should be enough for now.
+                       // probably need to be a bit more accurate.
+                       // 
+                       // why do this? because the timestamp is the time
+                       // the top-left pixel is first displayed which is
+                       // after the vlbank gap time
+                       t -= (double)(tdelt / 8) / 1000000.0;
+                    }
                }
              _drm_fail_count = 0;
+             pusec = usec;
+             psec = sec;
+#else
+             double t = ecore_time_get();
              _drm_send_time(t);
+             sec = 0;
+             usec = 0;
+#endif
              pframe = frame;
           }
      }
@@ -595,7 +638,7 @@ glob_match(const char *glob, const char *str)
 {
    if (!glob) return EINA_TRUE;
    if (!str) return EINA_FALSE;
-   if (!fnmatch(glob, str, 0)) return EINA_TRUE;
+   if (eina_fnmatch(glob, str, 0)) return EINA_TRUE;
    return EINA_FALSE;
 }
 
@@ -928,4 +971,10 @@ ecore_x_vsync_animator_tick_source_set(Ecore_X_Window win)
 #endif
      }
    return EINA_TRUE;
+}
+
+EAPI void
+ecore_x_vsync_animator_tick_delay_set(double delay)
+{
+   _ecore_x_vsync_animator_tick_delay = delay;
 }
