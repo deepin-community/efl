@@ -19,6 +19,11 @@
  * @li pad_huge
  * @li outdent_top
  * @li outdent_bottom
+ * @li overlay
+ * @li icon
+ * @li icon_overlay
+ * @li border
+ * @li border_overlay
  *
  * Of all this styles only default shows the title.
  *
@@ -29,6 +34,7 @@
  * @ref Elm_Layout :
  * - @c "clicked" - The user has clicked the frame's label
  * - @c "language,changed" - the program's language changed (since 1.9)
+ * - @c "close" - The user has clicked the close button if there is one
  *
  * Default content parts of the frame widget that you can use for are:
  * @li "default" - A content of the frame

@@ -101,6 +101,9 @@ src/modules/evas/engines/gl_common/evas_gl_define.h:
 src/static_libs/rg_etc/(etc2_encoder|rg_etc2).c:
   'override-license': BSD-2-clause
 
+src/lib/evas/Evas_GL.h:
+  'override-license': Khronos
+
 src/lib/evas/Evas_Loader.h:
   'override-license': BSD-2-clause
 

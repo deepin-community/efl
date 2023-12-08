@@ -45,7 +45,7 @@ _evil_mmap_protection_get(int prot)
 /***** API *****/
 
 
-void *
+EVIL_API void *
 mmap(void  *addr EVIL_UNUSED,
      size_t len,
      int    prot,
@@ -92,8 +92,8 @@ mmap(void  *addr EVIL_UNUSED,
      }
 
 #ifdef _WIN64
-   low = (DWORD)((len >> 32) & 0x00000000ffffffff);
-   low = (DWORD)(len & 0x00000000ffffffff);
+   high = (DWORD)((len >> 32) & 0x00000000ffffffffULL);
+   low = (DWORD)(len & 0x00000000ffffffffULL);
 #else
    high = 0L;
    low = len;
@@ -133,7 +133,7 @@ mmap(void  *addr EVIL_UNUSED,
    return data;
 }
 
-int
+EVIL_API int
 munmap(void  *addr,
        size_t len EVIL_UNUSED)
 {
@@ -147,7 +147,7 @@ munmap(void  *addr,
    return (res == 0) ? -1 : 0;
 }
 
-int
+EVIL_API int
 mprotect(void *addr, size_t len, int prot)
 {
    DWORD old;

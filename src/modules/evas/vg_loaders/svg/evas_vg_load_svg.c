@@ -181,11 +181,22 @@ static inline double
 _to_offset(const char *str)
 {
    char *end = NULL;
-
+   const char* str_end = str + strlen(str);
    double parsed_value = eina_convert_strtod_c(str, &end);
+   char *ptr = strstr(str, "%");
 
-   if (strstr(str, "%"))
-     parsed_value = parsed_value / 100.0;
+   end = _skip_space(end, NULL);
+
+   if (ptr)
+     {
+        parsed_value = parsed_value / 100.0;
+        if (end != ptr || (end + 1) != str_end)
+          return 0;
+     }
+   else if (end != str_end)
+     {
+        return 0;
+     }
 
    return parsed_value;
 }
@@ -267,6 +278,8 @@ _PARSE_TAG(Efl_Gfx_Fill_Rule, fill_rule, fill_rule_tags, EFL_GFX_FILL_RULE_WINDI
 static inline void
 _parse_dash_array(const char *str, Efl_Gfx_Dash** dash, int *length)
 {
+   if (strlen(str) >= 4 && !strncmp(str, "none", 4)) return;
+
    // It is assumed that the length of the dasharray string is 255 or less.
    double tmp[255];
    char *end = NULL;
@@ -337,7 +350,7 @@ _color_parser(const char *value, char **end)
 {
    double r;
 
-   r = eina_convert_strtod_c(value + 4, end);
+   r = eina_convert_strtod_c(value, end);
    *end = _skip_space(*end, NULL);
    if (**end == '%')
      r = 255 * r / 100;
@@ -918,6 +931,16 @@ _handle_transform_attr(Evas_SVG_Loader *loader EINA_UNUSED, Svg_Node* node, cons
    node->transform = _parse_transformation_matrix(value);
 }
 
+
+static void _handle_clip_path_attr(Evas_SVG_Loader* loader EINA_UNUSED, Svg_Node* node, const char* value)
+{
+    Svg_Style_Property* style = node->style;
+    style->comp.flags |= SVG_COMPOSITE_FLAGS_CLIP_PATH;
+
+    int len = strlen(value);
+    if (len >= 3 && !strncmp(value, "url", 3)) style->comp.url = _id_from_url((const char*)(value + 3));
+}
+
 static void
 _handle_display_attr(Evas_SVG_Loader *loader EINA_UNUSED, Svg_Node* node, const char *value)
 {
@@ -1003,6 +1026,10 @@ _attr_parse_g_node(void *data, const char *key, const char *value)
      {
         node->transform = _parse_transformation_matrix(value);
      }
+   else if (!strcmp(key, "clip-path"))
+     {
+        _handle_clip_path_attr(loader, node, value);
+     }
    else if (!strcmp(key, "id"))
      {
         node->id = _copy_id(value);
@@ -1014,6 +1041,37 @@ _attr_parse_g_node(void *data, const char *key, const char *value)
    return EINA_TRUE;
 }
 
+
+/* parse clipPath node
+ * https://www.w3.org/TR/SVG/struct.html#Groups
+ */
+static Eina_Bool _attr_parse_clip_path_node(void* data, const char* key, const char* value)
+{
+   Evas_SVG_Loader *loader = data;
+   Svg_Node* node = loader->svg_parse->node;
+
+   if (!strcmp(key, "style"))
+     {
+        return _attr_style_node(loader, value);
+     }
+   else if (!strcmp(key, "transform"))
+     {
+        node->transform = _parse_transformation_matrix(value);
+     }
+   else if (!strcmp(key, "clip-path"))
+     {
+        _handle_clip_path_attr(loader, node, value);
+     }
+   else if (!strcmp(key, "id"))
+     {
+        node->id = _copy_id(value);
+     }
+   else
+     {
+        _parse_style_attr(loader, key, value);
+     }
+   return EINA_TRUE;
+}
 
 static Svg_Node *
 _create_node(Svg_Node *parent, Svg_Node_Type type)
@@ -1111,10 +1169,11 @@ _create_mask_node(Evas_SVG_Loader *loader EINA_UNUSED, Svg_Node *parent EINA_UNU
 static Svg_Node *
 _create_clipPath_node(Evas_SVG_Loader *loader EINA_UNUSED, Svg_Node *parent EINA_UNUSED, const char *buf EINA_UNUSED, unsigned buflen EINA_UNUSED)
 {
-   Svg_Node *node = _create_node(NULL, SVG_NODE_UNKNOWN);
+   loader->svg_parse->node = _create_node(parent, SVG_NODE_CLIP_PATH);
 
-   node->display = EINA_FALSE;
-   return node;
+   eina_simple_xml_attributes_parse(buf, buflen,
+                                    _attr_parse_clip_path_node, loader);
+   return loader->svg_parse->node;
 }
 
 static Eina_Bool
@@ -1131,6 +1190,10 @@ _attr_parse_path_node(void *data, const char *key, const char *value)
    else if (!strcmp(key, "style"))
      {
         _attr_style_node(loader, value);
+     }
+   else if (!strcmp(key, "clip-path"))
+     {
+        _handle_clip_path_attr(loader, node, value);
      }
    else if (!strcmp(key, "id"))
      {
@@ -1194,6 +1257,10 @@ _attr_parse_circle_node(void *data, const char *key, const char *value)
      {
         _attr_style_node(loader, value);
      }
+   else if (!strcmp(key, "clip-path"))
+     {
+        _handle_clip_path_attr(loader, node, value);
+     }
    else if (!strcmp(key, "id"))
      {
         node->id = _copy_id(value);
@@ -1255,6 +1322,10 @@ _attr_parse_ellipse_node(void *data, const char *key, const char *value)
    if (!strcmp(key, "id"))
      {
         node->id = _copy_id(value);
+     }
+   else if (!strcmp(key, "clip-path"))
+     {
+        _handle_clip_path_attr(loader, node, value);
      }
    else if (!strcmp(key, "style"))
      {
@@ -1341,6 +1412,10 @@ _attr_parse_polygon_node(void *data, const char *key, const char *value)
      {
         _attr_style_node(loader, value);
      }
+   else if (!strcmp(key, "clip-path"))
+     {
+        _handle_clip_path_attr(loader, node, value);
+     }
    else if (!strcmp(key, "id"))
      {
         node->id = _copy_id(value);
@@ -1425,6 +1500,10 @@ _attr_parse_rect_node(void *data, const char *key, const char *value)
      {
         _attr_style_node(loader, value);
      }
+   else if (!strcmp(key, "clip-path"))
+     {
+        _handle_clip_path_attr(loader, node, value);
+     }
    else
      {
         _parse_style_attr(loader, key, value);
@@ -1492,6 +1571,10 @@ _attr_parse_line_node(void *data, const char *key, const char *value)
      {
         _attr_style_node(loader, value);
      }
+   else if (!strcmp(key, "clip-path"))
+     {
+        _handle_clip_path_attr(loader, node, value);
+     }
    else
      {
         _parse_style_attr(loader, key, value);
@@ -1548,6 +1631,20 @@ _find_child_by_id(Svg_Node *node, const char *id)
           return child;
      }
    return NULL;
+}
+
+static Svg_Node* _find_node_by_id(Svg_Node *node, const char* id)
+{
+   Svg_Node *child, *result = NULL;
+   Eina_List *l;
+   if ((node->id) && !strcmp(node->id, id)) return node;
+
+   EINA_LIST_FOREACH(node->child, l, child)
+     {
+        result = _find_node_by_id(child, id);
+        if (result) break;
+     }
+   return result;
 }
 
 static Eina_List *
@@ -1650,11 +1747,13 @@ _copy_attribute(Svg_Node *to, Svg_Node *from)
            break;
         case SVG_NODE_POLYGON:
            to->node.polygon.points_count = from->node.polygon.points_count;
-           to->node.polygon.points = calloc(to->node.polygon.points_count, sizeof(double));
+           to->node.polygon.points = malloc(to->node.polygon.points_count * sizeof(double));
+           memcpy(to->node.polygon.points, from->node.polygon.points, to->node.polygon.points_count * sizeof(double));
            break;
         case SVG_NODE_POLYLINE:
            to->node.polyline.points_count = from->node.polyline.points_count;
-           to->node.polyline.points = calloc(to->node.polyline.points_count, sizeof(double));
+           to->node.polyline.points = malloc(to->node.polyline.points_count * sizeof(double));
+           memcpy(to->node.polyline.points, from->node.polyline.points, to->node.polyline.points_count * sizeof(double));
            break;
         default:
            break;
@@ -1695,6 +1794,10 @@ _attr_parse_use_node(void *data, const char *key, const char *value)
         node_from = _find_child_by_id(defs, id);
         _clone_node(node_from, node);
         eina_stringshare_del(id);
+     }
+   else if (!strcmp(key, "clip-path"))
+     {
+        _handle_clip_path_attr(loader, node, value);
      }
    else
      {
@@ -2186,11 +2289,12 @@ _evas_svg_loader_xml_open_parser(Evas_SVG_Loader *loader,
      {
         // find out the tag name starting from content till sz length
         sz = attrs - content;
-        attrs_length = length - sz;
         while ((sz > 0) && (isspace(content[sz - 1])))
           sz--;
+        if ((unsigned int)sz >= sizeof(tag_name)) return;
         strncpy(tag_name, content, sz);
         tag_name[sz] = '\0';
+        attrs_length = length - sz;
      }
 
    if ((method = _find_group_factory(tag_name)))
@@ -2205,6 +2309,7 @@ _evas_svg_loader_xml_open_parser(Evas_SVG_Loader *loader,
           }
         else
           {
+             if (!strcmp(tag_name, "svg")) return; //Already loadded <svg>(SvgNodeType::Doc) tag
              parent = _get_parent_node_from_loader(loader);
              node = method(loader, parent, attrs, attrs_length);
           }
@@ -2467,6 +2572,21 @@ _update_gradient(Svg_Node *node, Eina_List *grad_list)
           }
      }
 }
+
+static void _update_composite(Svg_Node* node, Svg_Node* root)
+{
+   Svg_Node *child;
+   Eina_List *l;
+   if (node->style->comp.url && !node->style->comp.node) {
+        Svg_Node *findResult = _find_node_by_id(root, node->style->comp.url);
+        if (findResult) node->style->comp.node = findResult;
+   }
+   EINA_LIST_FOREACH(node->child, l, child)
+     {
+        _update_composite(child, root);
+     }
+}
+
 static Eina_Bool
 evas_vg_load_file_data_svg(Vg_File_Data *vfd EINA_UNUSED)
 {
@@ -2518,6 +2638,9 @@ evas_vg_load_file_open_svg(Eina_File *file,
              _update_gradient(loader.doc, gradient_list);
              eina_list_free(gradient_list);
           }
+
+        _update_composite(loader.doc, loader.doc);
+        if (defs) _update_composite(loader.doc, defs);
 
         *error = EVAS_LOAD_ERROR_NONE;
      }

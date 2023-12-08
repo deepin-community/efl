@@ -44,6 +44,7 @@ emile_compress(const Eina_Binbuf *data,
    Eina_Bool ok = EINA_FALSE;
 
    length = _emile_compress_buffer_size(data, t);
+   if (length < 0) return NULL;
 
    compact = malloc(length);
    if (!compact)
@@ -139,11 +140,14 @@ emile_decompress(const Eina_Binbuf *data,
    Eina_Binbuf *out;
    void *expanded;
 
+// this warning is wrong here so disable it
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
    expanded = malloc(dest_length);
    if (!expanded)
      return NULL;
-
    out = eina_binbuf_manage_new(expanded, dest_length, EINA_FALSE);
+#pragma GCC diagnostic pop
    if (!out)
      goto on_error;
 

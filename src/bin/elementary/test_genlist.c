@@ -292,6 +292,24 @@ _gl_selected(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_i
 }
 
 static void
+_gl_unselected(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_info)
+{
+   printf("unselected: %p\n", event_info);
+}
+
+static void
+_gl_highlighted(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_info)
+{
+   printf("highlighted: %p\n", event_info);
+}
+
+static void
+_gl_unhighlighted(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_info)
+{
+   printf("unhighlighted: %p\n", event_info);
+}
+
+static void
 _gl_double_clicked(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_info)
 {
    printf("double clicked: %p\n", event_info);
@@ -445,6 +463,9 @@ test_genlist(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_i
 
    gl = elm_genlist_add(win);
    evas_object_smart_callback_add(gl, "selected", _gl_selected, NULL);
+   evas_object_smart_callback_add(gl, "unselected", _gl_unselected, NULL);
+   evas_object_smart_callback_add(gl, "highlighted", _gl_highlighted, NULL);
+   evas_object_smart_callback_add(gl, "unhighlighted", _gl_unhighlighted, NULL);
    evas_object_smart_callback_add(gl, "clicked,double", _gl_double_clicked, NULL);
    evas_object_smart_callback_add(gl, "clicked,right", _gl_right_clicked, NULL);
    evas_object_smart_callback_add(gl, "longpressed", _gl_longpress, NULL);
@@ -519,7 +540,8 @@ test_genlist(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_i
      }
    elm_genlist_item_class_free(api->itc1);
 
-   evas_object_resize(win, 480, 400);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           400 * elm_config_scale_get());
    explode_win_enable(win);
    evas_object_show(win);
 
@@ -904,8 +926,9 @@ test_genlist2(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
    evas_object_show(bx3);
 
    evas_object_event_callback_add(gl, EVAS_CALLBACK_DEL, _genlist_del_cb, api->itc1);
-   
-   evas_object_resize(win, 320, 320);
+
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           320 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -1062,7 +1085,8 @@ test_genlist3(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
    evas_object_show(bx2);
 
    elm_genlist_item_class_free(api->itc1);
-   evas_object_resize(win, 320, 320);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           320 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -1221,7 +1245,8 @@ test_genlist4(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
    elm_box_pack_end(bx, bx2);
    evas_object_show(bx2);
 
-   evas_object_resize(win, 320, 320);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           320 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -1453,7 +1478,8 @@ test_genlist5(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
    evas_object_show(bx2);
 
    elm_genlist_item_class_free(api->itc1);
-   evas_object_resize(win, 320, 320);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           320 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -1728,7 +1754,8 @@ test_genlist6(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
 
    elm_box_pack_end(bx, gl);
 
-   evas_object_resize(win, 320, 320);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           320 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -1852,7 +1879,8 @@ test_genlist7(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
                                          ELM_GENLIST_ITEM_NONE, gl_sel7/* func */,
                                          api/* func data */);
 
-   evas_object_resize(win, 320, 320);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           320 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -2048,7 +2076,8 @@ test_genlist8(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
    elm_genlist_item_class_free(api->itc1);
    elm_genlist_item_class_free(api->itc2);
 
-   evas_object_resize(win, 480, 800);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           800 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -2250,7 +2279,8 @@ test_genlist9(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
    elm_box_pack_end(bx2, bt);
    evas_object_show(bt);
 
-   evas_object_resize(win, 480, 800);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           800 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -2391,7 +2421,8 @@ test_genlist10(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event
    elm_box_pack_end(bx, gl);
 
    elm_genlist_item_class_free(api->itc1);
-   evas_object_resize(win, 520, 520);
+   evas_object_resize(win, 520 * elm_config_scale_get(),
+                           520 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -2558,7 +2589,8 @@ test_genlist_reorder(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED,
 
    elm_box_pack_end(bx, gl);
 
-   evas_object_resize(win, 400, 500);
+   evas_object_resize(win, 400 * elm_config_scale_get(),
+                           500 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -2610,7 +2642,8 @@ test_genlist12(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event
      }
    elm_genlist_item_class_free(api->itc1);
 
-   evas_object_resize(win, 400, 500);
+   evas_object_resize(win, 400 * elm_config_scale_get(),
+                           500 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -2746,7 +2779,8 @@ test_genlist13(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event
    elm_box_pack_end(bx, bx1);
    evas_object_show(bx);
 
-   evas_object_resize(win, 480, 480);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           480 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -2976,7 +3010,8 @@ test_genlist14(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event
    elm_genlist_item_class_ref(api->itc2);
    elm_genlist_item_class_free(api->itc2);
 
-   evas_object_resize(win, 320, 320);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           320 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -3143,7 +3178,8 @@ test_genlist15(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event
    elm_box_pack_end(bx, bx2);
    evas_object_show(bx2);
 
-   evas_object_resize(win, 520, 520);
+   evas_object_resize(win, 520 * elm_config_scale_get(),
+                           520 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -3256,7 +3292,8 @@ test_genlist16(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event
    elm_box_pack_end(bx, gl);
    evas_object_show(bx);
 
-   evas_object_resize(win, 520, 520);
+   evas_object_resize(win, 520 * elm_config_scale_get(),
+                           520 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -3425,7 +3462,8 @@ test_genlist17(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event
    fr2 = _decorate_all_mode_frame_new(win, rdg, gl);
    elm_box_pack_end(bx2, fr2);
 
-   evas_object_resize(win, 520, 520);
+   evas_object_resize(win, 520 * elm_config_scale_get(),
+                           520 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -3651,7 +3689,8 @@ test_genlist18(void        *data EINA_UNUSED,
    fr2 = _decorate_all_mode_frame_new(win, rdg, gl);
    elm_box_pack_end(bx2, fr2);
 
-   evas_object_resize(win, 400, 800);
+   evas_object_resize(win, 400 * elm_config_scale_get(),
+                           800 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -3743,7 +3782,8 @@ test_genlist19(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event
      }
    elm_genlist_item_class_free(api->itc1);
 
-   evas_object_resize(win, 480, 800);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           800 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -3855,7 +3895,8 @@ test_genlist_item_styles(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED,
 
    evas_object_data_set(list, "genlist", gl);
 
-   evas_object_resize(win, 600, 600);
+   evas_object_resize(win, 600 * elm_config_scale_get(),
+                           600 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -3991,7 +4032,8 @@ test_genlist_multi_select(void *data EINA_UNUSED,
      }
    elm_genlist_item_class_free(itc);
 
-   evas_object_resize(win, 320, 500);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           500 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -4258,7 +4300,8 @@ test_genlist20(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED,
 
    elm_genlist_item_class_free(itc);
 
-   evas_object_resize(win, 320, 500);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           500 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -4426,7 +4469,8 @@ test_genlist_del(void *data EINA_UNUSED,
    gl = _gl_del_genlist_add(bx);
    _gl_del_item_append(gl, itc);
 
-   evas_object_resize(win, 320, 500);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           500 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -5176,7 +5220,8 @@ test_genlist_focus(void *data EINA_UNUSED,
    // Options
    _test_genlist_focus_option_panel_create(win, bx, gl, it_1, it_2);
 
-   evas_object_resize(win, 420, 600);
+   evas_object_resize(win, 420 * elm_config_scale_get(),
+                           600 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -5323,7 +5368,8 @@ test_genlist_filter(void *data EINA_UNUSED,
                              ELM_GENLIST_ITEM_NONE,
                              NULL, NULL);
 
-   evas_object_resize(win, 420, 600);
+   evas_object_resize(win, 420 * elm_config_scale_get(),
+                           600 * elm_config_scale_get());
    evas_object_show(win);
    elm_object_focus_set(entry, EINA_TRUE);
    evas_object_smart_callback_add(entry, "changed,user", _entry_change_cb, api);
@@ -5478,7 +5524,8 @@ test_genlist_show_bring(void *data EINA_UNUSED,
    elm_genlist_item_selected_set(gli, EINA_TRUE);
    elm_genlist_item_show(gli, ELM_GENLIST_ITEM_SCROLLTO_MIDDLE);
 
-   evas_object_resize(win, 480, 400);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           400 * elm_config_scale_get());
    explode_win_enable(win);
    evas_object_show(win);
 }
@@ -5544,7 +5591,8 @@ test_genlist_show_item(void *data,
         ecore_timer_add(0.1, _late_item_prepender, g_data);
      }
 
-   evas_object_resize(win, 480, 400);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           400 * elm_config_scale_get());
    explode_win_enable(win);
    evas_object_show(win);
 }
@@ -5599,7 +5647,8 @@ test_genlist_show_tree(void *data,
    elm_genlist_item_class_free(api->itc1);
    elm_genlist_item_show(show, g_data->type);
 
-   evas_object_resize(win, 480, 400);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           400 * elm_config_scale_get());
    explode_win_enable(win);
    evas_object_show(win);
 }
@@ -5754,7 +5803,8 @@ test_genlist_item_show(void *data EINA_UNUSED,
    evas_object_show(bt_bring);
    elm_box_pack_end(bx, bt_bring);
 
-   evas_object_resize(win, 480, 400);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           400 * elm_config_scale_get());
    explode_win_enable(win);
    evas_object_show(win);
 }
@@ -5841,7 +5891,8 @@ test_genlist_cache(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED,
 
    elm_genlist_item_class_free(itc);
 
-   evas_object_resize(win, 480, 400);
+   evas_object_resize(win, 480 * elm_config_scale_get(),
+                           400 * elm_config_scale_get());
    explode_win_enable(win);
    evas_object_show(win);
 }
@@ -6010,7 +6061,8 @@ test_genlist_reusable(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED,
    evas_object_show(ck);
 
    // show everything
-   evas_object_resize(win, 400, 400);
+   evas_object_resize(win, 400 * elm_config_scale_get(),
+                           400 * elm_config_scale_get());
    explode_win_enable(win);
    evas_object_show(win);
 }

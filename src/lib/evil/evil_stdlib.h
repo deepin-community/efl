@@ -1,6 +1,7 @@
 #ifndef __EVIL_STDLIB_H__
 #define __EVIL_STDLIB_H__
 
+#include "evil_private.h"
 
 /**
  * @file evil_stdlib.h
@@ -13,6 +14,13 @@
  * @{
  */
 
+/*
+ * Define environ for native windows based on UCRT
+ *
+ */
+#ifdef _MSC_VER
+# define environ _environ
+#endif
 
 /*
  * Environment variable related functions
@@ -40,7 +48,7 @@
  *
  * Supported OS: Windows XP.
  */
-EAPI int setenv(const char *name,
+EVIL_API int setenv(const char *name,
                 const char *value,
                 int         overwrite);
 
@@ -59,31 +67,13 @@ EAPI int setenv(const char *name,
  *
  * Supported OS: Windows XP.
  */
-EAPI int unsetenv(const char *name);
+EVIL_API int unsetenv(const char *name);
 
 
 /*
  * Files related functions
  *
  */
-
-/**
- * @brief create an unique temporary directory
- *
- * @since 1.8.0
- */
-EAPI char *mkdtemp(char *__template);
-
-/**
- * @brief Create a unique temporary file name with a suffix.
- *
- * @param __template Template of the file to create.
- * @param suffixlen Length of the suffix following the 'XXXXXX' placeholder.
- * @return A file descriptor on success, -1 otherwise.
- *
- * @since 1.10.0
- */
-EAPI int mkstemps(char *__template, int suffixlen);
 
 /**
  * @brief Return an absolute or full path name for a specified relative path name.
@@ -114,7 +104,7 @@ EAPI int mkstemps(char *__template, int suffixlen);
  *
  * Supported OS: Windows XP.
  */
-EAPI char *realpath(const char *file_name, char *resolved_name);
+EVIL_API char *realpath(const char *file_name, char *resolved_name);
 #ifndef HAVE_REALPATH
 # define HAVE_REALPATH 1
 #endif

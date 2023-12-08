@@ -48,7 +48,7 @@
  *                                   API                                      *
  *============================================================================*/
 
-EAPI const char *
+EINA_API const char *
 eina_environment_home_get(void)
 {
    static char *home = NULL;
@@ -91,10 +91,13 @@ eina_environment_home_get(void)
      }
 #endif
    home = strdup(home);
+#ifdef _WIN32
+   EINA_PATH_TO_UNIX(home);
+#endif
    return home;
 }
 
-EAPI const char *
+EINA_API const char *
 eina_environment_tmp_get(void)
 {
    static char *tmp = NULL;
@@ -130,5 +133,8 @@ eina_environment_tmp_get(void)
 #endif
 
    tmp = strdup(tmp);
+#ifdef _WIN32
+   EINA_PATH_TO_UNIX(tmp);
+#endif
    return tmp;
 }

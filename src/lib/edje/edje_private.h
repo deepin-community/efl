@@ -327,7 +327,7 @@ typedef struct _Edje_Gfx_Filter                      Edje_Gfx_Filter;
 typedef struct _Edje_Gfx_Filter_Directory            Edje_Gfx_Filter_Directory;
 typedef struct _Edje_Color_Tree_Node                 Edje_Color_Tree_Node;
 typedef struct _Edje_Vector_Directory_Entry          Edje_Vector_Directory_Entry;
-
+typedef struct _Edje_Color_Class_Info                Edje_Color_Class_Info;
 
 typedef struct _Edje_Vibration_Sample                Edje_Vibration_Sample;
 typedef struct _Edje_Vibration_Directory             Edje_Vibration_Directory;
@@ -618,6 +618,16 @@ struct _Edje_Style_Tag
    const char                     *value;
    const char                     *font;
    const char                     *text_class;
+   const char                     *color_class;
+   const char                     *outline_color_class;
+   const char                     *shadow_color_class;
+   const char                     *underline_color_class;
+   const char                     *underline2_color_class;
+   const char                     *underline_dash_color_class;
+   const char                     *glow_color_class;
+   const char                     *glow2_color_class;
+   const char                     *backing_color_class;
+   const char                     *strikethrough_color_class;
    double                          font_size;
 };
 
@@ -646,7 +656,12 @@ struct _Edje_External_Directory_Entry
 
 /*----------*/
 
-
+/*----------*/
+struct _Edje_Color_Class_Info
+{
+   Eina_List *colors;
+};
+/*----------*/
 
 /*----------*/
 
@@ -2324,6 +2339,7 @@ EAPI void _edje_edd_shutdown(void);
 
 EAPI extern Eet_Data_Descriptor *_edje_edd_edje_file;
 EAPI extern Eet_Data_Descriptor *_edje_edd_edje_part_collection;
+EAPI extern Eet_Data_Descriptor *_edje_edd_edje_color_class_info;
 
 extern Eina_Inlist     *_edje_edjes;
 
@@ -2528,7 +2544,6 @@ _edje_part_recalc_single_textblock(FLOAT_T sc,
 
 Edje_Real_Part   *_edje_real_part_get(const Edje *ed, const char *part);
 Edje_Real_Part   *_edje_real_part_recursive_get(Edje **ed, const char *part);
-Edje_Color_Class *_edje_color_class_find(const Edje *ed, const char *color_class);
 // The color_class has to be a pointer to an Eet owned string.
 Edje_Color_Class *_edje_color_class_recursive_find(const Edje *ed, const char *color_class);
 void              _edje_color_class_on_del(Edje *ed, Edje_Part *ep);

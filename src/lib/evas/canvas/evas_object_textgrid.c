@@ -379,7 +379,8 @@ _drop_glyphs_ref(const void *container EINA_UNUSED, void *data, void *fdata)
    Evas_Font_Array_Data *fad = data;
    Evas_Public_Data     *pd = fdata;
 
-   evas_common_font_glyphs_unref(fad->glyphs);
+   if (fad->glyphs)
+     evas_common_font_glyphs_unref(fad->glyphs);
    eina_array_pop(&pd->glyph_unref_queue);
 
    return EINA_TRUE;
@@ -553,10 +554,12 @@ evas_object_textgrid_render(Evas_Object *eo_obj EINA_UNUSED,
 
                             props = &text->text_props;
                             evas_common_font_draw_prepare(props);
-
-                            evas_common_font_glyphs_ref(props->glyphs);
-                            evas_unref_queue_glyph_put(obj->layer->evas,
-                                                       props->glyphs);
+                            if (props->glyphs)
+                              {
+                                 evas_common_font_glyphs_ref(props->glyphs);
+                                 evas_unref_queue_glyph_put(obj->layer->evas,
+                                                            props->glyphs);
+                              }
 
                             fad = eina_inarray_grow(texts->array, 1);
                             if (!fad)
@@ -868,7 +871,7 @@ _evas_textgrid_efl_gfx_entity_scale_set(Evas_Object *eo_obj, Evas_Textgrid_Data 
 
 /*********************  API *********************/
 
-EAPI Evas_Object *
+EVAS_API Evas_Object *
 evas_object_textgrid_add(Evas *e)
 {
    e = evas_find(e);
@@ -1474,13 +1477,13 @@ _evas_textgrid_efl_object_dbg_info_get(Eo *eo_obj, Evas_Textgrid_Data *o EINA_UN
      }
 }
 
-EAPI void
+EVAS_API void
 evas_object_textgrid_font_source_set(Eo *obj, const char *font_source)
 {
    efl_text_font_source_set((Eo *) obj, font_source);
 }
 
-EAPI const char *
+EVAS_API const char *
 evas_object_textgrid_font_source_get(const Eo *obj)
 {
    const char *font_source = NULL;
@@ -1488,14 +1491,14 @@ evas_object_textgrid_font_source_get(const Eo *obj)
    return font_source;
 }
 
-EAPI void
+EVAS_API void
 evas_object_textgrid_font_set(Eo *obj, const char *font_name, Evas_Font_Size font_size)
 {
    efl_text_font_family_set((Eo *) obj, font_name);
    efl_text_font_size_set((Eo *) obj, font_size);
 }
 
-EAPI void
+EVAS_API void
 evas_object_textgrid_font_get(const Eo *obj, const char **font_name, Evas_Font_Size *font_size)
 {
    if (font_name) *font_name = efl_text_font_family_get((Eo *) obj);

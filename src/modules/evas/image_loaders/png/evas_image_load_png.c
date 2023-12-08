@@ -473,6 +473,13 @@ evas_image_load_file_head_with_data_png(void *loader_data,
              evas_loader_helper_stretch_region_push(&prop->stretch.horizontal.region,
                                                     &current, stretchable);
           }
+        // End with strechable, add length info
+        if (stretchable)
+          {
+             evas_loader_helper_stretch_region_push(&prop->stretch.horizontal.region,
+                                                    &current, stretchable);
+             stretchable = !stretchable;
+          }
 
         current = 0;
 
@@ -512,6 +519,13 @@ evas_image_load_file_head_with_data_png(void *loader_data,
              // The bucket is full
              evas_loader_helper_stretch_region_push(&prop->stretch.vertical.region,
                                                     &current, stretchable);
+          }
+        // End with strechable, add length info
+        if (stretchable)
+          {
+             evas_loader_helper_stretch_region_push(&prop->stretch.vertical.region,
+                                                    &current, stretchable);
+             stretchable = !stretchable;
           }
 
         // Content zone is optional, if not provided, we should use the one we guessed
@@ -582,6 +596,17 @@ evas_image_load_file_head_with_data_png(void *loader_data,
      }
    free(pixels2);
 
+   if ((epi.hasa) && (pack_offset == sizeof(DATA32)))
+     {
+        DATA32 *dst_ptr = (DATA32 *) surface;
+        int total = w * h;
+
+        for (i = 0; i < total; i++)
+          {
+             if (A_VAL(dst_ptr) == 0) *dst_ptr = 0;
+             dst_ptr++;
+          }
+     }
    prop->info.premul = EINA_TRUE;
 
    *error = EVAS_LOAD_ERROR_NONE;
@@ -868,6 +893,17 @@ evas_image_load_file_data_png(void *loader_data,
           }
      }
 
+   if ((epi.hasa) && (pack_offset == sizeof(DATA32)))
+     {
+        DATA32 *dst_ptr = (DATA32 *) surface;
+        int total = w * h;
+
+        for (i = 0; i < total; i++)
+          {
+             if (A_VAL(dst_ptr) == 0) *dst_ptr = 0;
+             dst_ptr++;
+          }
+     }
    prop->info.premul = EINA_TRUE;
 
    *error = EVAS_LOAD_ERROR_NONE;

@@ -1,166 +1,193 @@
 group { name: "e/modules/notification/logo";
-   images.image: "glow_exclam.png" COMP;
+   images.image: "exclam.png" COMP;
    parts {
-      part { name: "base"; mouse_events: 0;
+      part { name: "spacer"; type: SPACER;
+         scale: 1;
          description { state: "default" 0.0;
-            image.normal: "glow_exclam.png";
-            max: 48 48;
-            aspect: 1.0 1.0;
+            min: 40 40;
+            max: 40 40;
+         }
+      }
+      part { name: "base"; mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+            image.normal: "exclam.png";
+            aspect: (56/160) (56/160); aspect_preference: BOTH;
+            color_class: "/fg/normal/notification/logo";
+            fixed: 1 1;
          }
       }
    }
 }
 
-group { name: "notification/main";
-   alias: "e/modules/notification/main";
-   images.image: "darken_square.png" COMP;
-   images.image: "sym_close_light_normal.png" COMP;
-   images.image: "sym_close_light_selected.png" COMP;
-   data.item: "app_icon_max" "48 48";
-   data.item: "shaped" "1";
-   styles {   
-      style { name: "notification_style_nowrap";
-         base: "font="FN" font_size=10 align=left color=#ffff style=shadow,bottom shadow_color=#00000080 wrap=none text_class=notification_body";
-         tag:  "subject"  "+ text_class=module_large style=glow color=#3399ffff glow_color=#3399ff18 align=center glow2_color=#3399ff12";
-         tag:  "body"  "+ text_class=module_normal";
-         tag:  "br" "\n";
-         tag:  "ps" "ps";
-         tag:  "b" "+ font="FNBD" text_class=module_bold";
-         tag:  "i" "+ font="FNIT" text_class=module_italic";
-         tag:  "u" "+ underline=on underline_color=#3399ffff";
-         tag:  "img" ""; // images not supported
-         tag:  "a" ""; // links not supported
-      }
+group { name: "e/modules/notification/main";
+   images.image: "win_shad_flat.png" COMP;
+   data.item: "app_icon_max" "40 40";
+   styles {
       style { name: "notification_style";
-         base: "font="FN" font_size=10 align=left color=#ffff style=shadow,bottom shadow_color=#00000080 wrap=word text_class=notification_body";
-         tag:  "subject"  "+ text_class=module_large style=glow color=#3399ffff glow_color=#3399ff18 align=center glow2_color=#3399ff12";
+         base: "font="FN" font_size=10 align=left color=cc:/fg/normal/notification/text wrap=word text_class=notification_body";
+         tag:  "subject"  "+ text_class=module_large color=cc:/fg/normal/notification/text/subject align=center";
          tag:  "body"  "+ text_class=module_normal";
          tag:  "br" "\n";
          tag:  "ps" "ps";
-         tag:  "b" "+ font="FNBD" text_class=module_bold";
+         tag:  "b" "+ font="FNBD" text_class=module_bold color=cc:/fg/normal/notification/text/bold";
          tag:  "i" "+ font="FNIT" text_class=module_italic";
-         tag:  "u" "+ underline=on underline_color=#3399ffff";
+         tag:  "u" "+ underline=on underline_color=cc:/fg/normal/notification/text/underline";
          tag:  "img" ""; // images not supported
          tag:  "a" ""; // links not supported
       }
    }
-   
+
    parts {
-      alias: "e.event.close" "notification.event.close";
-      part { name: "base";
+      part { name: "shadow"; type: RECT;
          description { state: "default" 0.0;
-            image.normal: "darken_square.png";
-            image.border: 6 6 6 6;
+            rel.to: "_sh1";
+            color_class: "/shadow/normal/notification";
+         }
+      }
+      WIN_SHAD("base", "shadow", "win_shad_flat.png", 10, 10, 7, 14, 0.25);
+      part { name: "base"; type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.offset: 32 32;
+            rel2.offset: -33 -33;
+            color_class: "/bg/normal/notification";
+            offscale;
          }
       }
       part { name: "titleclip"; type: RECT;
          description { state: "default" 0.0;
-            rel2.to_x: "e.event.close";
+            rel2.to_x: "notification.event.close";
             rel2.relative: 0.0 1.0;
          }
       }
       part { name: "bodyclip"; type: RECT;
+         scale: 1;
          description { state: "default" 0.0;
-            rel2.offset: -13 -13;
+            rel.to: "base";
             min: 220 80;
          }
       }
       part { name: "notification.swallow.app_icon"; type: SWALLOW; mouse_events: 0;
+         scale: 1;
          description { state: "default" 0.0;
             align: 0.0 0.5;
             aspect: 1.0 1.0;
             aspect_preference: BOTH;
+            rel.to: "base";
             rel1.offset: 12 12;
             rel2.offset: 12 -13;
             rel2.relative: 0.0 1.0;
             min: 24 24;
             fixed: 1 1;
+            offscale;
          }
       }
       part { name: "notification.textblock.message"; type: TEXTBLOCK; mouse_events: 0;
          clip_to: "bodyclip";
-         scale;
+         scale: 1;
          description { state: "default" 0.0;
             align: 0.0 0.0;
-            min: 260 40;
+            rel.to: "base";
             rel1.to_x: "notification.swallow.app_icon";
             rel1.to_y: "notification.text.title";
             rel1.relative: 1.0 1.0;
             rel1.offset: 4 4;
-            rel2.offset: -27 -11;
+            rel2.offset: -27 -13;
             text { style: "notification_style";
                min: 0 1;
             }
+            fixed: 1 1;
+            offscale;
+         }
+      }
+      part { name: "message"; type: TEXTBLOCK; mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+            align: 0.0 0.0;
+            min: 200 20;
+            max: 400 99999;
+            rel.to: "base";
+            rel1.to_x: "notification.swallow.app_icon";
+            rel1.to_y: "notification.text.title";
+            rel1.relative: 1.0 1.0;
+            rel1.offset: 4 4;
+            rel2.offset: -27 -13;
+            text { style: "notification_style";
+               text_source: "notification.textblock.message";
+               min: 0 1;
+            }
+            visible: 0;
+            offscale;
          }
       }
       part { name: "notification.text.title"; type: TEXT; mouse_events: 0;
          clip_to: "titleclip";
-         effect: SHADOW BOTTOM;
          scale: 1;
          description { state: "default" 0.0;
+            rel.to: "base";
             rel1.to_x: "notification.swallow.app_icon";
             rel1.relative: 1.0 0.0;
             rel1.offset: 4 12;
             rel2.relative: 0.0 0.0;
-            rel2.to_x: "e.event.close";
+            rel2.to_x: "notification.event.close";
             rel2.offset: -5 12;
-            color: FN_COL_DEFAULT;
+            color_class: "/fg/normal/notification/text/title";
             align: 0.0 0.0;
-            color_class: "notification_title";
             text { font: FNBD; size: 10;
-               text: "title goes here blah blah";
                min: 0 1;
                align: 0.0 0.5;
                text_class: "notification_title";
             }
             fixed: 0 1;
+            offscale;
          }
       }
+
       part { name: "close";
+         scale: 1;
          description { state: "default" 0.0;
-            image.normal: "sym_close_light_normal.png";
-            rel1.to: "e.event.close";
-            rel2.to: "e.event.close";
+            image.normal: "i-close";
+            rel.to: "notification.event.close";
             min: 15 15;
             max: 15 15;
             fixed: 1 1;
+            color_class: "/fg/normal/notification/button/close";
          }
          description { state: "selected" 0.0;
             inherit: "default" 0.0;
-            image.normal: "sym_close_light_selected.png";
+            color_class: "/fg/pressed/notification/button/close";
          }
       }
       part { name: "notification.event.close"; type: RECT;
          scale: 1;
          description { state: "default" 0.0;
+            rel.to: "base";
             rel1.relative: 1.0 0.0;
             rel1.offset: -13 12;
             rel2.relative: 1.0 0.0;
             rel2.offset: -13 12;
             align: 1.0 0.0;
             min: 15 15;
-            color: 0 0 0 0;
+            color: 0 0 0 0; // no cc
             fixed: 1 1;
+            offscale;
          }
       }
    }
    programs {
-      program {
-         signal: "mouse,down,1"; source: "notification.event.close";
+      program { signal: "mouse,down,1"; source: "notification.event.close";
          action: STATE_SET "selected" 0.0;
          target: "close";
       }
-      program {
-         signal: "mouse,up,1"; source: "notification.event.close";
+      program { signal: "mouse,up,1"; source: "notification.event.close";
          action: STATE_SET "default" 0.0;
          target: "close";
       }
-      program {
-         signal: "mouse,clicked,1"; source: "notification.event.close";
+      program { signal: "mouse,clicked,1"; source: "notification.event.close";
          action: SIGNAL_EMIT "notification,close" "theme";
       }
-      program {
-         signal: "mouse,clicked,1"; source: "base";
+      program { signal: "mouse,clicked,1"; source: "base";
          action: SIGNAL_EMIT "notification,find" "theme";
       }
 //      program {

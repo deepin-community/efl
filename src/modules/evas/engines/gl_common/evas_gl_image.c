@@ -8,7 +8,7 @@ evas_gl_common_image_alloc_ensure(Evas_GL_Image *im)
                                                     im->w, im->h);
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_image_all_unload(Evas_Engine_GL_Context *gc)
 {
    Eina_List *l;
@@ -69,10 +69,17 @@ _evas_gl_image_cache_add(Evas_GL_Image *im)
 {
    if (im->references == 0)
      {
-        im->csize = im->w * im->h * 4;
-        im->gc->shared->images_size += im->csize;
-        _evas_gl_image_cache_trim(im->gc);
-        return EINA_TRUE;
+        if (im->cached)
+          {
+             im->csize = im->w * im->h * 4;
+             im->gc->shared->images_size += im->csize;
+             _evas_gl_image_cache_trim(im->gc);
+             if (!eina_list_data_find(im->gc->shared->images, im))
+               { // FIXME for a messed up caching system... this used to be simple
+                  im->gc->shared->images = eina_list_prepend(im->gc->shared->images, im);
+               }
+             return EINA_TRUE;
+          }
      }
    else
      {
@@ -82,7 +89,7 @@ _evas_gl_image_cache_add(Evas_GL_Image *im)
    return EINA_FALSE;
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_image_ref(Evas_GL_Image *im)
 {
    if (im->references == 0)
@@ -92,7 +99,7 @@ evas_gl_common_image_ref(Evas_GL_Image *im)
    im->references++;
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_image_unref(Evas_GL_Image *im)
 {
    im->references--;
@@ -286,26 +293,6 @@ evas_gl_common_image_load(Evas_Engine_GL_Context *gc, const char *file, const ch
 {
    RGBA_Image *im_im;
 
-#ifdef EVAS_CSERVE2
-   if (evas_cserve2_use_get())
-     {
-        im_im = (RGBA_Image *) evas_cache2_image_open
-          (evas_common_image_cache2_get(), file, key, lo, error);
-        if (im_im)
-          {
-             *error = evas_cache2_image_open_wait(&im_im->cache_entry);
-             if ((*error != EVAS_LOAD_ERROR_NONE)
-                 && im_im->cache_entry.animated.animated)
-               {
-                  evas_cache2_image_close(&im_im->cache_entry);
-                  im_im = NULL;
-               }
-             else
-               return evas_gl_common_image_new_from_rgbaimage(gc, im_im, lo, error);
-          }
-     }
-#endif
-
    im_im = evas_common_load_image_from_file(file, key, lo, error);
    if (!im_im) return NULL;
 
@@ -323,7 +310,7 @@ evas_gl_common_image_mmap(Evas_Engine_GL_Context *gc, Eina_File *f, const char *
    return evas_gl_common_image_new_from_rgbaimage(gc, im_im, lo, error);
 }
 
-EAPI Evas_GL_Image *
+EMODAPI Evas_GL_Image *
 evas_gl_common_image_new_from_data(Evas_Engine_GL_Context *gc, unsigned int w, unsigned int h, DATA32 *data, int alpha, Evas_Colorspace cspace)
 {
    Evas_GL_Image *im;
@@ -532,7 +519,7 @@ evas_gl_common_image_alpha_set(Evas_GL_Image *im, int alpha)
    return im;
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_image_native_enable(Evas_GL_Image *im)
 {
    if (im->cs.data)
@@ -564,7 +551,7 @@ evas_gl_common_image_native_enable(Evas_GL_Image *im)
    im->tex_only = 1;
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_image_native_disable(Evas_GL_Image *im)
 {
    if (im->im)
@@ -602,6 +589,11 @@ void
 evas_gl_common_image_content_hint_set(Evas_GL_Image *im, int hint)
 {
    if (im->content_hint == hint) return;
+   if ((im->gc) &&
+       ((!im->gc->shared->info.sec_image_map) &&
+        ((!im->gc->shared->info.sec_tbm_surface) ||
+         (!im->gc->shared->info.egl_tbm_ext))))
+     return;
    im->content_hint = hint;
    if (!im->gc) return;
    if (!im->gc->shared->info.bgra) return;
@@ -679,7 +671,7 @@ evas_gl_common_image_cache_flush(Evas_Engine_GL_Context *gc)
    _evas_gl_image_cache_trim(gc);
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_image_free(Evas_GL_Image *im)
 {
    if (!im) return;
@@ -696,6 +688,10 @@ evas_gl_common_image_free(Evas_GL_Image *im)
           im->gc->font_glyph_images = eina_list_remove(im->gc->font_glyph_images, im);
         im->fglyph->ext_dat = NULL;
         im->fglyph->ext_dat_free = NULL;
+     }
+   else if ((im->gc) && (im->gc->shared))
+     {
+        im->gc->shared->images = eina_list_remove(im->gc->shared->images, im);
      }
 
    if (im->gc)
@@ -720,7 +716,15 @@ evas_gl_common_image_free(Evas_GL_Image *im)
      {
         if (_evas_gl_image_cache_add(im)) return;
      }
-   if (im->tex) evas_gl_common_texture_free(im->tex, EINA_TRUE);
+   if (im->tex)
+     {
+        if (!evas_gl_common_texture_free(im->tex, EINA_TRUE))
+          {
+             /* if texture is not freed, we need to assign im to NULL
+                because after this point im will be freed */
+             im->tex->im = NULL;
+          }
+     }
    if (im->im)
      evas_cache_image_drop(&im->im->cache_entry);
 

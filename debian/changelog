@@ -1,3 +1,76 @@
+efl (1.26.3-2) unstable; urgency=medium
+
+  * d/control: update freetype/fontconf build depends
+  * d/control: drop obsolete Replaces, Breaks
+  * Update lintian-overrides for renames & new formats
+  * Update lintian-overrides, remove arch- and version-specific strings
+  * d/control: clean up unused Build-Depends-Indep
+  * downgrade lua dependency to 5.1 (Closes: #1050626)
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Tue, 29 Aug 2023 21:33:58 -0700
+
+efl (1.26.3-1) unstable; urgency=medium
+
+  * New upstream release
+  * disable luajit usage on all platforms, drop elua
+  * switch from gnutls->openssl for crypto
+  * Bump symbols for 1.26.3 release
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sun, 18 Sep 2022 22:11:48 -0700
+
+efl (1.26.2-3) unstable; urgency=medium
+
+  * No changes from 1.26.2-2; bumped version to replace accidental upload
+    of 1.26.2-3~exp1 to unstable.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Wed, 03 Aug 2022 23:28:00 -0700
+
+efl (1.26.2-2) unstable; urgency=medium
+
+  * d/control: weaken libelementary1 recommends on -bin to get better
+    dependencies after binnmu (Closes: #1008040)
+  * d/copyright: update upstream git url
+  * d/rules: drop fake_home.sh, compat 13 provides writable $HOME and $XDG_*
+  * 30_disable_chm_docs.diff: disable chm docs (Closes: #1016237)
+  * Update some lintian overrides for new format
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Mon, 01 Aug 2022 22:50:48 -0700
+
+efl (1.26.2-1) unstable; urgency=medium
+
+  * libefl-all-dev: recommend libeina-bin, libelementary-bin (Closes: #984537)
+  * Revert "efl-doc: drop extra copy of Bitstream Vera, use
+    ttf-bitsream-vera instead".  Installing ttf-bitstream-vera can have
+    bad consequences; see bug report for more info. (Closes: #998280)
+  * d/p/00*.patch: delete, applied upstream
+  * Bump symbols for 1.26.2 release
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Mon, 07 Feb 2022 22:08:23 -0800
+
+efl (1.26.1-1) unstable; urgency=medium
+
+  * d/gbp.conf: switch back to specifying debian-branch.
+  * Bump symbols for 1.26.1 release
+  * Don't use luajit on ppc64/ppc64el to fix FTBFS.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Thu, 27 Jan 2022 20:29:27 -0800
+
+efl (1.26.0-1) unstable; urgency=medium
+
+  * Bump eo symbol versions for 1.26 release
+  * Add/remove symbols entries for changes in 1.26
+  * evas: add support for heif image loader
+  * libelementary-data: update install file for new pal data
+  * update lintian overrides for output changes, and version 1.26
+  * d/copyright: update cme configs and re-run for new copyright data
+  * d/p/30_drop_crashing_widget_previews.diff: drop, no longer necessary
+  * libefl-all-dev: drop unnecessary Depends on libbullet-dev
+  * d/p/0007-0011: cherry pick some post 1.26 fixes.  Mostly these are
+    tweaks/fixes for the test suite, but 0007 fixes an issue with eet that
+    the test suite can trigger.
+
+ -- Ross Vandegrift <rvandegrift@debian.org>  Sun, 23 Jan 2022 14:52:43 -0800
+
 efl (1.25.1-1) unstable; urgency=medium
 
   * New upstream version.

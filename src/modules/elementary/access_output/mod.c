@@ -4,10 +4,6 @@
 
 #include "Elementary.h"
 
-#ifndef EFL_BUILD
-# define EFL_BUILD
-#endif
-#undef ELM_MODULE_HELPER_H
 #include "elm_module_helper.h"
 
 /* to enable this module
@@ -19,7 +15,7 @@ static void (*cb_func) (void *data);
 static void *cb_data;
 static Ecore_Exe *espeak = NULL;
 static Ecore_Event_Handler *exe_exit_handler = NULL;
-static char *tmpf = NULL;
+static Eina_Tmpstr *tmpf = NULL;
 static int tmpfd = -1;
 
 static Eina_Bool
@@ -32,7 +28,7 @@ _exe_del(void *data EINA_UNUSED, int type EINA_UNUSED, void *event)
         if (tmpf)
           {
              unlink(tmpf);
-             free(tmpf);
+             eina_tmpstr_del(tmpf);
              tmpf = NULL;
              close(tmpfd);
              tmpfd = -1;
@@ -44,7 +40,7 @@ _exe_del(void *data EINA_UNUSED, int type EINA_UNUSED, void *event)
 }
 
 // module api funcs needed
-EAPI int
+EMODAPI int
 elm_modapi_init(void *m EINA_UNUSED)
 {
    exe_exit_handler =
@@ -53,7 +49,7 @@ elm_modapi_init(void *m EINA_UNUSED)
    return 1; // succeed always
 }
 
-EAPI int
+EMODAPI int
 elm_modapi_shutdown(void *m EINA_UNUSED)
 {
    if (exe_exit_handler)
@@ -65,25 +61,22 @@ elm_modapi_shutdown(void *m EINA_UNUSED)
 }
 
 // module fucns for the specific module type
-EAPI void
+EMODAPI void
 out_read(const char *txt)
 {
    if (!tmpf)
      {
-        char buf[PATH_MAX];
         mode_t cur_umask;
 
-        snprintf(buf, sizeof(buf), "/tmp/.elm-speak-XXXXXX");
         cur_umask = umask(S_IRWXO | S_IRWXG);
-        tmpfd = mkstemp(buf);
+        tmpfd = eina_file_mkstemp("elm-speak-XXXXXX", &tmpf);
         umask(cur_umask);
-        if (tmpfd >= 0) tmpf = strdup(buf);
-        else return;
+        if (tmpfd < 0) return;
      }
    if (write(tmpfd, txt, strlen(txt)) < 0) perror("write to tmpfile (espeak)");
 }
 
-EAPI void
+EMODAPI void
 out_read_done(void)
 {
    char buf[PATH_MAX];
@@ -106,7 +99,7 @@ out_read_done(void)
      }
 }
 
-EAPI void
+EMODAPI void
 out_cancel(void)
 {
    if (espeak)
@@ -117,14 +110,14 @@ out_cancel(void)
    if (tmpf)
      {
         unlink(tmpf);
-        free(tmpf);
+        eina_tmpstr_del(tmpf);
         tmpf = NULL;
         close(tmpfd);
         tmpfd = -1;
      }
 }
 
-EAPI void
+EMODAPI void
 out_done_callback_set(void (*func) (void *data), const void *data)
 {
    cb_func = func;

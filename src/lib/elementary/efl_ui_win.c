@@ -371,6 +371,7 @@ static int _elm_win_count = 0;
 
 static Eina_Bool _elm_win_auto_throttled = EINA_FALSE;
 
+static Eina_Bool _elm_win_state_eval_timer_now = EINA_FALSE;
 static Ecore_Timer *_elm_win_state_eval_timer = NULL;
 
 static void _elm_win_legacy_init(Efl_Ui_Win_Data *sd);
@@ -658,6 +659,7 @@ _elm_win_state_eval(void *data EINA_UNUSED)
    int _elm_win_count_withdrawn = 0;
    Eina_Bool throttle = EINA_FALSE;
 
+   _elm_win_state_eval_timer_now = EINA_FALSE;
    _elm_win_state_eval_timer = NULL;
 
    EINA_LIST_FOREACH(_elm_win_list, l, obj)
@@ -674,7 +676,6 @@ _elm_win_state_eval(void *data EINA_UNUSED)
 
                        elm_win_norender_push(obj);
                        evas_object_data_set(obj, "__win_auto_norender", obj);
-
                        if (_elm_config->auto_flush_withdrawn)
                          {
                             edje_file_cache_flush();
@@ -779,10 +780,15 @@ _elm_win_flush_cache_and_exit(Eo *obj)
 }
 
 static void
-_elm_win_state_eval_queue(void)
+_elm_win_state_eval_queue(Eina_Bool now)
 {
+   if ((_elm_win_state_eval_timer_now) && (_elm_win_state_eval_timer)) return;
    if (_elm_win_state_eval_timer) ecore_timer_del(_elm_win_state_eval_timer);
-   _elm_win_state_eval_timer = ecore_timer_add(0.5, _elm_win_state_eval, NULL);
+   if (now)
+     _elm_win_state_eval_timer = ecore_timer_add(0.0, _elm_win_state_eval, NULL);
+   else
+     _elm_win_state_eval_timer = ecore_timer_add(0.5, _elm_win_state_eval, NULL);
+   _elm_win_state_eval_timer_now = now;
 }
 
 // example shot spec (wait 0.1 sec then save as my-window.png):
@@ -1850,7 +1856,7 @@ _elm_win_state_change(Ecore_Evas *ee)
           }
      }
 
-   _elm_win_state_eval_queue();
+   _elm_win_state_eval_queue(EINA_TRUE);
 
    if ((ch_withdrawn) || (ch_minimized))
      {
@@ -2618,7 +2624,7 @@ _efl_ui_win_hide(Eo *obj, Efl_Ui_Win_Data *sd)
         return;
      }
 
-   _elm_win_state_eval_queue();
+   _elm_win_state_eval_queue(EINA_FALSE);
 
    if ((sd->modal) && (evas_object_visible_get(obj)))
      _elm_win_modality_decrement(sd);
@@ -3113,7 +3119,7 @@ _efl_ui_win_efl_canvas_group_group_del(Eo *obj, Efl_Ui_Win_Data *sd)
 
    _elm_win_list = eina_list_remove(_elm_win_list, obj);
    _elm_win_count--;
-   _elm_win_state_eval_queue();
+   _elm_win_state_eval_queue(EINA_FALSE);
 
    if (_elm_win_count == _paused_windows)
      efl_event_callback_call(efl_loop_get(obj), EFL_APP_EVENT_PAUSE, NULL);
@@ -3706,8 +3712,13 @@ _elm_win_xwin_update(Efl_Ui_Win_Data *sd)
                                                    sd->wm_rot.preferred_rot);
 
 #ifdef HAVE_ELEMENTARY_X
+   const char *engine_name = ecore_evas_engine_name_get(sd->ee);
+   if (engine_name) _elm_win_need_frame_adjust(sd, engine_name);
    if (sd->csd.need && sd->x.xwin)
-     TRAP(sd, borderless_set, EINA_TRUE);
+     {
+        TRAP(sd, borderless_set, EINA_TRUE);
+        ecore_x_mwm_borderless_set(sd->x.xwin, EINA_TRUE);
+     }
 #endif
 }
 
@@ -5003,7 +5014,7 @@ _elm_win_cb_hide(void *data EINA_UNUSED,
                  Evas_Object *obj EINA_UNUSED,
                  void *event_info EINA_UNUSED)
 {
-   _elm_win_state_eval_queue();
+   _elm_win_state_eval_queue(EINA_FALSE);
 }
 
 static void
@@ -5012,7 +5023,7 @@ _elm_win_cb_show(void *data EINA_UNUSED,
                  Evas_Object *obj EINA_UNUSED,
                  void *event_info EINA_UNUSED)
 {
-   _elm_win_state_eval_queue();
+   _elm_win_state_eval_queue(EINA_TRUE);
 }
 
 static inline Eina_Bool
@@ -5268,11 +5279,7 @@ _elm_win_finalize_internal(Eo *obj, Efl_Ui_Win_Data *sd, const char *name, Efl_U
 
       default:
         disp = getenv("ELM_DISPLAY");
-        if ((disp) && (!strcmp(disp, "ews")))
-          {
-             enginelist[p++] = ELM_EWS;
-          }
-        else if ((disp) && (!strcmp(disp, "buffer")))
+        if ((disp) && (!strcmp(disp, "buffer")))
           {
              enginelist[p++] = ELM_BUFFER;
           }
@@ -5534,8 +5541,6 @@ _elm_win_finalize_internal(Eo *obj, Efl_Ui_Win_Data *sd, const char *name, Efl_U
                tmp_sd.ee = ecore_evas_gl_sdl_new(NULL, 1, 1, 0, 0);
              else if (!strcmp(enginelist[i], ELM_OPENGL_COCOA))
                tmp_sd.ee = ecore_evas_cocoa_new(NULL, 1, 1, 0, 0);
-             else if (!strcmp(enginelist[i], ELM_EWS))
-               tmp_sd.ee = ecore_evas_ews_new(0, 0, 1, 1);
              else if (!strcmp(enginelist[i], ELM_SOFTWARE_FB))
                tmp_sd.ee = ecore_evas_fb_new(NULL, 0, 1, 1);
              else if (!strcmp(enginelist[i], ELM_BUFFER))
@@ -7485,19 +7490,12 @@ EOLIAN static Eina_Rect
 _efl_ui_win_efl_access_component_extents_get(const Eo *obj, Efl_Ui_Win_Data *_pd EINA_UNUSED, Eina_Bool screen_coords)
 {
    Eina_Rect r;
-   int ee_x, ee_y;
 
    r = efl_gfx_entity_geometry_get(obj);
    r.x = r.y = 0;
    if (screen_coords)
      {
-        Ecore_Evas *ee = ecore_evas_ecore_evas_get(evas_object_evas_get(obj));
-        if (ee)
-          {
-             ecore_evas_geometry_get(ee, &ee_x, &ee_y, NULL, NULL);
-             r.x += ee_x;
-             r.y += ee_y;
-          }
+        r = _efl_access_component_screen_coords_extents_get(obj, r);
      }
    return r;
 }
@@ -8543,7 +8541,11 @@ elm_win_withdrawn_get(const Evas_Object *obj)
 {
    Efl_Ui_Win_Data *sd = efl_data_scope_safe_get(obj, MY_CLASS);
    if (!sd) return EINA_FALSE;
-
+   if (ecore_evas_override_get(sd->ee))
+     {
+        if (evas_object_visible_get(obj)) return EINA_FALSE;
+        return EINA_FALSE;
+     }
    return sd->withdrawn;
 }
 
@@ -9224,6 +9226,7 @@ _ui_buffer_get(Ecore_Evas_Selection_Buffer buffer)
 void
 _register_selection_changed(Efl_Ui_Selection *selection)
 {
+   if (!selection) return;
    ELM_WIN_DATA_GET(efl_provider_find(selection, EFL_UI_WIN_CLASS), pd);
 
    eina_array_push(pd->planned_changes, selection);
@@ -9306,7 +9309,7 @@ _enter_state_change_cb(Ecore_Evas *ee, unsigned int seat EINA_UNUSED, Eina_Posit
              target->currently_inside = EINA_TRUE;
              efl_event_callback_call(target->obj, EFL_UI_DND_EVENT_DROP_ENTERED, &ev);
           }
-        else if (!move_inside && !target->currently_inside)
+        else if (!move_inside && target->currently_inside)
           {
              target->currently_inside = EINA_FALSE;
              efl_event_callback_call(target->obj, EFL_UI_DND_EVENT_DROP_LEFT, &ev);

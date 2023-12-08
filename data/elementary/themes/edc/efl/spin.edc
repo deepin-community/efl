@@ -4,22 +4,23 @@ group { "efl/spin";
       rect { "bg";
          scale;
          desc { "default";
-            color: 0 0 0 0;
+            color: 0 0 0 0; // no cc
          }
       }
       text { "efl.text";
          nomouse;
          scale;
          desc { "default";
-            color: FN_COL_DEFAULT;
-            text {
-               font: FNBD;
-               size: 10;
+            color_class: "/fg/normal/spinner/text";
+            text { font: FN; size: 10;
                min: 1 1;
                ellipsis: -1;
                align: 0.5 0.5;
             }
             rel.to: "bg";
+            rel1.offset: 4 4;
+            rel2.offset: -5 -5;
+            offscale;
          }
       }
    }
