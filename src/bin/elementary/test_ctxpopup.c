@@ -475,7 +475,7 @@ _list_item_cb11(void *data EINA_UNUSED, Evas_Object *obj, void *event_info EINA_
 {
    Evas_Object *ctxpopup;
    Evas_Coord x,y;
-   char label[16];
+   char label[18];
    int i = 0;
 
    if (list_mouse_down > 0) return;
@@ -563,6 +563,7 @@ test_ctxpopup(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
    evas_object_show(list);
    elm_list_go(list);
 
-   evas_object_resize(win, 400, 400);
+   evas_object_resize(win, 400 * elm_config_scale_get(),
+                           400 * elm_config_scale_get());
    evas_object_show(win);
 }

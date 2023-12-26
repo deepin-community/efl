@@ -288,13 +288,12 @@ extern const char *_elm_engines[];
 # define ELM_SOFTWARE_SDL      (_elm_engines[4])
 # define ELM_OPENGL_SDL        (_elm_engines[5])
 # define ELM_BUFFER            (_elm_engines[6])
-# define ELM_EWS               (_elm_engines[7])
-# define ELM_OPENGL_COCOA      (_elm_engines[8])
-# define ELM_WAYLAND_SHM       (_elm_engines[9])
-# define ELM_WAYLAND_EGL       (_elm_engines[10])
-# define ELM_DRM               (_elm_engines[11])
-# define ELM_SOFTWARE_DDRAW    (_elm_engines[12])
-# define ELM_GL_DRM            (_elm_engines[13])
+# define ELM_OPENGL_COCOA      (_elm_engines[7])
+# define ELM_WAYLAND_SHM       (_elm_engines[8])
+# define ELM_WAYLAND_EGL       (_elm_engines[9])
+# define ELM_DRM               (_elm_engines[10])
+# define ELM_SOFTWARE_DDRAW    (_elm_engines[11])
+# define ELM_GL_DRM            (_elm_engines[12])
 
 # define ELM_FONT_TOKEN_STYLE  ":style="
 
@@ -550,7 +549,7 @@ struct _Elm_Config
    double        glayer_zoom_finger_factor;
    double        glayer_zoom_wheel_factor;
    double        glayer_zoom_distance_tolerance;
-   double        glayer_rotate_finger_enable;
+   unsigned char glayer_rotate_finger_enable;
    double        glayer_rotate_angular_tolerance;
    double        glayer_line_min_length;
    double        glayer_line_distance_tolerance;
@@ -603,6 +602,7 @@ struct _Elm_Config
    int           gl_stencil;
    int           gl_msaa;
    const char   *icon_theme;
+   const char   *palette;
    unsigned char entry_select_allow;
    Eina_Bool     offline;
    int  powersave;
@@ -667,11 +667,6 @@ void                 _elm_prefs_data_init(void);
 void                 _elm_prefs_data_shutdown(void);
 
 /* init functions for dnd and cnp */
-int                  _elm_ews_wm_init(void);
-void                 _elm_ews_wm_shutdown(void);
-void                 _elm_ews_wm_rescale(Elm_Theme *th,
-                                         Eina_Bool use_theme);
-
 void                 _elm_win_shutdown(void);
 void                 _elm_win_rescale(Elm_Theme *th,
                                       Eina_Bool use_theme);
@@ -853,6 +848,7 @@ EOAPI void efl_ui_focus_manager_calc_update_order(Eo *obj, Efl_Ui_Focus_Object *
 
 
 void _efl_access_shutdown(void);
+Eina_Rect _efl_access_component_screen_coords_extents_get(const Eo *obj, Eina_Rect r);
 
 /* Combobox: no proper support for Efl.Part API yet. */
 void        _elm_combobox_part_text_set(Eo *obj, const char * part, const char *label);

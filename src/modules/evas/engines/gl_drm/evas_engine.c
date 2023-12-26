@@ -798,15 +798,17 @@ _native_cb_bind(void *image)
 
    if (n->ns.type == EVAS_NATIVE_SURFACE_WL_DMABUF)
      {
-        void *v;
-
         /* Must re-import every time for coherency. */
         if (n->ns_data.wl_surface_dmabuf.image)
           glsym_evas_gl_common_eglDestroyImage(img->native.disp, n->ns_data.wl_surface_dmabuf.image);
-        v = gl_import_simple_dmabuf(img->native.disp, &n->ns_data.wl_surface_dmabuf.attr);
-        if (!v) return;
-        glsym_glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, v);
-        n->ns_data.wl_surface_dmabuf.image = v;
+        n->ns_data.wl_surface_dmabuf.image = gl_import_simple_dmabuf(img->native.disp, &n->ns_data.wl_surface_dmabuf.attr);
+        if (!n->ns_data.wl_surface_dmabuf.image)
+          {
+             img->native.invalid = EINA_TRUE;
+             return;
+          }
+        img->native.invalid = EINA_FALSE;
+        glsym_glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, n->ns_data.wl_surface_dmabuf.image);
      }
    else if (n->ns.type == EVAS_NATIVE_SURFACE_WL)
      {
@@ -839,8 +841,10 @@ _native_cb_unbind(void *image)
    if (n->ns.type == EVAS_NATIVE_SURFACE_WL_DMABUF)
      {
         if (n->ns_data.wl_surface_dmabuf.image)
-          glsym_evas_gl_common_eglDestroyImage(img->native.disp, n->ns_data.wl_surface_dmabuf.image);
-        n->ns_data.wl_surface_dmabuf.image = NULL;
+          {
+             glsym_evas_gl_common_eglDestroyImage(img->native.disp, n->ns_data.wl_surface_dmabuf.image);
+             n->ns_data.wl_surface_dmabuf.image = NULL;
+          }
      }
    else if (n->ns.type == EVAS_NATIVE_SURFACE_WL)
      {
@@ -1467,10 +1471,10 @@ eng_image_native_set(void *engine, void *image, void *native)
                        return NULL;
                     }
 
+                  img->native.yinvert = yinvert;
                   //XXX: workaround for mesa-10.2.8
                   // mesa's eglQueryWaylandBufferWL() with EGL_WAYLAND_Y_INVERTED_WL works incorrect.
-                  //img->native.yinvert = yinvert;
-                  img->native.yinvert = 1;
+                  //img->native.yinvert = 1;
                   img->native.loose = 0;
                   img->native.disp = ob->egl.disp;
                   img->native.shared = ob->gl_context->shared;

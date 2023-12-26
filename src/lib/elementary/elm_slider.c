@@ -102,7 +102,7 @@ _units_set(Evas_Object *obj)
      {
         Eina_Value val;
 
-        eina_value_setup(&val, EINA_VALUE_TYPE_DOUBLE);
+        if (!eina_value_setup(&val, EINA_VALUE_TYPE_DOUBLE)) return;
 
         eina_strbuf_reset(sd->format_strbuf);
         if (!sd->intvl_enable)
@@ -147,7 +147,7 @@ _indicator_set(Evas_Object *obj)
 
    if (!sd->indi_format_cb) return;
 
-   eina_value_setup(&val, EINA_VALUE_TYPE_DOUBLE);
+   if (!eina_value_setup(&val, EINA_VALUE_TYPE_DOUBLE)) return;
    eina_strbuf_reset(sd->indi_format_strbuf);
 
    eina_value_set(&val, sd->val);
@@ -180,7 +180,7 @@ _min_max_set(Evas_Object *obj)
    Eina_Value val;
 
    if (!sd->format_cb) return;
-   eina_value_setup(&val, EINA_VALUE_TYPE_DOUBLE);
+   if (!eina_value_setup(&val, EINA_VALUE_TYPE_DOUBLE)) return;
 
    str = eina_strbuf_new();
 
@@ -1571,8 +1571,10 @@ _format_legacy_to_format_eo_cb(void *data, Eina_Strbuf *str, const Eina_Value va
    const Eina_Value_Type *type = eina_value_type_get(&value);
 
    if (type == EINA_VALUE_TYPE_DOUBLE)
-     eina_value_get(&value, &val);
-
+   {
+       if (!eina_value_get(&value, &val)) return EINA_FALSE;
+   }
+   
    if (sfwd->format_cb)
      buf = sfwd->format_cb(val);
    if (buf)
@@ -1598,6 +1600,52 @@ elm_slider_units_format_function_set(Evas_Object *obj, slider_func_type func, sl
    sfwd->format_free_cb = free_func;
 
    efl_ui_format_func_set(obj, sfwd, _format_legacy_to_format_eo_cb, _format_legacy_to_format_eo_free_cb);
+}
+
+typedef struct
+{
+   slider_func_full_type format_cb;
+   slider_freefunc_type format_free_cb;
+   void *format_func_data;
+} Slider_Full_Format_Wrapper_Data;
+
+static Eina_Bool
+_format_legacy_to_format_eo_cb_full(void *data, Eina_Strbuf *str, const Eina_Value value)
+{
+   Slider_Full_Format_Wrapper_Data *sfwd = data;
+   char *buf = NULL;
+   double val = 0;
+   const Eina_Value_Type *type = eina_value_type_get(&value);
+
+   if (type == EINA_VALUE_TYPE_DOUBLE)
+     eina_value_get(&value, &val);
+
+   if (sfwd->format_cb)
+     buf = sfwd->format_cb(val,sfwd->format_func_data);
+   if (buf)
+     eina_strbuf_append(str, buf);
+   if (sfwd->format_free_cb) sfwd->format_free_cb(buf);
+
+   return EINA_TRUE;
+}
+
+static void
+_format_legacy_to_format_eo_full_free_cb(void *data)
+{
+   Slider_Full_Format_Wrapper_Data *sfwd = data;
+   free(sfwd);
+}
+
+EAPI void
+elm_slider_units_format_function_set_full(Evas_Object *obj, slider_func_full_type func, slider_freefunc_type free_func, void *data)
+{
+   Slider_Full_Format_Wrapper_Data *sfwd = malloc(sizeof(Slider_Full_Format_Wrapper_Data));
+
+   sfwd->format_cb = func;
+   sfwd->format_free_cb = free_func;
+   sfwd->format_func_data = data;
+   
+   efl_ui_format_func_set(obj, sfwd, _format_legacy_to_format_eo_cb_full, _format_legacy_to_format_eo_full_free_cb);
 }
 
 EAPI void
@@ -1713,6 +1761,20 @@ elm_slider_indicator_format_function_set(Evas_Object *obj, slider_func_type func
    efl_ui_format_func_set(efl_part(obj, "indicator"), sfwd,
                           _format_legacy_to_format_eo_cb,
                           _format_legacy_to_format_eo_free_cb);
+}
+
+EAPI void
+elm_slider_indicator_format_function_set_full(Evas_Object *obj, slider_func_full_type func, slider_freefunc_type free_func, void *data)
+{
+   Slider_Full_Format_Wrapper_Data *sfwd = malloc(sizeof(Slider_Full_Format_Wrapper_Data));
+
+   sfwd->format_cb = func;
+   sfwd->format_free_cb = free_func;
+   sfwd->format_func_data = data;
+
+   efl_ui_format_func_set(efl_part(obj, "indicator"), sfwd,
+                          _format_legacy_to_format_eo_cb_full,
+                          _format_legacy_to_format_eo_full_free_cb);
 }
 
 EAPI void

@@ -1629,7 +1629,7 @@ eng_outbuf_flush(Outbuf *ob, Tilebuf_Rect *surface_damage EINA_UNUSED, Tilebuf_R
         ob->vsync = 1;
      }
    if ((glsym_eglSwapBuffersWithDamage) && (rects) &&
-       (ob->swap_mode != MODE_FULL))
+       (ob->swap_mode != MODE_FULL) && (!partial_render_debug))
      {
         EGLint num = 0, *result = NULL, i = 0;
         Tilebuf_Rect *r;
@@ -1706,6 +1706,7 @@ eng_outbuf_flush(Outbuf *ob, Tilebuf_Rect *surface_damage EINA_UNUSED, Tilebuf_R
    // clear out rects after swap as we may use them during swap
 
    ob->frame_cnt++;
+   ob->gl_context->frame_cnt++;
 
  end:
    glsym_evas_gl_preload_render_unlock(eng_preload_make_current, ob);

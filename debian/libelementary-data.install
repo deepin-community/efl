@@ -1,8 +1,4 @@
-usr/share/elementary/config
-usr/share/elementary/edje_externals
-usr/share/elementary/objects
-usr/share/elementary/themes
-usr/share/elementary/images
+usr/share/elementary
 usr/share/icons/Enlightenment-X
 usr/share/icons/hicolor/128x128/apps/elementary.png
 /usr/share/elementary/objects/*.edj

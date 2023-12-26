@@ -59,8 +59,8 @@ struct _Eina_Memory_Header
    size_t size;
 };
 
-EAPI Eina_Memory_Table **_eina_sp_ids_tables[EINA_MAX_MID_TABLE_ID] = { NULL };
-EAPI int _eina_sp_log_dom = -1;
+EINA_API Eina_Memory_Table **_eina_sp_ids_tables[EINA_MAX_MID_TABLE_ID] = { NULL };
+EINA_API int _eina_sp_log_dom = -1;
 
 /* Spare empty table */
 static Eina_Memory_Table *empty_table = NULL;
@@ -71,6 +71,8 @@ static Eina_Spinlock sl;
 
 #define MEM_PAGE_SIZE 4096
 #define SAFEPOINTER_MAGIC 0x7DEADC03
+
+static int no_anon = -1;
 
 static void *
 _eina_safepointer_calloc(int number, size_t size)
@@ -89,12 +91,21 @@ _eina_safepointer_calloc(int number, size_t size)
                    (size % MEM_PAGE_SIZE ? 1 : 0))
           * MEM_PAGE_SIZE;
 
-        header = mmap(NULL, newsize, PROT_READ | PROT_WRITE,
-                      MAP_PRIVATE | MAP_ANON, -1, 0);
-        if (header == MAP_FAILED)
+        if (no_anon == -1)
           {
-             ERR("mmap of Eina_Safepointer table region failed.");
-             return NULL;
+             if (getenv("EFL_NO_MMAP_ANON")) no_anon = 1;
+             else no_anon = 0;
+          }
+        if (no_anon == 1) header = calloc(number, size);
+        else
+          {
+             header = mmap(NULL, newsize, PROT_READ | PROT_WRITE,
+                           MAP_PRIVATE | MAP_ANON, -1, 0);
+             if (header == MAP_FAILED)
+               {
+                  ERR("mmap of Eina_Safepointer table region failed.");
+                  return NULL;
+               }
           }
 
         header->size = newsize;
@@ -120,12 +131,15 @@ _eina_safepointer_free(void *pointer)
 
         if (!pointer) return;
 
-        header = (Eina_Memory_Header*)(pointer) - 1;
-        if (!EINA_MAGIC_CHECK(header, SAFEPOINTER_MAGIC))
-          EINA_MAGIC_FAIL(header, SAFEPOINTER_MAGIC);
-
-        EINA_MAGIC_SET(header, 0);
-        munmap(header, header->size);
+        if (no_anon == 1) free((void *)((uintptr_t) pointer & ~0x3));
+        else
+          {
+             header = (Eina_Memory_Header*)(pointer) - 1;
+             if (!EINA_MAGIC_CHECK(header, SAFEPOINTER_MAGIC))
+               EINA_MAGIC_FAIL(header, SAFEPOINTER_MAGIC);
+             EINA_MAGIC_SET(header, 0);
+             munmap(header, header->size);
+          }
      }
 #else
    free((void *)((uintptr_t) pointer & ~0x3));
@@ -261,7 +275,7 @@ _eina_safepointer_entry_find(Eina_Memory_Table *table)
    return entry;
 }
 
-EAPI const Eina_Safepointer *
+EINA_API const Eina_Safepointer *
 eina_safepointer_register(const void *target)
 {
    Eina_Memory_Table *table;
@@ -298,7 +312,7 @@ eina_safepointer_register(const void *target)
    return (void*) id;
 }
 
-EAPI void
+EINA_API void
 eina_safepointer_unregister(const Eina_Safepointer *safe)
 {
    Eina_Memory_Table *table;

@@ -20,9 +20,9 @@
 #define TESTS_DIC_DIR TESTS_SRC_DIR"/dicts"
 
 /* Functions defined in evas_object_textblock.c */
-EAPI Eina_Bool
+EVAS_API Eina_Bool
 _evas_textblock_check_item_node_link(Evas_Object *obj);
-EAPI int
+EVAS_API int
 _evas_textblock_format_offset_get(const Evas_Object_Textblock_Node_Format *n);
 /* end of functions defined in evas_object_textblock.c */
 
@@ -1054,6 +1054,10 @@ EFL_START_TEST(evas_textblock_cursor)
    pos = evas_textblock_cursor_pos_get(cur);
    
    ck_assert_int_eq(pos, 0);
+   evas_object_textblock_text_markup_set(tb, "&#x1f3f3;&#xfe0f;&#x200d;&#x1f308;");
+   evas_textblock_cursor_pos_set(cur, 0);
+   evas_textblock_cursor_cluster_next(cur);
+   ck_assert_int_eq(4, evas_textblock_cursor_pos_get(cur));
 
    END_TB_TEST();
 }
@@ -4239,6 +4243,23 @@ EFL_START_TEST(evas_textblock_fit)
    fail_if(n_ret != EVAS_ERROR_SUCCESS);
    evas_object_textblock_size_formatted_get(tb, &fw, &fh);
    fail_if(fw_new == fw && fh_new == fh);
+
+   const char *buf1 = "<font_size=20>AAAA</font_size>";
+   evas_object_textblock_text_markup_set(tb, buf1);
+   evas_object_resize(tb, 300, 4);
+   n_ret = evas_textblock_fit_options_set(tb,TEXTBLOCK_FIT_MODE_ALL);
+   fail_if(n_ret != EVAS_ERROR_SUCCESS);
+   n_ret = evas_textblock_fit_size_range_set(tb,1,255);
+   fail_if(n_ret != EVAS_ERROR_SUCCESS);
+   evas_object_textblock_size_formatted_get(tb, &fw, &fh);
+
+
+   const char *buf2 = "AAAAA<font_size=20>AAAA</font_size>";
+   evas_object_textblock_text_markup_set(tb, buf2);
+   evas_object_resize(tb, 300, 4);
+   evas_object_textblock_size_formatted_get(tb, &fw_new, &fh_new);
+   fail_if(fw_new < (fw * 2));
+
    END_TB_TEST();
 }
 EFL_END_TEST;
@@ -5199,6 +5220,27 @@ EFL_START_TEST(efl_text_font_source)
 }
 EFL_END_TEST
 
+EFL_START_TEST(efl_text_default_format)
+{
+   Evas *evas;
+   Eo *txt;
+   evas = EVAS_TEST_INIT_EVAS();
+   txt = efl_add(EFL_CANVAS_TEXTBLOCK_CLASS, evas);
+
+   Eina_Size2D size;
+
+   efl_text_markup_set(txt, "<font=Sans>Hello</font>");
+
+   efl_text_font_size_set(txt, 80);
+   efl_text_color_set(txt, 255, 255, 255, 255);
+   size = efl_canvas_textblock_size_native_get(txt);
+
+   ck_assert_int_gt(size.h, 20);
+   efl_del(txt);
+   evas_free(evas);
+}
+EFL_END_TEST
+
 void evas_test_textblock(TCase *tc)
 {
    tcase_add_test(tc, evas_textblock_simple);
@@ -5242,5 +5284,6 @@ void evas_test_textblock(TCase *tc)
    tcase_add_test(tc, efl_text_style);
    tcase_add_test(tc, efl_text_markup);
    tcase_add_test(tc, efl_text_font_source);
+   tcase_add_test(tc, efl_text_default_format);
 }
 

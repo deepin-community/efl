@@ -19,6 +19,7 @@ public_sub_headers = [
 'eina_debug_private.h',
 'eina_log.h',
 'eina_inline_log.x',
+'eina_fnmatch.h',
 'eina_fp.h',
 'eina_inline_f32p32.x',
 'eina_inline_f16p16.x',
@@ -66,7 +67,6 @@ public_sub_headers = [
 'eina_main.h',
 'eina_cpu.h',
 'eina_inline_cpu.x',
-'eina_sched.h',
 'eina_tiler.h',
 'eina_hamster.h',
 'eina_matrixsparse.h',
@@ -143,6 +143,7 @@ eina_src = files([
 'eina_evlog.c',
 'eina_file_common.h',
 'eina_file_common.c',
+'eina_fnmatch.c',
 'eina_fp.c',
 'eina_hamster.c',
 'eina_hash.c',
@@ -168,7 +169,6 @@ eina_src = files([
 'eina_rbtree.c',
 'eina_rectangle.c',
 'eina_safety_checks.c',
-'eina_sched.c',
 'eina_share_common.c',
 'eina_simple_xml_parser.c',
 'eina_str.c',
@@ -200,9 +200,9 @@ eina_src = files([
 ]) + eina_mp_sources
 
 if sys_windows == true
-  eina_src += files('eina_file_win32.c')
+  eina_src += files('eina_file_win32.c', 'eina_win32_dllmain.c', 'eina_thread_win32.c')
 else
-  eina_src += files('eina_file.c')
+  eina_src += files('eina_file_posix.c', 'eina_thread_posix.c')
 endif
 
 eina_config = configuration_data()
@@ -369,8 +369,13 @@ eina_ext_deps += [iconv]
 execinfo = cc.find_library('execinfo', required: false)
 eina_ext_deps += [execinfo]
 
+if sys_windows == true
+   bcrypt = cc.find_library('bcrypt', required: true)
+   eina_ext_deps += [bcrypt]
+endif
+
 eina_lib = library('eina', eina_src,
-  c_args : package_c_args,
+  c_args : [package_c_args, '-DEINA_BUILD'],
   include_directories : config_dir,
   dependencies: eina_ext_deps + [eina_deps, evil],
   install: true,

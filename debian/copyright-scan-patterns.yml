@@ -27,6 +27,7 @@ ignore:
     - png
     - psd
     - svg
+    - svg.gz
     - svgz
     - tga
     - tgv
@@ -37,4 +38,5 @@ ignore:
     - x
     - xcf
     - xcf.gz
+    - xm
     - xpm
