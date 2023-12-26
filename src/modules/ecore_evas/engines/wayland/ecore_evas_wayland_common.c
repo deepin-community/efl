@@ -6,8 +6,8 @@
 #include <Evas_Engine_Wayland.h>
 #include "ecore_wl2_internal.h"
 
-EAPI extern Eina_List *_evas_canvas_image_data_unset(Evas *eo_e);
-EAPI extern void _evas_canvas_image_data_regenerate(Eina_List *list);
+EMODAPI extern Eina_List *_evas_canvas_image_data_unset(Evas *eo_e);
+EMODAPI extern void _evas_canvas_image_data_regenerate(Eina_List *list);
 
 #define _smart_frame_type "ecore_evas_wl_frame"
 
@@ -37,21 +37,30 @@ static void _ecore_evas_wl_selection_init(Ecore_Evas *ee);
 
 /* local functions */
 static void
-_anim_cb_tick(Ecore_Wl2_Window *win EINA_UNUSED, uint32_t timestamp, void *data)
+_anim_cb_tick(Ecore_Wl2_Window *win EINA_UNUSED, uint32_t timestamp EINA_UNUSED, void *data)
 {
    Ecore_Evas *ee = data;
    Ecore_Evas_Engine_Wl_Data *edata;
-   double t;//, rt;
+//   double t;//, rt;
+//   double tnow = ecore_time_get();
    /* static double pt = 0.0, prt = 0.0; */
 
    edata = ee->engine.data;
 
    if (!edata->ticking) return;
-   t = ((double)timestamp / 1000.0);
-   ecore_loop_time_set(t);
+//   t = ((double)timestamp / 1000.0);
+//   if ((t - tnow) < -0.1)
+//     {
+//        fprintf(stderr,
+//                "ecore_evas: _anim_cb_tick() -> tick too far in past - %1.5f sec behind\n",
+//                tnow - t);
+//        t = tnow;
+//     }
+//   ecore_loop_time_set(t);
    /* rt = ecore_time_get(); */
    /* printf("ECORE_EVAS: wl client anim tick %p | %p - %1.5f @ %1.5f delt=%1.5f | %1.5f\n", ee, edata, t, ecore_time_get(), t - pt, rt - prt); */
-   ecore_evas_animator_tick(ee, NULL, t);
+//   ecore_evas_animator_tick(ee, NULL, t);
+   ecore_evas_animator_tick(ee, NULL, ecore_loop_time_get());
    /* pt = t; */
    /* prt = rt; */
 }
@@ -323,7 +332,7 @@ static void
 _ecore_evas_wl_common_resize(Ecore_Evas *ee, int w, int h)
 {
    Ecore_Evas_Engine_Wl_Data *wdata;
-   int ow, oh, ew, eh, fw, fh;
+   int ow, oh, ew, eh, fw, fh, ww, hh;
    int diff = 0;
 
    LOGFN;
@@ -348,30 +357,42 @@ _ecore_evas_wl_common_resize(Ecore_Evas *ee, int w, int h)
    if (wdata->win->xdg_set_min_size && wdata->win->xdg_toplevel &&
        wdata->win->pending.min)
      {
-        wdata->win->xdg_set_min_size(wdata->win->xdg_toplevel,
-                                     ee->prop.min.w + fw, ee->prop.min.h + fh);
+        ww = ee->prop.min.w + fw;
+        hh = ee->prop.min.h + fh;
+        if (ww < 1) ww = 1;
+        if (hh < 1) hh = 1;
+        wdata->win->xdg_set_min_size(wdata->win->xdg_toplevel, ww, hh);
         wdata->win->pending.min = 0;
      }
    if (wdata->win->xdg_set_max_size && wdata->win->xdg_toplevel &&
        wdata->win->pending.max)
      {
-        wdata->win->xdg_set_max_size(wdata->win->xdg_toplevel,
-                                     ee->prop.max.w + fw, ee->prop.max.h + fh);
+        ww = ee->prop.max.w + fw;
+        hh = ee->prop.max.h + fh;
+        if (ww < 0) ww = 0;
+        if (hh < 0) hh = 0;
+        wdata->win->xdg_set_max_size(wdata->win->xdg_toplevel, ww, hh);
         wdata->win->pending.max = 0;
      }
 
    if (wdata->win->zxdg_set_min_size && wdata->win->zxdg_toplevel &&
        wdata->win->pending.min)
      {
-        wdata->win->zxdg_set_min_size(wdata->win->zxdg_toplevel,
-                                      ee->prop.min.w + fw, ee->prop.min.h + fh);
+        ww = ee->prop.min.w + fw;
+        hh = ee->prop.min.h + fh;
+        if (ww < 1) ww = 1;
+        if (hh < 1) hh = 1;
+        wdata->win->zxdg_set_min_size(wdata->win->zxdg_toplevel, ww, hh);
         wdata->win->pending.min = 0;
      }
    if (wdata->win->zxdg_set_max_size && wdata->win->zxdg_toplevel &&
        wdata->win->pending.max)
      {
-        wdata->win->zxdg_set_max_size(wdata->win->zxdg_toplevel,
-                                      ee->prop.max.w + fw, ee->prop.max.h + fh);
+        ww = ee->prop.max.w + fw;
+        hh = ee->prop.max.h + fh;
+        if (ww < 0) ww = 0;
+        if (hh < 0) hh = 0;
+        wdata->win->zxdg_set_max_size(wdata->win->zxdg_toplevel, ww, hh);
         wdata->win->pending.max = 0;
      }
 
@@ -975,45 +996,6 @@ _rotation_do(Ecore_Evas *ee, int rotation, int resize)
      }
 }
 
-static Eina_Bool
-_ecore_evas_wl_common_cb_www_drag(void *d EINA_UNUSED, int t EINA_UNUSED, void *event)
-{
-   Ecore_Wl2_Event_Window_WWW_Drag *ev = event;
-   Ecore_Evas_Engine_Wl_Data *wdata;
-   Ecore_Evas *ee;
-
-   ee = ecore_event_window_match((Ecore_Window)ev->window);
-   if ((!ee) || (ee->ignore_events)) return ECORE_CALLBACK_PASS_ON;
-   if ((Ecore_Window)ev->window != ee->prop.window)
-     return ECORE_CALLBACK_PASS_ON;
-
-   wdata = ee->engine.data;
-   wdata->dragging = !!ev->dragging;
-   if (!ev->dragging)
-     evas_damage_rectangle_add(ee->evas, 0, 0, ee->w, ee->h);
-   return ECORE_CALLBACK_RENEW;
-}
-
-static Eina_Bool
-_ecore_evas_wl_common_cb_www(void *d EINA_UNUSED, int t EINA_UNUSED, void *event)
-{
-   Ecore_Wl2_Event_Window_WWW *ev = event;
-   Ecore_Evas_Engine_Wl_Data *wdata;
-   Ecore_Evas *ee;
-
-   ee = ecore_event_window_match((Ecore_Window)ev->window);
-   if ((!ee) || (ee->ignore_events)) return ECORE_CALLBACK_PASS_ON;
-   if ((Ecore_Window)ev->window != ee->prop.window)
-     return ECORE_CALLBACK_PASS_ON;
-
-   wdata = ee->engine.data;
-   wdata->x_rel += ev->x_rel;
-   wdata->y_rel += ev->y_rel;
-   wdata->timestamp = ev->timestamp;
-   evas_damage_rectangle_add(ee->evas, 0, 0, ee->w, ee->h);
-   return ECORE_CALLBACK_RENEW;
-}
-
 static void
 _ecore_evas_wl_common_cb_device_event_free(void *user_data, void *func_data)
 {
@@ -1349,14 +1331,6 @@ _ecore_evas_wl_common_init(void)
                                _ecore_evas_wl_common_cb_window_configure, NULL);
    eina_array_push(_ecore_evas_wl_event_hdls, h);
 
-   h = ecore_event_handler_add(_ecore_wl2_event_window_www,
-                               _ecore_evas_wl_common_cb_www, NULL);
-   eina_array_push(_ecore_evas_wl_event_hdls, h);
-
-   h = ecore_event_handler_add(_ecore_wl2_event_window_www_drag,
-                               _ecore_evas_wl_common_cb_www_drag, NULL);
-   eina_array_push(_ecore_evas_wl_event_hdls, h);
-
    h = ecore_event_handler_add(ECORE_WL2_EVENT_DISCONNECT,
                                _ecore_evas_wl_common_cb_disconnect, NULL);
    eina_array_push(_ecore_evas_wl_event_hdls, h);
@@ -1687,7 +1661,7 @@ _ecore_evas_wl_common_name_class_set(Ecore_Evas *ee, const char *n, const char *
 static void
 _ecore_evas_wl_common_size_min_set(Ecore_Evas *ee, int w, int h)
 {
-   int fw, fh;
+   int fw, fh, ww, hh;
    Ecore_Evas_Engine_Wl_Data *wdata;
    LOGFN;
 
@@ -1702,12 +1676,20 @@ _ecore_evas_wl_common_size_min_set(Ecore_Evas *ee, int w, int h)
    evas_output_framespace_get(ee->evas, NULL, NULL, &fw, &fh);
    if (wdata->win->xdg_set_min_size && wdata->win->xdg_toplevel)
      {
-        wdata->win->xdg_set_min_size(wdata->win->xdg_toplevel, w + fw, h + fh);
+        ww = w + fw;
+        hh = h + fh;
+        if (ww < 1) ww = 1;
+        if (hh < 1) hh = 1;
+        wdata->win->xdg_set_min_size(wdata->win->xdg_toplevel, ww, hh);
         wdata->win->pending.min = 0;
      }
    if (wdata->win->zxdg_set_min_size && wdata->win->zxdg_toplevel)
      {
-        wdata->win->zxdg_set_min_size(wdata->win->zxdg_toplevel, w + fw, h + fh);
+        ww = w + fw;
+        hh = h + fh;
+        if (ww < 1) ww = 1;
+        if (hh < 1) hh = 1;
+        wdata->win->zxdg_set_min_size(wdata->win->zxdg_toplevel, ww, hh);
         wdata->win->pending.min = 0;
      }
    else
@@ -1718,7 +1700,7 @@ _ecore_evas_wl_common_size_min_set(Ecore_Evas *ee, int w, int h)
 static void
 _ecore_evas_wl_common_size_max_set(Ecore_Evas *ee, int w, int h)
 {
-   int fw, fh;
+   int fw, fh, ww, hh;
    Ecore_Evas_Engine_Wl_Data *wdata;
    LOGFN;
 
@@ -1732,12 +1714,20 @@ _ecore_evas_wl_common_size_max_set(Ecore_Evas *ee, int w, int h)
    evas_output_framespace_get(ee->evas, NULL, NULL, &fw, &fh);
    if (wdata->win->xdg_set_max_size && wdata->win->xdg_toplevel)
      {
-        wdata->win->xdg_set_max_size(wdata->win->xdg_toplevel, w + fw, h + fh);
+        ww = w + fw;
+        hh = h + fh;
+        if (ww < 0) ww = 0;
+        if (hh < 0) hh = 0;
+        wdata->win->xdg_set_max_size(wdata->win->xdg_toplevel, ww, hh);
         wdata->win->pending.max = 0;
      }
    if (wdata->win->zxdg_set_max_size && wdata->win->zxdg_toplevel)
      {
-        wdata->win->zxdg_set_max_size(wdata->win->zxdg_toplevel, w + fw, h + fh);
+        ww = w + fw;
+        hh = h + fh;
+        if (ww < 0) ww = 0;
+        if (hh < 0) hh = 0;
+        wdata->win->zxdg_set_max_size(wdata->win->zxdg_toplevel, ww, hh);
         wdata->win->pending.max = 0;
      }
    else
@@ -2158,6 +2148,7 @@ _ecore_evas_wl_common_show(Ecore_Evas *ee)
 {
    Evas_Engine_Info_Wayland *einfo;
    Ecore_Evas_Engine_Wl_Data *wdata;
+   int ww, hh;
 
    LOGFN;
 
@@ -2179,33 +2170,41 @@ _ecore_evas_wl_common_show(Ecore_Evas *ee)
         if (wdata->win->xdg_set_min_size && wdata->win->xdg_toplevel &&
             wdata->win->pending.min)
           {
-             wdata->win->xdg_set_min_size(wdata->win->xdg_toplevel,
-                                          ee->prop.min.w + fw,
-                                          ee->prop.min.h + fh);
+             ww = ee->prop.min.w + fw;
+             hh = ee->prop.min.h + fh;
+             if (ww < 1) ww = 1;
+             if (hh < 1) hh = 1;
+             wdata->win->xdg_set_min_size(wdata->win->xdg_toplevel, ww, hh);
              wdata->win->pending.min = 0;
           }
         if (wdata->win->xdg_set_max_size && wdata->win->xdg_toplevel &&
             wdata->win->pending.max)
           {
-             wdata->win->xdg_set_max_size(wdata->win->xdg_toplevel,
-                                          ee->prop.max.w + fw,
-                                          ee->prop.max.h + fh);
+             ww = ee->prop.max.w + fw;
+             hh = ee->prop.max.h + fh;
+             if (ww < 0) ww = 0;
+             if (hh < 0) hh = 0;
+             wdata->win->xdg_set_max_size(wdata->win->xdg_toplevel, ww, hh);
              wdata->win->pending.max = 0;
           }
         if (wdata->win->zxdg_set_min_size && wdata->win->zxdg_toplevel &&
             wdata->win->pending.min)
           {
-             wdata->win->zxdg_set_min_size(wdata->win->zxdg_toplevel,
-                                           ee->prop.min.w + fw,
-                                           ee->prop.min.h + fh);
+             ww = ee->prop.min.w + fw;
+             hh = ee->prop.min.h + fh;
+             if (ww < 1) ww = 1;
+             if (hh < 1) hh = 1;
+             wdata->win->zxdg_set_min_size(wdata->win->zxdg_toplevel, ww, hh);
              wdata->win->pending.min = 0;
           }
         if (wdata->win->zxdg_set_max_size && wdata->win->zxdg_toplevel &&
             wdata->win->pending.max)
           {
-             wdata->win->zxdg_set_max_size(wdata->win->zxdg_toplevel,
-                                           ee->prop.max.w + fw,
-                                           ee->prop.max.h + fh);
+             ww = ee->prop.max.w + fw;
+             hh = ee->prop.max.h + fh;
+             if (ww < 0) ww = 0;
+             if (hh < 0) hh = 0;
+             wdata->win->zxdg_set_max_size(wdata->win->zxdg_toplevel, ww, hh);
              wdata->win->pending.max = 0;
           }
 
@@ -2218,7 +2217,6 @@ _ecore_evas_wl_common_show(Ecore_Evas *ee)
              einfo->info.destination_alpha = ee_needs_alpha(ee);
              einfo->info.wl2_win = wdata->win;
              einfo->info.hidden = wdata->win->pending.configure; //EINA_FALSE;
-             einfo->www_avail = !!wdata->win->www_surface;
              if (!evas_engine_info_set(ee->evas, (Evas_Engine_Info *)einfo))
                ERR("Failed to set Evas Engine Info for '%s'", ee->driver);
              if (ECORE_EVAS_PORTRAIT(ee))

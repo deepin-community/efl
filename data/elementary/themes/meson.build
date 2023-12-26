@@ -5,13 +5,14 @@ edc_files = [
 elm_themes = []
 
 elm_themes_image_include = join_paths(meson.current_source_dir(), 'img')
+elm_themes_sound_include = join_paths(meson.current_source_dir(), 'snd')
 
 foreach edc_file : edc_files
    elm_themes += custom_target('edje_cc_' + edc_file,
     input : edc_file,
     depfile: '@BASENAME@.edj.d',
     output : '@BASENAME@.edj',
-    command : edje_cc_exe + [ '-beta', '-fastcomp',
+    command : edje_cc_exe + [ '-beta', '-fastdecomp',
               '-deps', '@DEPFILE@',
               '-sd', join_paths(meson.current_source_dir(), 'snd'),
               '-id', elm_themes_image_include,

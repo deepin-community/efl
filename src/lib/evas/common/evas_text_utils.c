@@ -858,7 +858,7 @@ _evas_common_text_props_cluster_move(const Evas_Text_Props *props, int pos,
    return pos;
 }
 
-EAPI int
+EVAS_API int
 evas_common_text_props_cluster_next(const Evas_Text_Props *props, int pos)
 {
    Eina_Bool right;
@@ -867,7 +867,7 @@ evas_common_text_props_cluster_next(const Evas_Text_Props *props, int pos)
    return _evas_common_text_props_cluster_move(props, pos, right);
 }
 
-EAPI int
+EVAS_API int
 evas_common_text_props_cluster_prev(const Evas_Text_Props *props, int pos)
 {
    Eina_Bool right;
@@ -877,7 +877,7 @@ evas_common_text_props_cluster_prev(const Evas_Text_Props *props, int pos)
 }
 
 /* Returns the index of the logical char in the props. */
-EAPI int
+EVAS_API int
 evas_common_text_props_index_find(const Evas_Text_Props *props, int _cutoff)
 {
 #ifdef OT_SUPPORT
@@ -973,7 +973,7 @@ evas_common_text_props_index_find(const Evas_Text_Props *props, int _cutoff)
 /* Won't work in the middle of ligatures, assumes cutoff < len.
  * Also won't work in the middle of indic words, should handle that in a
  * smart way. */
-EAPI Eina_Bool
+EVAS_API Eina_Bool
 evas_common_text_props_split(Evas_Text_Props *base,
       Evas_Text_Props *ext, int _cutoff)
 {
@@ -1027,7 +1027,7 @@ evas_common_text_props_split(Evas_Text_Props *base,
 }
 
 /* Won't work in the middle of ligatures */
-EAPI void
+EVAS_API void
 evas_common_text_props_merge(Evas_Text_Props *item1,
       const Evas_Text_Props *item2)
 {
@@ -1222,7 +1222,7 @@ _content_create_regular(RGBA_Font_Int *fi, const Eina_Unicode *text,
 }
 #endif
 
-EAPI Eina_Bool
+EVAS_API Eina_Bool
 evas_common_text_props_content_create(void *_fi, const Eina_Unicode *text,
       Evas_Text_Props *text_props, const Evas_BiDi_Paragraph_Props *par_props,
       size_t par_pos, int len, Evas_Text_Props_Mode mode, const char *lang)
@@ -1362,8 +1362,8 @@ Eina_Bool read_byte_color_component(const char* source,char ** next,unsigned cha
  * 3. "#RGB"
  * 4. "#RGBA"
  * 5. "color names"
- * 6. "rgb(r,g,b)"
- * 7. "rgba(r,g,b,a)"
+ * 6. "rgb(0-255,0-255,0-255)"
+ * 7. "rgba(0-255,0-255,0-255,0.0-1.0)"
  * TODO (we may use specific color parser)
  * 8. "hsl(H,S,L)"
  * 9. "hsla(H,S,L,A)"
@@ -1422,7 +1422,7 @@ evas_common_format_color_parse(const char *str, int slen,
           }
         else v = EINA_FALSE;
       }
-    else if (slen <= 21)/* search for rgb(),hsv(),colorname, 20 is length of rgba(255,255,255,255) */
+    else if (slen <= 25)/* search for rgb(),hsv(),colorname, 25 is length of rgba(255,255,255,1.0) */
       {
          /*remove spaces and convert name to lowercase*/
          char color_name[0xFF] = {0};
@@ -1446,19 +1446,22 @@ evas_common_format_color_parse(const char *str, int slen,
                    *a = 0xff;
                 }
            }
-         else if ((strncmp(color_name,"rgba(",4) == 0) && color_name[slen-1] == ')'&& slen >= 13 && slen <=21) /* rgba() */
+         else if ((strncmp(color_name,"rgba(",4) == 0) && color_name[slen-1] == ')'&& slen >= 13 && slen <=25) /* rgba() */
            {
               char * p_color = &color_name[4];
 
               if (
                   (!read_byte_color_component(++p_color,&p_color,r)  || !p_color   || *p_color != ',') ||
                   (!read_byte_color_component(++p_color,&p_color,g)  || !p_color   || *p_color != ',') ||
-                  (!read_byte_color_component(++p_color,&p_color,b)  || !p_color   || *p_color != ',') ||
-                  (!read_byte_color_component(++p_color,&p_color,a)  || !p_color   || *p_color != ')')
+                  (!read_byte_color_component(++p_color,&p_color,b)  || !p_color   || *p_color != ',')
                  )
                 {
                    *r = *g = *b = *a = 0;
                    v = EINA_FALSE;
+                }
+              else
+                {
+                   *a = (unsigned char)(strtof(++p_color, NULL) * 255);
                 }
            }
          else

@@ -1,0 +1,10 @@
+# efl-doc includes edje examples with font artifacts.  They are not
+# installed as system fonts.
+#
+# The fonts used in the artifacts are duplicated intentionally due to
+# #998280 - installing ttf-bitstream-vera causes subpar font rendering
+# for end users.
+efl-doc: font-in-non-font-package [usr/share/doc/efl-doc/examples/edje/Vera.ttf]
+efl-doc: font-outside-font-dir [usr/share/doc/efl-doc/examples/edje/Vera.ttf]
+efl-doc: truetype-font-prohibits-installable-embedding (preview/print only) [usr/share/doc/efl-doc/examples/edje/Vera.ttf]
+efl-doc: duplicate-font-file also in (ttf-bitstream-vera) [usr/share/doc/efl-doc/examples/edje/Vera.ttf]

@@ -69,6 +69,10 @@ static const struct ext_loader_s loaders[] =
    MATCHING(".avif", "avif"),
    MATCHING(".avifs", "avif"),
 
+   MATCHING(".heif", "heif"),
+   MATCHING(".heic", "heif"),
+   // MATCHING(".avif", "heif"),
+
    /* xcf - gefenric */
    MATCHING(".xcf", "generic"),
    MATCHING(".xcf.gz", "generic"),
@@ -90,26 +94,48 @@ static const struct ext_loader_s loaders[] =
    MATCHING(".svgz", "generic"),
    MATCHING(".svg.gz", "generic"),
    /* RAW */
+   MATCHING(".3fr", "generic"),
+   MATCHING(".ari", "generic"),
    MATCHING(".arw", "generic"),
-   MATCHING(".cr2", "generic"),
+   MATCHING(".bay", "generic"),
+   MATCHING(".braw", "generic"),
    MATCHING(".crw", "generic"),
+   MATCHING(".cr2", "generic"),
+   MATCHING(".cr3", "generic"),
+   MATCHING(".cap", "generic"),
+   MATCHING(".data", "generic"),
    MATCHING(".dcr", "generic"),
+   MATCHING(".dcs", "generic"),
    MATCHING(".dng", "generic"),
+   MATCHING(".drf", "generic"),
+   MATCHING(".eip", "generic"),
    MATCHING(".erf", "generic"),
    MATCHING(".fff", "generic"),
+   MATCHING(".gpr", "generic"),
+   MATCHING(".iiq", "generic"),
    MATCHING(".k25", "generic"),
    MATCHING(".kdc", "generic"),
+   MATCHING(".mdc", "generic"),
+   MATCHING(".mef", "generic"),
+   MATCHING(".mos", "generic"),
    MATCHING(".mrw", "generic"),
    MATCHING(".nef", "generic"),
-   MATCHING(".nrf", "generic"),
    MATCHING(".nrw", "generic"),
+   MATCHING(".obm", "generic"),
    MATCHING(".orf", "generic"),
    MATCHING(".pef", "generic"),
+   MATCHING(".ptx", "generic"),
+   MATCHING(".pxn", "generic"),
+   MATCHING(".r3d", "generic"),
    MATCHING(".raf", "generic"),
    MATCHING(".raw", "generic"),
+   MATCHING(".rw1", "generic"),
    MATCHING(".rw2", "generic"),
+   MATCHING(".rwz", "generic"),
    MATCHING(".sr2", "generic"),
    MATCHING(".srf", "generic"),
+   MATCHING(".srw", "generic"),
+   MATCHING(".tif", "generic"),
    MATCHING(".x3f", "generic"),
    /* video */
    MATCHING(".264", "generic"),
@@ -167,7 +193,8 @@ static const struct ext_loader_s loaders[] =
 static const char *loaders_name[] =
 { /* in order of most likely needed */
   "png", "jpeg", "eet", "xpm", "tiff", "gif", "svg", "webp", "pmaps",
-  "bmp", "tga", "wbmp", "ico", "psd", "jp2k", "dds", "avif", "generic"
+  "bmp", "tga", "wbmp", "ico", "psd", "jp2k", "dds", "avif", "heif",
+  "generic"
 };
 
 struct evas_image_foreach_loader_data
@@ -266,7 +293,7 @@ _evas_image_foreach_loader(const Eina_Hash *hash EINA_UNUSED, const void *key EI
    return r;
 }
 
-EAPI int
+EVAS_API int
 evas_common_load_rgba_image_module_from_file(Image_Entry *ie)
 {
    const char           *loader = NULL, *end;
@@ -392,7 +419,7 @@ _timestamp_build(Image_Timestamp *tstamp, struct stat *st)
 #endif
 }
 
-EAPI int
+EVAS_API int
 evas_common_load_rgba_image_data_from_file(Image_Entry *ie)
 {
    void *pixels;
@@ -495,7 +522,7 @@ end:
    return ret;
 }
 
-EAPI double
+EVAS_API double
 evas_common_load_rgba_image_frame_duration_from_file(Image_Entry *ie, const int start, const int frame_num)
 {
    Evas_Image_Load_Func *evas_image_load_func = NULL;
@@ -512,7 +539,7 @@ evas_common_load_rgba_image_frame_duration_from_file(Image_Entry *ie, const int 
    return -1;
 }
 
-EAPI Eina_Bool
+EVAS_API Eina_Bool
 evas_common_extension_can_load_get(const char *file)
 {
    unsigned int length;

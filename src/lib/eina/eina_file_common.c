@@ -28,7 +28,7 @@
 #include <errno.h>
 
 #ifdef _WIN32
-# include <evil_private.h> /* windows.h fcntl mkstemps mkdtemp */
+# include <evil_private.h> /* windows.h */
 #endif
 
 #define COPY_BLOCKSIZE (4 * 1024 * 1024)
@@ -73,7 +73,7 @@ Eina_Lock _eina_file_lock_cache;
 static Eina_Spinlock _eina_statgen_lock;
 static Eina_Statgen _eina_statgen = 0;
 
-EAPI void
+EINA_API void
 eina_file_statgen_next(void)
 {
    eina_spinlock_take(&_eina_statgen_lock);
@@ -85,7 +85,7 @@ eina_file_statgen_next(void)
    eina_spinlock_release(&_eina_statgen_lock);
 }
 
-EAPI Eina_Statgen
+EINA_API Eina_Statgen
 eina_file_statgen_get(void)
 {
    Eina_Statgen s;
@@ -95,7 +95,7 @@ eina_file_statgen_get(void)
    return s;
 }
 
-EAPI void
+EINA_API void
 eina_file_statgen_enable(void)
 {
    eina_spinlock_take(&_eina_statgen_lock);
@@ -103,7 +103,7 @@ eina_file_statgen_enable(void)
    eina_spinlock_release(&_eina_statgen_lock);
 }
 
-EAPI void
+EINA_API void
 eina_file_statgen_disable(void)
 {
    eina_spinlock_take(&_eina_statgen_lock);
@@ -126,7 +126,7 @@ _eina_file_escape(char *path, size_t len)
      return NULL;
 
 #ifdef _WIN32
-   EVIL_PATH_SEP_WIN32_TO_UNIX(path);
+   EINA_PATH_TO_UNIX(path);
 #endif
 
    while ((p = strchr(p, '/')))
@@ -405,7 +405,7 @@ _eina_file_map_close(Eina_File_Map *map)
 
 // Global API
 
-EAPI char *
+EINA_API char *
 eina_file_path_sanitize(const char *path)
 {
    Eina_Tmpstr *result = NULL;
@@ -430,7 +430,7 @@ eina_file_path_sanitize(const char *path)
    return r;
 }
 
-EAPI Eina_File *
+EINA_API Eina_File *
 eina_file_virtualize(const char *virtual_name, const void *data, unsigned long long length, Eina_Bool copy)
 {
    Eina_File *file;
@@ -494,7 +494,7 @@ eina_file_virtualize(const char *virtual_name, const void *data, unsigned long l
    return file;
 }
 
-EAPI Eina_Bool
+EINA_API Eina_Bool
 eina_file_virtual(Eina_File *file)
 {
    if (!file) return EINA_FALSE;
@@ -502,7 +502,7 @@ eina_file_virtual(Eina_File *file)
    return file->virtual;
 }
 
-EAPI Eina_File *
+EINA_API Eina_File *
 eina_file_dup(const Eina_File *f)
 {
    Eina_File *file = (Eina_File*) f;
@@ -544,7 +544,7 @@ eina_file_clean_close(Eina_File *file)
    free(file);
 }
 
-EAPI void
+EINA_API void
 eina_file_close(Eina_File *file)
 {
    Eina_Bool leave = EINA_TRUE;
@@ -574,21 +574,21 @@ eina_file_close(Eina_File *file)
    eina_lock_release(&_eina_file_lock_cache);
 }
 
-EAPI size_t
+EINA_API size_t
 eina_file_size_get(const Eina_File *file)
 {
    EINA_FILE_MAGIC_CHECK(file, 0);
    return file->length;
 }
 
-EAPI time_t
+EINA_API time_t
 eina_file_mtime_get(const Eina_File *file)
 {
    EINA_FILE_MAGIC_CHECK(file, 0);
    return file->mtime;
 }
 
-EAPI const char *
+EINA_API const char *
 eina_file_filename_get(const Eina_File *file)
 {
    EINA_FILE_MAGIC_CHECK(file, NULL);
@@ -695,7 +695,7 @@ _eina_file_map_lines_iterator_free(Eina_Lines_Iterator *it)
    free(it);
 }
 
-EAPI Eina_Iterator *
+EINA_API Eina_Iterator *
 eina_file_map_lines(Eina_File *file)
 {
    Eina_Lines_Iterator *it;
@@ -952,7 +952,7 @@ _eina_file_copy_internal(int s, int d, off_t total, Eina_File_Copy_Progress cb, 
    return ret;
 }
 
-EAPI Eina_Bool
+EINA_API Eina_Bool
 eina_file_copy(const char *src, const char *dst, Eina_File_Copy_Flags flags, Eina_File_Copy_Progress cb, const void *cb_data)
 {
    struct stat st;
@@ -991,98 +991,6 @@ eina_file_copy(const char *src, const char *dst, Eina_File_Copy_Flags flags, Ein
      unlink(dst);
 
    return success;
-}
-
-EAPI int
-eina_file_mkstemp(const char *templatename, Eina_Tmpstr **path)
-{
-   char buffer[PATH_MAX];
-   const char *XXXXXX = NULL, *sep;
-   int fd, len;
-#ifndef _WIN32
-   mode_t old_umask;
-#endif
-
-   EINA_SAFETY_ON_NULL_RETURN_VAL(templatename, -1);
-
-   sep = strchr(templatename, '/');
-#ifdef _WIN32
-   if (!sep) sep = strchr(templatename, '\\');
-#endif
-   if (sep)
-     {
-        len = eina_strlcpy(buffer, templatename, sizeof(buffer));
-     }
-   else
-     {
-        len = eina_file_path_join(buffer, sizeof(buffer),
-                                  eina_environment_tmp_get(), templatename);
-     }
-
-   /*
-    * Unix:
-    * Make sure temp file is created with secure permissions,
-    * http://man7.org/linux/man-pages/man3/mkstemp.3.html#NOTES
-    *
-    * Windows:
-    * no secure permissions anyway and the umask use below makes
-    * the file read-only.
-    */
-#ifndef _WIN32
-   old_umask = umask(S_IRWXG|S_IRWXO);
-#endif
-   if ((XXXXXX = strstr(buffer, "XXXXXX.")) != NULL)
-     {
-        int suffixlen = buffer + len - XXXXXX - 6;
-        fd = mkstemps(buffer, suffixlen);
-     }
-   else
-     fd = mkstemp(buffer);
-#ifndef _WIN32
-   umask(old_umask);
-#endif
-
-   if (fd < 0)
-     {
-        if (path) *path = NULL;
-        return -1;
-     }
-
-   if (path) *path = eina_tmpstr_add(buffer);
-   return fd;
-}
-
-EAPI Eina_Bool
-eina_file_mkdtemp(const char *templatename, Eina_Tmpstr **path)
-{
-   char buffer[PATH_MAX];
-   char *tmpdirname, *sep;
-
-   EINA_SAFETY_ON_NULL_RETURN_VAL(templatename, EINA_FALSE);
-
-   sep = strchr(templatename, '/');
-#ifdef _WIN32
-   if (!sep) sep = strchr(templatename, '\\');
-#endif
-   if (sep)
-     {
-        eina_strlcpy(buffer, templatename, sizeof(buffer));
-     }
-   else
-     {
-        eina_file_path_join(buffer, sizeof(buffer),
-                            eina_environment_tmp_get(), templatename);
-     }
-
-   tmpdirname = mkdtemp(buffer);
-   if (tmpdirname == NULL)
-     {
-        if (path) *path = NULL;
-        return EINA_FALSE;
-     }
-
-   if (path) *path = eina_tmpstr_add(tmpdirname);
-   return EINA_TRUE;
 }
 
 /*============================================================================*
@@ -1147,7 +1055,7 @@ eina_file_shutdown(void)
    return EINA_TRUE;
 }
 
-EAPI Eina_Bool
+EINA_API Eina_Bool
 eina_file_close_on_exec(int fd, Eina_Bool on)
 {
 #ifdef _WIN32

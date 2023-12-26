@@ -97,6 +97,47 @@ uniform float blur_div;
 
 // ----------------------------------------------------------------------------
 
+#ifdef SHD_DITHER
+
+#ifdef DM_HIQ
+#define DMMOD 4.0
+#define DMDIV (16.0*256.0)
+const mat4 dm = mat4(vec4( 0.0/DMDIV,  8.0/DMDIV,  2.0/DMDIV, 10.0/DMDIV),
+                     vec4(12.0/DMDIV,  4.0/DMDIV, 14.0/DMDIV,  6.0/DMDIV),
+                     vec4( 3.0/DMDIV, 11.0/DMDIV,  1.0/DMDIV,  9.0/DMDIV),
+                     vec4(15.0/DMDIV,  7.0/DMDIV, 13.0/DMDIV,  5.0/DMDIV));
+#else
+#define DMMOD 2.0
+#define DMDIV (4.0*256.0)
+const mat2 dm = mat2(vec2( 0.0/DMDIV,  2.0/DMDIV),
+                     vec2( 3.0/DMDIV,  1.0/DMDIV));
+#endif
+
+float dither_closest(ivec2 pos, float val)
+{
+   float limit = dm[pos.x][pos.y];
+   if (val <= limit) return 0.0;
+   return (1.0 / 256.0);
+}
+
+float dither_8bit(ivec2 modpos, float val)
+{
+   float val_quant = float(floor(val * 255.0)) / 255.0;
+   float val_delta = val - val_quant;
+   float val_roundup = dither_closest(modpos, val_delta);
+   return val_quant + val_roundup;
+}
+
+vec4 dither(vec4 col, vec2 pos)
+{
+   ivec2 modpos = ivec2(int(mod(pos.x, DMMOD)), int(mod(pos.y, DMMOD)));
+   return vec4(dither_8bit(modpos, col.r),
+               dither_8bit(modpos, col.g),
+               dither_8bit(modpos, col.b),
+               dither_8bit(modpos, col.a));
+}
+#endif
+
 #ifndef SHD_FILTER_BLUR
 void main()
 {
@@ -243,6 +284,9 @@ vec4 fetch_pixel(float ox, float oy)
 #ifndef SHD_FILTER_BLUR
 
    gl_FragColor =
+#ifdef SHD_DITHER
+   dither(
+#endif
        c
 #ifndef SHD_NOMUL
      * col
@@ -252,6 +296,9 @@ vec4 fetch_pixel(float ox, float oy)
 #endif
 #ifdef SHD_FILTER_DISPLACE
      * fa
+#endif
+#ifdef SHD_DITHER
+   , gl_FragCoord.xy)
 #endif
    ;
 }
@@ -312,9 +359,25 @@ void main()
    }
 
 #ifndef SHD_NOMUL
-   gl_FragColor = (acc / blur_div) * col;
+   gl_FragColor =
+#ifdef SHD_DITHER
+     dither(
+#endif
+            (acc / blur_div) * col, gl_FragCoord.xy
+#ifdef SHD_DITHER
+           )
+#endif
+   ;
 #else
-   gl_FragColor = (acc / blur_div);
+   gl_FragColor =
+#ifdef SHD_DITHER
+     dither(
+#endif
+            (acc / blur_div), gl_FragCoord.xy
+#ifdef SHD_DITHER
+           )
+#endif
+   ;
 #endif
 }
 

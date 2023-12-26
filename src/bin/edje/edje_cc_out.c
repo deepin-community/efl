@@ -224,6 +224,7 @@ Eina_List *codes = NULL;
 Eina_List *code_lookups = NULL;
 Eina_List *aliases = NULL;
 Eina_List *color_tree_root = NULL;
+Eina_Hash *color_class_reg = NULL;
 
 static Eet_Data_Descriptor *edd_edje_file = NULL;
 static Eet_Data_Descriptor *edd_edje_part_collection = NULL;
@@ -1469,8 +1470,18 @@ data_image_sets_init(void)
         if (!set->entries) continue;
         EINA_LIST_FOREACH(set->entries, ll, set_entry)
           {
-             img = &edje_file->image_dir->entries[set_entry->id];
-             set_entry->name = img->entry;
+             if (set_entry->id < (int)edje_file->image_dir->entries_count)
+               {
+                  img = &edje_file->image_dir->entries[set_entry->id];
+                  set_entry->name = img->entry;
+               }
+             else
+               {
+                  ERR("set %i / %i, entry %i / %i\n",
+                      i, edje_file->image_dir->sets_count,
+                      set_entry->id, edje_file->image_dir->entries_count);
+                  abort();
+               }
           }
      }
 }
@@ -2771,6 +2782,44 @@ data_thread_fontmap_end(void *data EINA_UNUSED, Ecore_Thread *thread EINA_UNUSED
    thread_end(0);
 }
 
+static Eina_Bool
+data_write_color_class_register_each_cb(const Eina_Hash *hash EINA_UNUSED,
+                                        const void *key,
+                                        void *data EINA_UNUSED,
+                                        void *fdata)
+{
+   Edje_Color_Class_Info *cc_info = fdata;
+   cc_info->colors = eina_list_append(cc_info->colors,
+                                      eina_stringshare_add(key));
+   return EINA_TRUE;
+}
+
+static void
+data_write_color_class_register(Eet_File *ef)
+{
+   Edje_Color_Class_Info *cc_info;
+   const char *s;
+
+   if (!color_class_reg) return;
+   cc_info = calloc(1, sizeof(Edje_Color_Class_Info));
+   if (!cc_info)
+     {
+        ERR("Out of Memory");
+        exit(-1);
+     }
+   eina_hash_foreach(color_class_reg,
+                     data_write_color_class_register_each_cb,
+                     cc_info);
+
+   eet_data_write(ef, _edje_edd_edje_color_class_info,
+                  "edje/color_class_info", cc_info, compress_mode);
+
+   eina_hash_free(color_class_reg);
+   color_class_reg = NULL;
+   EINA_LIST_FREE(cc_info->colors, s) eina_stringshare_del(s);
+   free(cc_info);
+}
+
 void
 data_write(void)
 {
@@ -2883,6 +2932,7 @@ data_write(void)
              data_thread_authors_end(ef, NULL);
           }
      }
+   data_write_color_class_register(ef);
    data_write_images();
    data_image_sets_init();
    INF("images: %3.5f", ecore_time_get() - t); t = ecore_time_get();
@@ -3606,6 +3656,7 @@ _data_image_sets_size_set(void)
      }
 }
 
+/*
 static void
 _data_image_id_update(Eina_List *images_unused_list)
 {
@@ -3676,6 +3727,7 @@ _data_image_id_update(Eina_List *images_unused_list)
           }
      }
 }
+ */
 
 void
 data_process_lookups(void)
@@ -3691,7 +3743,7 @@ data_process_lookups(void)
    Eina_Hash *images_in_use;
    char *group_name;
    Eina_Bool is_lua = EINA_FALSE;
-   Image_Unused_Ids *iui;
+//   Image_Unused_Ids *iui;
 
    /* remove all unreferenced Edje_Part_Collection */
    EINA_LIST_FOREACH_SAFE(edje_collections, l, l2, pc)
@@ -4013,10 +4065,10 @@ free_group:
 
    if (edje_file->image_dir && !is_lua)
      {
-        Edje_Image_Directory_Entry *de, *de_last, *img;
+        Edje_Image_Directory_Entry *de/*, *de_last, *img*/;
         Edje_Image_Directory_Set *set;
         Edje_Image_Directory_Set_Entry *set_e;
-        Eina_List *images_unused_list = NULL;
+//        Eina_List *images_unused_list = NULL;
         unsigned int i;
 
         for (i = 0; i < edje_file->image_dir->entries_count; ++i)
@@ -4026,12 +4078,14 @@ free_group:
              if (de->entry && eina_hash_find(images_in_use, de->entry))
                continue;
 
-             printf("Warning: Image '%s' not used\n", de->entry);
-             INF("Image '%s' in resource 'edje/image/%i' will not be included as it is unused.",
-                 de->entry, de->id);
+             if (!no_warn_unused_images)
+               printf("Warning: Image '%s' not used\n", de->entry);
+//             INF("Image '%s' in resource 'edje/image/%i' will not be included as it is unused.",
+//                 de->entry, de->id);
 
              // so as not to write the unused images, moved last image in the
              // list to unused image position and check it
+/*
              free((void *)de->entry);
              de->entry = NULL;
              de_last = edje_file->image_dir->entries + edje_file->image_dir->entries_count - 1;
@@ -4046,6 +4100,7 @@ free_group:
              img = realloc(edje_file->image_dir->entries,
                            sizeof (Edje_Image_Directory_Entry) * edje_file->image_dir->entries_count);
              edje_file->image_dir->entries = img;
+ */
           }
 
         for (i = 0; i < edje_file->image_dir->sets_count; ++i)
@@ -4055,13 +4110,16 @@ free_group:
              if (set->name && eina_hash_find(images_in_use, set->name))
                continue;
 
-             printf("Warning: Image set '%s' not used\n", set->name);
-             EINA_LIST_FOREACH(set->entries, l, set_e)
+             if (!no_warn_unused_images)
                {
-                  printf("  Contains '%s' size %ix%i -> %ix%i\n",
-                         set_e->name,
-                         set_e->size.min.w, set_e->size.min.h,
-                         set_e->size.max.w, set_e->size.max.h);
+                  printf("Warning: Image set '%s' not used\n", set->name);
+                  EINA_LIST_FOREACH(set->entries, l, set_e)
+                    {
+                       printf("  Contains '%s' size %ix%i -> %ix%i\n",
+                              set_e->name,
+                              set_e->size.min.w, set_e->size.min.h,
+                              set_e->size.max.w, set_e->size.max.h);
+                    }
                }
 /* No need to redo id's - we will warn of unused images - fix in src
  * Also .. this is broken and messes up id's ... so easyer - complain
@@ -4091,9 +4149,9 @@ free_group:
           }
 
         /* update image id in parts */
-        if (images_unused_list) _data_image_id_update(images_unused_list);
-        EINA_LIST_FREE(images_unused_list, iui)
-          free(iui);
+//        if (images_unused_list) _data_image_id_update(images_unused_list);
+//        EINA_LIST_FREE(images_unused_list, iui)
+//          free(iui);
 
         _data_image_sets_size_set();
      }
@@ -4440,6 +4498,7 @@ process_color_tree(char *s, const char *f_in, int ln)
 
              ctn = mem_alloc(SZ(Edje_Color_Tree_Node));
              ctn->name = strdup(token[!id]);
+             color_class_register(ctn->name);
              ctn->color_classes = NULL;
 
              edje_file->color_tree = eina_list_append(edje_file->color_tree, ctn);

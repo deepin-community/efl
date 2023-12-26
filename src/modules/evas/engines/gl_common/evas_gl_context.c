@@ -87,7 +87,7 @@ sym_missing(void)
  * Previously we used strstr(), however there are some extensions
  * whose names are subsets of others.
  */
-EAPI Eina_Bool
+EMODAPI Eina_Bool
 evas_gl_extension_string_check(const char *exts, const char *ext)
 {
    const char *ptr;
@@ -155,7 +155,7 @@ _has_ext(const char *ext, const char **pexts, int *pnum)
 
 #ifdef GL_GLES
 
-EAPI void *
+EMODAPI void *
 evas_gl_common_eglCreateImage(EGLDisplay dpy, EGLContext ctx, EGLenum target, EGLClientBuffer buffer, const EGLAttrib *attrib_list)
 {
    if (eglsym_eglCreateImageKHR)
@@ -178,7 +178,7 @@ evas_gl_common_eglCreateImage(EGLDisplay dpy, EGLContext ctx, EGLenum target, EG
    return NULL;
 }
 
-EAPI int
+EMODAPI int
 evas_gl_common_eglDestroyImage(EGLDisplay dpy, void *im)
 {
    if (eglsym_eglDestroyImage)
@@ -189,7 +189,7 @@ evas_gl_common_eglDestroyImage(EGLDisplay dpy, void *im)
 #endif
 
 /* FIXME: return error if a required symbol was not found */
-EAPI void
+EMODAPI void
 evas_gl_symbols(void *(*GetProcAddress)(const char *name), const char *extsn)
 {
    int failed = 0, num = 0;
@@ -381,7 +381,8 @@ evas_gl_symbols(void *(*GetProcAddress)(const char *name), const char *extsn)
    FINDSYM(glsym_glProgramParameteri, "glProgramParameteriEXT", "GL_EXT_geometry_shader4", glsym_func_void);
    FINDSYM(glsym_glProgramParameteri, "glProgramParameteriARB", "GL_ARB_geometry_shader4", glsym_func_void);
 
-   FINDSYMN(secsym_glEGLImageTargetTexture2DOES, "glEGLImageTargetTexture2DOES", "GL_OES_EGL_image_external", glsym_func_void);
+   FINDSYM(secsym_glEGLImageTargetTexture2DOES, "glEGLImageTargetTexture2DOES", "GL_OES_EGL_image_external", glsym_func_void);
+   FINDSYM(secsym_glEGLImageTargetTexture2DOES, "glEGLImageTargetTexture2DOES", "GL_OES_EGL_image", glsym_func_void);
 
    // Old SEC extensions
    FINDSYMN(secsym_eglMapImageSEC, "eglMapImageSEC", NULL, secsym_func_void_ptr);
@@ -441,7 +442,7 @@ static void shader_array_flush(Evas_Engine_GL_Context *gc);
 static Evas_Engine_GL_Context *_evas_gl_common_context = NULL;
 static Evas_GL_Shared *shared = NULL;
 
-EAPI void
+EMODAPI void
 __evas_gl_err(int err, const char *file, const char *func, int line, const char *op)
 {
    const char *errmsg;
@@ -862,7 +863,7 @@ _evas_gl_common_viewport_set(Evas_Engine_GL_Context *gc)
      }
 }
 
-EAPI Evas_Engine_GL_Context *
+EMODAPI Evas_Engine_GL_Context *
 evas_gl_common_context_new(void)
 {
    Evas_Engine_GL_Context *gc;
@@ -1179,6 +1180,7 @@ evas_gl_common_context_new(void)
    _evas_gl_common_viewport_set(gc);
 
    gc->def_surface = evas_gl_common_image_surface_new(gc, 1, 1, 1, EINA_FALSE);
+   gc->err_img = evas_gl_common_image_surface_new(gc, 1, 1, 0, EINA_FALSE);
 
    return gc;
 
@@ -1417,7 +1419,7 @@ array_alloc(Evas_Engine_GL_Context *gc, int n)
 #undef RALOC
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_context_free(Evas_Engine_GL_Context *gc)
 {
    int i, j;
@@ -1427,6 +1429,7 @@ evas_gl_common_context_free(Evas_Engine_GL_Context *gc)
    if (gc->references > 0) return;
    if (gc->shared) gc->shared->references--;
 
+   if (gc->err_img) evas_gl_common_image_free(gc->err_img);
    if (gc->def_surface) evas_gl_common_image_free(gc->def_surface);
 
    if (gc->font_surface)
@@ -1504,7 +1507,7 @@ evas_gl_common_context_free(Evas_Engine_GL_Context *gc)
      }
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_context_use(Evas_Engine_GL_Context *gc)
 {
    if (_evas_gl_common_context == gc) return;
@@ -1512,7 +1515,7 @@ evas_gl_common_context_use(Evas_Engine_GL_Context *gc)
    if (gc) _evas_gl_common_viewport_set(gc);
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_context_newframe(Evas_Engine_GL_Context *gc)
 {
    int i;
@@ -1605,7 +1608,7 @@ evas_gl_common_context_newframe(Evas_Engine_GL_Context *gc)
    _evas_gl_common_viewport_set(gc);
 }
 
-EAPI void
+EMODAPI void
 evas_gl_common_context_resize(Evas_Engine_GL_Context *gc, int w, int h, int rot)
 {
    if ((gc->w == w) && (gc->h == h) && (gc->rot == rot)) return;
@@ -1656,7 +1659,7 @@ evas_gl_common_tiling_done(Evas_Engine_GL_Context *gc EINA_UNUSED)
 }
 
 
-EAPI void
+EMODAPI void
 evas_gl_common_context_done(Evas_Engine_GL_Context *gc)
 {
    if (gc->master_clip.used)
@@ -2951,6 +2954,13 @@ evas_gl_common_context_image_map_push(Evas_Engine_GL_Context *gc,
    int nomul = 0, yinvert = 0;
    Eina_Bool flat = EINA_FALSE;
    Eina_Bool blend = EINA_FALSE;
+   int tex_target = GL_TEXTURE_2D;
+
+   if (tex->im)
+     {
+        if (tex->im->native.target == GL_TEXTURE_EXTERNAL_OES)
+          tex_target = GL_TEXTURE_EXTERNAL_OES;
+     }
 
    if (!(gc->dc->render_op == EVAS_RENDER_COPY) &&
        ((a < 255) || (tex->alpha) || (!!mtex))) blend = EINA_TRUE;
@@ -3068,7 +3078,7 @@ evas_gl_common_context_image_map_push(Evas_Engine_GL_Context *gc,
         gc->pipe[pn].region.type = SHD_MAP;
         gc->pipe[pn].shader.prog = prog;
         gc->pipe[pn].shader.cur_tex = tex->pt->texture;
-        gc->pipe[pn].shader.tex_target = GL_TEXTURE_2D;
+        gc->pipe[pn].shader.tex_target = tex_target;
 
         if (utexture)
           {
@@ -3906,7 +3916,7 @@ evas_gl_common_filter_inverse_color_push(Evas_Engine_GL_Context *gc,
 }
 // ----------------------------------------------------------------------------
 
-EAPI void
+EMODAPI void
 evas_gl_common_context_flush(Evas_Engine_GL_Context *gc)
 {
    shader_array_flush(gc);
@@ -4034,7 +4044,27 @@ shader_array_flush(Evas_Engine_GL_Context *gc)
                   if (!gc->pipe[i].array.im->native.loose)
                     {
                        if (gc->pipe[i].array.im->native.func.bind)
-                         gc->pipe[i].array.im->native.func.bind(gc->pipe[i].array.im);
+                         {
+                            gc->pipe[i].array.im->native.func.bind(gc->pipe[i].array.im);
+                            if (gc->pipe[i].array.im->native.invalid)
+                              {
+                                 fprintf(stderr,
+                                         "Evas GL: native bind failed for %ix%i image\n",
+                                         gc->pipe[i].array.im->w,
+                                         gc->pipe[i].array.im->h);
+                                 if ((gc->err_img) &&
+                                     (gc->err_img->tex) &&
+                                     (gc->err_img->tex->pt))
+                                   {
+                                      glActiveTexture(GL_TEXTURE0);
+                                      glBindTexture
+                                        (GL_TEXTURE_2D,
+                                         gc->err_img->tex->pt->texture);
+                                      gc->pipe[i].shader.cur_tex =
+                                        gc->err_img->tex->pt->texture;
+                                   }
+                              }
+                         }
                     }
                }
           }
@@ -4689,7 +4719,7 @@ shader_array_flush(Evas_Engine_GL_Context *gc)
    gc->havestuff = EINA_FALSE;
 }
 
-EAPI int
+EMODAPI int
 evas_gl_common_buffer_dump(Evas_Engine_GL_Context *gc, const char* dname, const char* buf_name, int frame, const char *suffix)
 {
    RGBA_Image *im = NULL;

@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
+#include <netinet/in.h>
 #include <unistd.h>
 #include <Eeze_Net.h>
 
@@ -76,9 +77,18 @@ eeze_net_new(const char *name)
         syspath = eina_stringshare_add(name);
         break;
      }
-   if (!device) return NULL;
+   if (!device)
+     {
+        udev_enumerate_unref(en);
+        return NULL;
+     }
    net = calloc(1, sizeof(Eeze_Net));
-   if (!net) return NULL;
+   if (!net)
+     {
+        udev_enumerate_unref(en);
+        udev_device_unref(device);
+        return NULL;
+     }
    EINA_REFCOUNT_INIT(net);
    net->device = device;
    net->syspath = syspath;
@@ -86,6 +96,7 @@ eeze_net_new(const char *name)
    idx = udev_device_get_sysattr_value(net->device, "ifindex");
    if (!idx)
      {
+        udev_enumerate_unref(en);
         udev_device_unref(net->device);
         eina_stringshare_del(net->syspath);
         eina_stringshare_del(net->name);
@@ -199,7 +210,7 @@ eeze_net_scan(Eeze_Net *net)
    eina_stringshare_replace_length(&net->broadip, ip, INET_ADDRSTRLEN);
 
    if (ioctl(sock, *i++, &ifr) < 0) goto error;
-   sa = (struct sockaddr_in*) & (ifr.ifr_netmask);
+   sa = (struct sockaddr_in*) & (ifr.ifr_addr);
    inet_ntop(AF_INET, (struct in_addr*)&sa->sin_addr, ip, INET_ADDRSTRLEN);
    eina_stringshare_replace_length(&net->netmask, ip, INET_ADDRSTRLEN);
 
@@ -221,7 +232,7 @@ eeze_net_scan(Eeze_Net *net)
    eina_stringshare_replace_length(&net->broadip6, ip6, INET6_ADDRSTRLEN);
 
    if (ioctl(sock, *i++, &ifr) < 0) goto error;
-   sa6 = (struct sockaddr_in6*) & (ifr.ifr_netmask);
+   sa6 = (struct sockaddr_in6*) & (ifr.ifr_addr);
    inet_ntop(AF_INET6, (struct in6_addr*)&sa6->sin6_addr, ip6, INET6_ADDRSTRLEN);
    eina_stringshare_replace_length(&net->netmask6, ip6, INET6_ADDRSTRLEN);
 

@@ -38,7 +38,7 @@ struct _Evas_Module_Task
 
 static Eina_TLS task = 0;
 
-EAPI Eina_Bool
+EVAS_API Eina_Bool
 evas_module_task_cancelled(void)
 {
    Evas_Module_Task *t;
@@ -49,7 +49,7 @@ evas_module_task_cancelled(void)
    return t->cancelled(t->data);
 }
 
-EAPI void
+EVAS_API void
 evas_module_task_register(Eina_Bool (*cancelled)(void *data), void *data)
 {
    Evas_Module_Task *t;
@@ -63,7 +63,7 @@ evas_module_task_register(Eina_Bool (*cancelled)(void *data), void *data)
    eina_tls_set(task, t);
 }
 
-EAPI void
+EVAS_API void
 evas_module_task_unregister(void)
 {
     Evas_Module_Task *t;
@@ -202,6 +202,7 @@ EVAS_EINA_STATIC_MODULE_DEFINE(image_loader, dds);
 EVAS_EINA_STATIC_MODULE_DEFINE(image_loader, eet);
 EVAS_EINA_STATIC_MODULE_DEFINE(image_loader, generic);
 EVAS_EINA_STATIC_MODULE_DEFINE(image_loader, gif);
+EVAS_EINA_STATIC_MODULE_DEFINE(image_loader, heif);
 EVAS_EINA_STATIC_MODULE_DEFINE(image_loader, ico);
 EVAS_EINA_STATIC_MODULE_DEFINE(image_loader, jpeg);
 EVAS_EINA_STATIC_MODULE_DEFINE(image_loader, jp2k);
@@ -306,6 +307,9 @@ static const struct {
 #endif
 #ifdef EVAS_STATIC_BUILD_GIF
   EVAS_EINA_STATIC_MODULE_USE(image_loader, gif),
+#endif
+#ifdef EVAS_STATIC_BUILD_HEIF
+  EVAS_EINA_STATIC_MODULE_USE(image_loader, heif),
 #endif
 #ifdef EVAS_STATIC_BUILD_ICO
   EVAS_EINA_STATIC_MODULE_USE(image_loader, ico),
@@ -803,7 +807,7 @@ evas_module_shutdown(void)
      }
 }
 
-EAPI int
+EVAS_API int
 _evas_module_engine_inherit(Evas_Func *funcs, char *name, size_t info)
 {
    Evas_Module *em;
@@ -824,7 +828,7 @@ _evas_module_engine_inherit(Evas_Func *funcs, char *name, size_t info)
    return 0;
 }
 
-EAPI const char *
+EVAS_API const char *
 _evas_module_libdir_get(void)
 {
    if (!pfx) pfx = eina_prefix_new
@@ -845,7 +849,7 @@ _evas_module_datadir_get(void)
 }
 
 /* deprecated */
-EAPI const char *
+EVAS_API const char *
 evas_cserve_path_get(void)
 {
    return NULL;
