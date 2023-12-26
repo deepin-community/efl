@@ -491,12 +491,15 @@ _elua_scan_params(lua_State *L, int i, char *params, ...) // Stack usage -
                    size_t len;
                    char *temp = (char *)lua_tolstring(L, j, &len);       // Stack usage [-0, +0, m]
 
-                   len++;      // Cater for the null at the end.
-                   *v = malloc(len);
-                   if (*v)
+                   if (temp)
                      {
-                        memcpy(*v, temp, len);
-                        n++;
+                       len++;      // Cater for the null at the end.
+                       *v = malloc(len);
+                       if (*v)
+                         {
+                            memcpy(*v, temp, len);
+                            n++;
+                         }
                      }
                 }
               break;
@@ -1458,7 +1461,7 @@ _elua_color_class(lua_State *L) // Stack usage [-(10|14), +(11|15), ?]
         edje_color_class_set(class, r, g, b, a, r, g, b, a, r, g, b, a);
      }
 
-   c_class = _edje_color_class_find(ed, class);
+   c_class = _edje_color_class_recursive_find(ed, class);
    if (!c_class) return 0;
 
    _elua_ret(L, "%r %g %b %a", c_class->r, c_class->g, c_class->b, c_class->a);

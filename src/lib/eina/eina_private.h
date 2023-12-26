@@ -25,10 +25,32 @@
 #include <xlocale.h>
 #endif
 
+#ifdef _WIN32
+# include <windows.h>
+# include <bcrypt.h>
+#endif
+
 #include "eina_magic.h"
 #include "eina_iterator.h"
 #include "eina_accessor.h"
 #include "eina_stringshare.h"
+
+#ifdef _WIN32
+
+# define EINA_PATH_SEP_SWAP(p, s1, s2) \
+   do { \
+     char *iter = p; \
+     while (*iter) \
+       { \
+          if (*iter == s1) \
+            *iter = s2; \
+          iter++; \
+       } \
+   } while (0)
+
+# define EINA_PATH_TO_UNIX(p) EINA_PATH_SEP_SWAP(p, '\\', '/')
+# define EINA_PATH_TO_WIN32(p) EINA_PATH_SEP_SWAP(p, '/', '\\')
+#endif
 
 #ifndef ABS
 # define ABS(x) ((x) < 0 ? -(x) : (x))
@@ -152,6 +174,7 @@ Eina_Stringshare *eina_file_sanitize(const char *path);
 void eina_freeq_main_set(Eina_FreeQ *fq);
 
 #ifdef _WIN32
+extern BCRYPT_ALG_HANDLE _eina_bcrypt_provider;
 typedef _locale_t locale_t;
 #endif
 locale_t _eina_c_locale_get(void);
@@ -159,4 +182,3 @@ locale_t _eina_c_locale_get(void);
 #include "eina_inline_private.h"
 
 #endif /* EINA_PRIVATE_H_ */
-

@@ -24,6 +24,7 @@
 #include <sys/stat.h>
 
 #include <evil_private.h>
+#include <fcntl.h>
 
 #include "eina_config.h"
 #include "eina_private.h"
@@ -397,6 +398,114 @@ _eina_file_sep_find(char *s)
    return NULL;
 }
 
+static unsigned char _eina_file_random_uchar(unsigned char *c)
+{
+  /*
+   * Helper function for mktemp.
+   *
+   * Only characters from 'a' to 'z' and '0' to '9' are considered
+   * because on Windows, file system is case insensitive. That means
+   * 36 possible values.
+   * To increase randomness, we consider the greatest multiple of 36
+   * within 255 : 7*36 = 252, that is, values from 0 to 251 and choose
+   * a random value in this interval.
+   */
+  do {
+    BCryptGenRandom(_eina_bcrypt_provider, c, sizeof(UCHAR), 0);
+  } while (*c > 251);
+
+  *c = '0' + *c % 36;
+  if (*c > '9')
+    *c += 'a' - '9' - 1;
+
+  return *c;
+}
+
+static int
+_eina_file_mkstemp_init(char *__template, size_t *length, int suffixlen)
+{
+  if (!__template || (suffixlen < 0))
+     {
+        errno = EINVAL;
+        return 0;
+     }
+
+  *length = strlen(__template);
+  if ((*length < (6 + (size_t)suffixlen))
+       || (strncmp(__template + *length - 6 - suffixlen, "XXXXXX", 6) != 0))
+     {
+        errno = EINVAL;
+        return 0;
+     }
+   return 1;
+}
+
+static void
+_eina_file_tmpname(char *__template, size_t length, int suffixlen)
+{
+   unsigned char *suffix;
+
+   suffix = (unsigned char *)(__template + length - 6 - suffixlen);
+   *suffix = _eina_file_random_uchar(suffix);
+   suffix++;
+   *suffix = _eina_file_random_uchar(suffix);
+   suffix++;
+   *suffix = _eina_file_random_uchar(suffix);
+   suffix++;
+   *suffix = _eina_file_random_uchar(suffix);
+   suffix++;
+   *suffix = _eina_file_random_uchar(suffix);
+   suffix++;
+   *suffix = _eina_file_random_uchar(suffix);
+   suffix++;
+}
+
+static int
+_eina_file_mkstemps(char *__template, int suffixlen)
+{
+   size_t length;
+   int i;
+
+   if (!_eina_file_mkstemp_init(__template, &length, suffixlen))
+     return -1;
+
+   for (i = 0; i < 32768; i++)
+     {
+        int fd;
+
+        _eina_file_tmpname(__template, length, suffixlen);
+
+        fd = _open(__template,
+                   _O_RDWR | _O_BINARY | _O_CREAT | _O_EXCL,
+                   _S_IREAD | _S_IWRITE);
+        if (fd >= 0)
+          return fd;
+     }
+
+   errno = EEXIST;
+   return -1;
+}
+
+static char *
+_eina_file_mkdtemp(char *__template)
+{
+   size_t length;
+   int i;
+
+   if (!_eina_file_mkstemp_init(__template, &length, 0))
+     return NULL;
+
+   for (i = 0; i < 32768; i++)
+     {
+        _eina_file_tmpname(__template, length, 0);
+        if (CreateDirectory(__template, NULL) == TRUE)
+          return __template;
+     }
+
+   return NULL;
+}
+
+
 /**
  * @endcond
  */
@@ -441,7 +550,7 @@ eina_file_cleanup(Eina_Tmpstr *path)
    if (!result)
      return NULL;
 
-   EVIL_PATH_SEP_WIN32_TO_UNIX(result);
+   EINA_PATH_TO_UNIX(result);
 
    return result;
 }
@@ -450,7 +559,7 @@ eina_file_cleanup(Eina_Tmpstr *path)
  *                                   API                                      *
  *============================================================================*/
 
-EAPI Eina_Bool
+EINA_API Eina_Bool
 eina_file_dir_list(const char *dir,
                    Eina_Bool recursive,
                    Eina_File_Dir_List_Cb cb,
@@ -512,7 +621,7 @@ eina_file_dir_list(const char *dir,
    return EINA_TRUE;
 }
 
-EAPI Eina_Array *
+EINA_API Eina_Array *
 eina_file_split(char *path)
 {
    Eina_Array *ea;
@@ -545,7 +654,7 @@ eina_file_split(char *path)
    return ea;
 }
 
-EAPI Eina_Iterator *
+EINA_API Eina_Iterator *
 eina_file_ls(const char *dir)
 {
    Eina_File_Iterator *it;
@@ -590,7 +699,7 @@ eina_file_ls(const char *dir)
    return NULL;
 }
 
-EAPI Eina_Iterator *
+EINA_API Eina_Iterator *
 eina_file_direct_ls(const char *dir)
 {
    Eina_File_Direct_Iterator *it;
@@ -641,13 +750,13 @@ eina_file_direct_ls(const char *dir)
    return NULL;
 }
 
-EAPI Eina_Iterator *
+EINA_API Eina_Iterator *
 eina_file_stat_ls(const char *dir)
 {
    return eina_file_direct_ls(dir);
 }
 
-EAPI Eina_Bool
+EINA_API Eina_Bool
 eina_file_refresh(Eina_File *file)
 {
    WIN32_FILE_ATTRIBUTE_DATA fad;
@@ -679,7 +788,7 @@ eina_file_refresh(Eina_File *file)
    return r;
 }
 
-EAPI Eina_File *
+EINA_API Eina_File *
 eina_file_open(const char *path, Eina_Bool shared)
 {
    Eina_File *file;
@@ -788,7 +897,7 @@ eina_file_open(const char *path, Eina_Bool shared)
    return NULL;
 }
 
-EAPI Eina_Bool
+EINA_API Eina_Bool
 eina_file_unlink(const char *pathname)
 {
    Eina_Stringshare *unlink_path = eina_file_sanitize(pathname);
@@ -827,23 +936,23 @@ eina_file_unlink(const char *pathname)
 }
 
 
-EAPI Eina_Iterator *eina_file_xattr_get(Eina_File *file EINA_UNUSED)
+EINA_API Eina_Iterator *eina_file_xattr_get(Eina_File *file EINA_UNUSED)
 {
    return NULL;
 }
 
-EAPI Eina_Iterator *eina_file_xattr_value_get(Eina_File *file EINA_UNUSED)
+EINA_API Eina_Iterator *eina_file_xattr_value_get(Eina_File *file EINA_UNUSED)
 {
    return NULL;
 }
 
-EAPI void
+EINA_API void
 eina_file_map_populate(Eina_File *file EINA_UNUSED, Eina_File_Populate rule EINA_UNUSED, const void *map EINA_UNUSED,
                        unsigned long int offset EINA_UNUSED, unsigned long int length EINA_UNUSED)
 {
 }
 
-EAPI void *
+EINA_API void *
 eina_file_map_all(Eina_File *file, Eina_File_Populate rule EINA_UNUSED)
 {
    EINA_SAFETY_ON_NULL_RETURN_VAL(file, NULL);
@@ -886,7 +995,7 @@ eina_file_map_all(Eina_File *file, Eina_File_Populate rule EINA_UNUSED)
    return NULL;
 }
 
-EAPI void *
+EINA_API void *
 eina_file_map_new(Eina_File *file, Eina_File_Populate rule,
                   unsigned long int offset, unsigned long int length)
 {
@@ -981,7 +1090,7 @@ eina_file_map_new(Eina_File *file, Eina_File_Populate rule,
    return NULL;
 }
 
-EAPI void
+EINA_API void
 eina_file_map_free(Eina_File *file, void *map)
 {
    EINA_SAFETY_ON_NULL_RETURN(file);
@@ -1012,7 +1121,7 @@ eina_file_map_free(Eina_File *file, void *map)
    eina_lock_release(&file->lock);
 }
 
-EAPI Eina_Bool
+EINA_API Eina_Bool
 eina_file_map_faulted(Eina_File *file, void *map EINA_UNUSED)
 {
 #warning "We need to handle access to corrupted memory mapped file."
@@ -1050,7 +1159,7 @@ eina_file_map_faulted(Eina_File *file, void *map EINA_UNUSED)
    return EINA_FALSE;
 }
 
-EAPI int
+EINA_API int
 eina_file_statat(void *container EINA_UNUSED, Eina_File_Direct_Info *info, Eina_Stat *st)
 {
    struct __stat64 buf;
@@ -1092,4 +1201,71 @@ eina_file_statat(void *container EINA_UNUSED, Eina_File_Direct_Info *info, Eina_
    st->ctimensec = 0;
 
    return 0;
+}
+
+EINA_API int
+eina_file_mkstemp(const char *templatename, Eina_Tmpstr **path)
+{
+   char buffer[PATH_MAX];
+   const char *XXXXXX = NULL, *sep;
+   int fd, len;
+
+   EINA_SAFETY_ON_NULL_RETURN_VAL(templatename, -1);
+
+   sep = strchr(templatename, '/');
+   if (!sep) sep = strchr(templatename, '\\');
+   if (sep)
+     {
+        len = eina_strlcpy(buffer, templatename, sizeof(buffer));
+     }
+   else
+     {
+        len = eina_file_path_join(buffer, sizeof(buffer),
+                                  eina_environment_tmp_get(), templatename);
+     }
+
+   if ((XXXXXX = strstr(buffer, "XXXXXX.")) != NULL)
+     fd = _eina_file_mkstemps(buffer, buffer + len - XXXXXX - 6);
+   else
+     fd = _eina_file_mkstemps(buffer, 0);
+
+   if (fd < 0)
+     {
+        if (path) *path = NULL;
+        return -1;
+     }
+
+   if (path) *path = eina_tmpstr_add(buffer);
+   return fd;
+}
+
+EINA_API Eina_Bool
+eina_file_mkdtemp(const char *templatename, Eina_Tmpstr **path)
+{
+   char buffer[PATH_MAX];
+   char *tmpdirname, *sep;
+
+   EINA_SAFETY_ON_NULL_RETURN_VAL(templatename, EINA_FALSE);
+
+   sep = strchr(templatename, '/');
+   if (!sep) sep = strchr(templatename, '\\');
+   if (sep)
+     {
+        eina_strlcpy(buffer, templatename, sizeof(buffer));
+     }
+   else
+     {
+        eina_file_path_join(buffer, sizeof(buffer),
+                            eina_environment_tmp_get(), templatename);
+     }
+
+   tmpdirname = _eina_file_mkdtemp(buffer);
+   if (tmpdirname == NULL)
+     {
+        if (path) *path = NULL;
+        return EINA_FALSE;
+     }
+
+   if (path) *path = eina_tmpstr_add(tmpdirname);
+   return EINA_TRUE;
 }

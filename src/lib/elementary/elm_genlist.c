@@ -2,8 +2,6 @@
 # include "elementary_config.h"
 #endif
 
-#include <fnmatch.h>
-
 #define EFL_ACCESS_OBJECT_PROTECTED
 #define EFL_ACCESS_SELECTION_PROTECTED
 #define EFL_ACCESS_WIDGET_ACTION_PROTECTED
@@ -347,7 +345,7 @@ _item_text_realize(Elm_Gen_Item *it,
         (edje_object_data_get(target, "texts"));
    EINA_LIST_FOREACH(*source, l, key)
      {
-        if (parts && fnmatch(parts, key, FNM_PERIOD)) continue;
+        if (parts && !eina_fnmatch(parts, key, EINA_FNMATCH_PERIOD)) continue;
 
         s = it->itc->func.text_get
            ((void *)WIDGET_ITEM_DATA_GET(EO_OBJ(it)), WIDGET(it), key);
@@ -423,7 +421,7 @@ _item_content_realize(Elm_Gen_Item *it,
 
    EINA_LIST_FREE(source, key)
      {
-        if (parts && fnmatch(parts, key, FNM_PERIOD))
+        if (parts && !eina_fnmatch(parts, key, EINA_FNMATCH_PERIOD))
           continue;
 
         Evas_Object *old = NULL;
@@ -505,7 +503,7 @@ _item_state_realize(Elm_Gen_Item *it, Evas_Object *target, const char *parts)
    src = elm_widget_stringlist_get(edje_object_data_get(target, "states"));
    EINA_LIST_FREE(src, key)
      {
-        if (parts && fnmatch(parts, key, FNM_PERIOD)) continue;
+        if (parts && !eina_fnmatch(parts, key, EINA_FNMATCH_PERIOD)) continue;
 
         Eina_Bool on = it->itc->func.state_get
            ((void *)WIDGET_ITEM_DATA_GET(EO_OBJ(it)), WIDGET(it), key);
@@ -4435,6 +4433,7 @@ _item_mouse_down_cb(void *data,
    // NOTE: keep this code at the bottom, as the user can change the
    //       list at this point (clear, delete, etc...)
    _item_highlight(it);
+   efl_ref(EO_OBJ(it));
    if (ev->flags & EVAS_BUTTON_DOUBLE_CLICK)
      {
         evas_object_smart_callback_call
@@ -4443,7 +4442,8 @@ _item_mouse_down_cb(void *data,
               (WIDGET(it), ELM_GENLIST_EVENT_ACTIVATED, eo_it);
      }
    evas_object_smart_callback_call
-         (WIDGET(it), "pressed", eo_it);
+        (WIDGET(it), "pressed", eo_it);
+   efl_unref(EO_OBJ(it));
 }
 
 static Item_Block *
@@ -7410,6 +7410,7 @@ _elm_genlist_item_all_contents_unset(Eo *eo_item EINA_UNUSED, Elm_Gen_Item *it, 
    Evas_Object *content;
 
    ELM_GENLIST_ITEM_CHECK_OR_RETURN(it);
+   ELM_GENLIST_DATA_GET_FROM_ITEM(it, sd);
 
    EINA_LIST_FREE(it->contents, content)
      {
@@ -7417,6 +7418,7 @@ _elm_genlist_item_all_contents_unset(Eo *eo_item EINA_UNUSED, Elm_Gen_Item *it, 
         edje_object_part_unswallow(VIEW(it), content);
         evas_object_hide(content);
         if (l) *l = eina_list_append(*l, content);
+        eina_hash_del_by_key(sd->content_item_map, &content);
      }
 }
 
@@ -8742,12 +8744,10 @@ _elm_genlist_search_by_text_item_get(Eo *obj EINA_UNUSED,
    if (!pattern) return NULL;
    if (!sd->items) return NULL;
 
-   if (flags & ELM_GLOB_MATCH_NO_ESCAPE) fnflags |= FNM_NOESCAPE;
-   if (flags & ELM_GLOB_MATCH_PATH) fnflags |= FNM_PATHNAME;
-   if (flags & ELM_GLOB_MATCH_PERIOD) fnflags |= FNM_PERIOD;
-#ifdef FNM_CASEFOLD
-   if (flags & ELM_GLOB_MATCH_NOCASE) fnflags |= FNM_CASEFOLD;
-#endif
+   if (flags & ELM_GLOB_MATCH_NO_ESCAPE) fnflags |= EINA_FNMATCH_NOESCAPE;
+   if (flags & ELM_GLOB_MATCH_PATH) fnflags |= EINA_FNMATCH_PATHNAME;
+   if (flags & ELM_GLOB_MATCH_PERIOD) fnflags |= EINA_FNMATCH_PERIOD;
+   if (flags & ELM_GLOB_MATCH_NOCASE) fnflags |= EINA_FNMATCH_CASEFOLD;
 
    start = (item_to_search_from) ?
    EINA_INLIST_GET((Elm_Gen_Item *)efl_data_scope_get(item_to_search_from, ELM_GENLIST_ITEM_CLASS)) :
@@ -8757,7 +8757,7 @@ _elm_genlist_search_by_text_item_get(Eo *obj EINA_UNUSED,
         if (!it->itc->func.text_get) continue;
         str = it->itc->func.text_get((void *)WIDGET_ITEM_DATA_GET(EO_OBJ(it)), WIDGET(it), part_name);
         if (!str) continue;
-        if (!fnmatch(pattern, str, fnflags))
+        if (eina_fnmatch(pattern, str, fnflags))
           {
              free(str);
              return EO_OBJ(it);

@@ -86,7 +86,8 @@ test_label(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_inf
    elm_box_pack_end(bx, lb);
    evas_object_show(lb);
 
-   evas_object_resize(win, 320, 300);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           300 * elm_config_scale_get());
 
    evas_object_show(bx);
    evas_object_show(win);
@@ -305,7 +306,8 @@ test_label_slide(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *eve
 
    evas_object_smart_callback_add(bt, "clicked", _label_slide_stop_cb, lbs);
 
-   evas_object_resize(win, 320, 320);
+   evas_object_resize(win, 320 * elm_config_scale_get(),
+                           320 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -320,7 +322,8 @@ enum BUTTON{
    BUTTON_ARRAY            = 4,
    BUTTON_CONTENT          = 5,
    BUTTON_STYLE            = 6,
-   BUTTON_ALL              = BUTTON_STYLE+1,
+   BUTTON_SIZE             = 7,
+   BUTTON_ALL              = BUTTON_SIZE+1,
 };
 
 char* BUTTON_STR[BUTTON_ALL] ={
@@ -331,6 +334,7 @@ char* BUTTON_STR[BUTTON_ALL] ={
    "ARRAY",
    "CONTENT",
    "STYLE",
+   "Get Size",
 };
 
 char *contents[] = {
@@ -430,6 +434,8 @@ char * get_fit_status(Eo * textblock)
    static char status[0xFFF];
    unsigned int options,min,max,step,size_array[256];
    size_t size_array_len;
+   int current_fitting_fontsize = 0;
+   current_fitting_fontsize = evas_textblock_fit_font_size_get(textblock);
    evas_textblock_fit_options_get(textblock,&options);
    evas_textblock_fit_size_range_get(textblock,&min,&max);
    evas_textblock_fit_step_size_get(textblock,&step);
@@ -464,8 +470,15 @@ char * get_fit_status(Eo * textblock)
    sprintf(status + strlen(status)," ]");
 
    sprintf(status + strlen(status),"<br>");
-   sprintf(status + strlen(status),"%s",styles_names[app->i_style]);
-
+   sprintf(status + strlen(status),"%s<br>",styles_names[app->i_style]);
+   if (current_fitting_fontsize == -1)
+     {
+        sprintf(status + strlen(status),"Current Font Size = No Fitting");
+     }
+   else
+     {
+        sprintf(status + strlen(status),"Current Font Size = %d", current_fitting_fontsize);
+     }
 
 
    return status;
@@ -728,7 +741,8 @@ test_label_ellipsis(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *
    elm_box_pack_end(bx, lb);
    evas_object_show(lb);
 
-   evas_object_resize(win, 300, 100);
+   evas_object_resize(win, 300 * elm_config_scale_get(),
+                           100 * elm_config_scale_get());
    evas_object_show(win);
 }
 
@@ -897,6 +911,7 @@ test_label_emoji(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *eve
    _font_set(txt, "Sans");
    evas_object_show(cmb);
 
-   evas_object_resize(win, 300, 400);
+   evas_object_resize(win, 300 * elm_config_scale_get(),
+                           400 * elm_config_scale_get());
    evas_object_show(win);
 }

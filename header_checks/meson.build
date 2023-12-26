@@ -53,7 +53,8 @@ header_checks = [
   'features.h',
   'langinfo.h',
   'locale.h',
-  'crt_externs.h'
+  'crt_externs.h',
+  'pthread.h',
 ]
 
 #### The below is logically broken
@@ -113,6 +114,7 @@ function_checks = [
   ['dlopen', ['dlfcn.h'],                               ['dl']],
   ['dlsym', ['dlfcn.h'],                                ['dl']],
   ['lround', ['math.h'],                                ['m']],
+  ['mallinfo2', ['malloc.h'],                            ['malloc']],
   ['mallinfo', ['malloc.h'],                            ['malloc']],
   ['shm_open', ['sys/mman.h', 'sys/stat.h', 'fcntl.h'], ['rt']],
 #from here on we specify arguments
@@ -214,15 +216,12 @@ endif
 regexp = []
 if sys_windows == true
    regexp = cc.find_library('regex',
-                            has_headers: ['regex.h', 'fnmatch.h'],
+                            has_headers: ['regex.h'],
                             required: true)
    if regexp.found() == false
       error('regex can not be found')
    endif
 else
-   if cc.has_header_symbol('fnmatch.h', 'fnmatch') == false
-      error('fnmatch can not be found')
-   endif
    if cc.has_header_symbol('regex.h', 'regcomp') == false
       error('regcomp can not be found')
    endif

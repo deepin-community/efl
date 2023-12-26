@@ -108,13 +108,6 @@ usr/lib/*/libelput.so
 usr/lib/*/pkgconfig/elput.pc
 
 #
-# libelua-dev.install
-usr/include/elua-1
-usr/lib/*/libelua.so
-usr/lib/*/pkgconfig/elua*.pc
-usr/lib/*/cmake/Elua/*.cmake
-
-#
 # libembryo-dev.install
 usr/include/embryo-1
 usr/lib/*/libembryo.so
